@@ -1,0 +1,8 @@
+button {
+    background: transparent;
+    border: none;
+  }
+  
+  button i {
+    font-size: 1.5rem;
+  }
