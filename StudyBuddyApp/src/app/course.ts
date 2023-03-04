@@ -1,4 +1,5 @@
 import { Section } from "./section"
+import { TimeStartEnd } from "./time-start-end"
 
 export class Course {
     private code:string 
@@ -20,6 +21,6 @@ export class Course {
         this.code= c;
     }
     addSection( s : string , start : string , end :string ){
-        this.sections.push( new Section(s , start , end ))
+        this.sections.push( new Section(s , new TimeStartEnd( start , end)))
     }
 }
