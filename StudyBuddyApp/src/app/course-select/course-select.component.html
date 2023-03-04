@@ -4,5 +4,5 @@
 <select name="course" id="course">
     <option *ngFor="let c of courses" value="{{c.code}}">{{c.code}} </option>
 </select>
-<button (click)="removeCourse" class="btn btn-danger"><i class="fa fa-times"></i></button>
+<button type="button" (click)="removeCourse" class="btn btn-danger"><i class="fa fa-times"></i></button>
 <br><br>
