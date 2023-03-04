@@ -16,6 +16,6 @@ export class CourseSelectComponent {
   }
 
   removeCourse(){
-    this.decrement.emit(1);
+    this.decrement.emit(this.num);
   }
 }

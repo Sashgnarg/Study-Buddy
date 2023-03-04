@@ -22,6 +22,6 @@ export class NewUserComponent {
   }
 
   removeCourse(data:any){
-    this.courseCount.splice(data,1)
+    this.courseCount.splice(data-1,1)
   }
 }
