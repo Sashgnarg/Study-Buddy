@@ -1,8 +1,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
 <label for="course">Course</label>
-<select name="course" id="course">
-    <option *ngFor="let c of courses" value="{{c.code}}">{{c.code}} </option>
+<select [(ngModel)]="curCourse" (change)="setSection()" name="course" id="course">
+    <option *ngFor="let c of courses" value="{{c.getCode()}}">{{c.getCode()}} </option>
+</select>
+
+<label for="section">Section</label>
+<select name="section" id="section">
+    <option *ngFor="let s of sections" value="s.name">{{s.name}}</option>
 </select>
 <button type="button" (click)="removeCourse()" class="btn btn-danger"><i class="fa fa-times"></i></button>
 <br><br>

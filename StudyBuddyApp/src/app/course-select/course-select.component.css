@@ -6,3 +6,10 @@ button {
   button i {
     font-size: 1.5rem;
   }
+
+  select{
+    display: inline-block;
+  }
+  label{
+    margin-left: 60px;
+  }

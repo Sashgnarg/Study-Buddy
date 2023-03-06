@@ -24,9 +24,9 @@
         <option value="Science">Science</option>
     </select><br><br>
 
+    <h3>Courses</h3>
     <app-course-select (decrement)="removeCourse($event)" [num]="course" *ngFor="let course of courseCount"></app-course-select>
     <button (click)="incrCount()" type="button">add course</button>
-    <h3>Courses</h3>
     
 
 
