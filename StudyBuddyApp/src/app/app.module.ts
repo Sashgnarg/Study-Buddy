@@ -10,7 +10,7 @@ import { CourseSelectComponent } from './course-select/course-select.component';
   declarations: [
     AppComponent,
     NewUserComponent,
-    CourseSelectComponent
+    CourseSelectComponent,
   ],
   imports: [
     BrowserModule,
