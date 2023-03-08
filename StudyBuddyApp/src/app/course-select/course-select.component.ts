@@ -28,7 +28,6 @@ export class CourseSelectComponent implements OnInit {
       section : ['' , Validators.required]
     })
     this.num=-1;
-    let temp1 = new Course()
     this.curCourse =''
     this.courses=[]
     this.sections=[]

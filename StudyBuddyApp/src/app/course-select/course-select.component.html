@@ -10,6 +10,6 @@
     <select name="section" id="section" formControlName="section">
         <option *ngFor="let s of sections" value="{{s.name}}">{{s.name}}</option>
     </select>
-    <button type="button" (click)="removeCourse()" class="btn btn-danger"><i class="fa fa-times"></i></button>
+    <button id='xButton'type="button" (click)="removeCourse()" class="btn btn-danger"><i class="fa fa-times"></i></button>
     <br><br>
 </form>

@@ -1,9 +1,10 @@
-import { Component , ViewChild } from '@angular/core';
+import { Component , OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { CourseSelectComponent } from '../course-select/course-select.component';
 import { User } from '../user';
 import { Course } from '../course';
+import { Section } from '../section';
 
 
 @Component({
@@ -11,9 +12,10 @@ import { Course } from '../course';
   templateUrl: './new-user.component.html',
   styleUrls: ['./new-user.component.css']
 })
-export class NewUserComponent {
-
-  public courseCount : number[]
+export class NewUserComponent implements OnInit{
+  public allCourses:Course[]
+  public allSections: Section[][]
+  public courseCount : number
   @ViewChild('child', { static: false }) childComponent!: CourseSelectComponent;
 
   form : FormGroup
@@ -23,45 +25,65 @@ export class NewUserComponent {
       lName:['',Validators.required],
       faculty:['' , Validators.required],
       password:['' , Validators.required],
-      repeatPassword:['' , Validators.required , ],
-      courses : this.FB.array([])
+      repeatPassword:['' , Validators.required],
+      courses : this.FB.array([]),
     })
-    this.courseCount=[];
-    for (let i = 1; i <= 1; i++) {
-      this.courseCount.push(i);
-    }    
+    this.allCourses=[]
+    this.allSections=[]
+    this.courseCount=0
+  }
+  ngOnInit(){
+    this.allCourses = this.DS.getTermCourses();
+    this.allCourses.forEach(e => {
+      this.allSections.push(e.getSections());
+    });
+  }
+
+  get courses() : FormArray{
+    return this.form.get('courses') as FormArray
   }
 
   incrCount(){
-    this.courseCount.push(this.courseCount.length+1)
-    console.log(this.courseCount.length)
+    this.courseCount++;
+    const courseForm = this.FB.group({
+      code: ['' , Validators.required],
+      section:['' , Validators.required]
+    })
+
+    this.courses.push(courseForm);
+
   }
 
   removeCourse(data:any){
-    this.courseCount.splice(data-1,1)
+    this.courseCount--;
+    this.courses.removeAt(data)
   }
 
-  pushToCourses(data : FormGroup){
-    this.form.value.courses.push(data)
-  }
+  setSections(courseIndex : number){
+    var curCourse = this.courses.at(courseIndex).get('code')!.value
+    return this.allCourses.find((e)=> e.getCode() == curCourse)?.getSections()
 
+  }
   submit(){
-    this.childComponent.formToParent();
     console.log(this.form.value)
+
     let form = this.form.value
-    var courses : Course[];
-    courses = [];
-    for(let i = 0 ; i<this.courseCount.length ; i++ ){
-      let c = new Course()
-      // change the follow 2 lines to parse the database to find the matching course
-      c.setCode(form.courses[i].course.value)
-      console.log(form.courses[i].section.value)
-      let section = form.courses[i].section.value
-      c.addSection( section , "null" , "null")
-      courses.push( c )
+    var userSections : Section[]
+    userSections =[]
+    var userCourses : Course[];
+    userCourses = [];
+    for(let i = 0 ; i<this.courseCount ; i++ ){
+      let code = this.courses.at(i)!.get('code')!.value
+      let c = this.allCourses.find(e => e.getCode() == code)!
+      let s = c.getSections().find(e=> e.name == this.courses.at(i).get('section')!.value)!
+      userCourses.push( c )
+      userSections.push(s)
     }
-    var user = new User(form.fName , form.lName , form.password , this.courseCount.length , courses );
+    var user = new User(form.fName , form.lName , form.password , this.courseCount , userCourses ,userSections );
     this.DS.createUser(user);
+  }
+  test(){
+    console.log(this.courses.value);
   }
 
 }
