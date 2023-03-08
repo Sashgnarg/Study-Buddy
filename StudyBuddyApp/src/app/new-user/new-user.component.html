@@ -1,19 +1,19 @@
 <h1>New User</h1>
 
-<form action="">
+<form [formGroup]="form" action="">
     <h2>Personal Info</h2>
     <label for="fName">First Name</label><br>
-    <input type="text" name="fName" placeholder="first name"><br><br>
+    <input type="text" name="fName" placeholder="first name" formControlName="fName"><br><br>
     <label for="lName">Last Name</label><br>
-    <input type="text" name="lName" placeholder="last name"><br><br>
+    <input type="text" name="lName" placeholder="last name" formControlName="lName"><br><br>
 
     <label for="password"></label>Password<br>
-    <input type="password" name="password" placeholder="password"><br><br>
+    <input type="password" name="password" placeholder="password" formControlName="password"><br><br>
     <label for="repeatPassword">confirm Password</label><br>
-    <input type="password" name="repeatPassword" placeholder="Confirm password"><br><br>
+    <input type="password" name="repeatPassword" placeholder="Confirm password" formControlName="repeatPassword"><br><br>
     <h2>School Info</h2><br>
     <label for="faculty">Faculty</label><br>
-    <select name="faculty" id="faculty">
+    <select name="faculty" id="faculty" formControlName="faculty">
         <option value="Applied Science">Applied Science</option>
         <option value="Arts and Social Science">Arts and Social Science</option>
         <option value="Communication Art and Technology">Communication Art and Technology</option>
@@ -25,10 +25,8 @@
     </select><br><br>
 
     <h3>Courses</h3>
-    <app-course-select (decrement)="removeCourse($event)" [num]="course" *ngFor="let course of courseCount"></app-course-select>
+    <app-course-select #child (formDataSend)="pushToCourses($event)" (decrement)="removeCourse($event)" [num]="course" *ngFor="let course of courseCount"></app-course-select>
     <button (click)="incrCount()" type="button">add course</button>
     
-
-
-
+    <button (click)="submit()" type="button">test submit</button>
 </form>
