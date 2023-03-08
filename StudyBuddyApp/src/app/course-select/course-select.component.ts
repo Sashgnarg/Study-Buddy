@@ -31,6 +31,7 @@ export class CourseSelectComponent implements OnInit {
     let temp1 = new Course()
     this.curCourse =''
     this.courses=[]
+    this.sections=[]
     
   }
   ngOnInit(){

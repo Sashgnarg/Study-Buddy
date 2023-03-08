@@ -2,7 +2,8 @@ import { Course } from "./course"
 
 export class User {
 
-    name: string
+    fName: string
+    lName : string
     password: string
     courseCount: number
     courses : Course[]
@@ -10,8 +11,9 @@ export class User {
     // add more later 
     // ie friends messages etc
 
-    constructor(n : string , p : string , cCount : number , courses:Course[]){
-        this.name = n
+    constructor(fn : string , ln :string,  p : string , cCount : number , courses:Course[]){
+        this.fName = fn
+        this.lName = ln
         this.password = p
         this.courseCount = cCount
         this.courses = courses

@@ -2,6 +2,8 @@ import { Component , ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CourseSelectComponent } from '../course-select/course-select.component';
+import { User } from '../user';
+import { Course } from '../course';
 
 
 @Component({
@@ -46,7 +48,20 @@ export class NewUserComponent {
   submit(){
     this.childComponent.formToParent();
     console.log(this.form.value)
-
+    let form = this.form.value
+    var courses : Course[];
+    courses = [];
+    for(let i = 0 ; i<this.courseCount.length ; i++ ){
+      let c = new Course()
+      // change the follow 2 lines to parse the database to find the matching course
+      c.setCode(form.courses[i].course.value)
+      console.log(form.courses[i].section.value)
+      let section = form.courses[i].section.value
+      c.addSection( section , "null" , "null")
+      courses.push( c )
+    }
+    var user = new User(form.fName , form.lName , form.password , this.courseCount.length , courses );
+    this.DS.createUser(user);
   }
 
 }

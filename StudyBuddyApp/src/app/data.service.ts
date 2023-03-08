@@ -15,7 +15,7 @@ export class DataService {
 
   
   createUser(U : User){
-
+    console.log(U)
   }
 
   getTermCourses() : Course[]{
