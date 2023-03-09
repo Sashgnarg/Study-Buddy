@@ -1,0 +1,39 @@
+<p>admin-faculties works!</p>
+
+<!-- Form for adding a new faculty -->
+<form [formGroup]="facultyForm" (ngSubmit)="addFaculty()">
+    <mat-form-field>
+        <mat-label>Faculty ID:</mat-label>
+        <input matInput type="number" name="faculty-id-input" formControlName="facultyIdControl" required>
+    </mat-form-field>
+
+    <br><br>
+
+    <mat-form-field>
+        <mat-label>Faculty Name:</mat-label>
+        <input matInput type="text" name="faculty-name-input" formControlName="facultyNameControl" required>
+    </mat-form-field>
+
+    <br><br>
+
+    <button mat-raised-button color="primary">Submit</button>
+</form>
+
+<!-- Display Faculties table -->
+<table mat-table [dataSource]="dataSource">
+    <!-- faculty_id column -->
+    <ng-container matColumnDef="faculty-id">
+        <th mat-header-cell *matHeaderCellDef> faculty_id </th>
+        <td mat-cell *matCellDef="let element"> {{element.faculty_id}} </td>
+    </ng-container>
+
+    <!-- faculty_name column -->
+    <ng-container matColumnDef="faculty-name">
+        <th mat-header-cell *matHeaderCellDef> faculty_name </th>
+        <td mat-cell *matCellDef="let element"> {{element.faculty_name}} </td>
+    </ng-container>
+
+    <!-- Render header and rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
