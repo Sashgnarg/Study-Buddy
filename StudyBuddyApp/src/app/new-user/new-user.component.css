@@ -11,8 +11,21 @@ button{
   }
 
   select{
-    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 50%;
+    /* display: inline-block; */
+    
+  }
+  .center {
+    width: 30%;
+  }
+
+  .selectRow{
+    display: flex;
+    justify-content: space-between;
   }
   label{
-    margin-left: 60px;
+    font-weight: bold;
   }
+

@@ -1,7 +1,6 @@
 import { Component , OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
-import { CourseSelectComponent } from '../course-select/course-select.component';
 import { User } from '../user';
 import { Course } from '../course';
 import { Section } from '../section';
@@ -16,7 +15,6 @@ export class NewUserComponent implements OnInit{
   public allCourses:Course[]
   public allSections: Section[][]
   public courseCount : number
-  @ViewChild('child', { static: false }) childComponent!: CourseSelectComponent;
 
   form : FormGroup
   constructor(private DS : DataService , private FB : FormBuilder){
@@ -81,9 +79,6 @@ export class NewUserComponent implements OnInit{
     }
     var user = new User(form.fName , form.lName , form.password , this.courseCount , userCourses ,userSections );
     this.DS.createUser(user);
-  }
-  test(){
-    console.log(this.courses.value);
   }
 
 }

@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NewUserComponent } from './new-user/new-user.component';
-import { CourseSelectComponent } from './course-select/course-select.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -13,7 +12,6 @@ import { ReactiveFormsModule } from '@angular/forms';
   declarations: [
     AppComponent,
     NewUserComponent,
-    CourseSelectComponent,
   ],
   imports: [
     BrowserModule,

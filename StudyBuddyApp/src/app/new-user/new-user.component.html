@@ -1,21 +1,25 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 
-<h1>New User</h1>
-
-<form [formGroup]="form" action="">
-    <h2>Personal Info</h2>
-    <label for="fName">First Name</label><br>
-    <input type="text" name="fName" placeholder="first name" formControlName="fName"><br><br>
-    <label for="lName">Last Name</label><br>
-    <input type="text" name="lName" placeholder="last name" formControlName="lName"><br><br>
-
-    <label for="password"></label>Password<br>
-    <input type="password" name="password" placeholder="password" formControlName="password"><br><br>
-    <label for="repeatPassword">confirm Password</label><br>
-    <input type="password" name="repeatPassword" placeholder="Confirm password" formControlName="repeatPassword"><br><br>
+<form class="form-group center container" [formGroup]="form" action="">
+    <h1>New User</h1>
+    <ng-container class="row">
+        <h2>Personal Info</h2>
+        <label for="fName">First Name</label><br>
+        <input [ngClass]="{'ng-invalid': form.get('fName')?.invalid && (form.get('fName')?.touched || form.get('fName')?.dirty)}" class="form-control" type="text" name="fName" placeholder="first name" formControlName="fName"><br>
+        <div *ngIf="form.get('fName')?.invalid && (form.get('fName')?.touched || form.get('fName')?.dirty)">
+            <div class='invalid'>Enter Name</div>
+        </div>
+        <label for="lName">Last Name</label><br>
+        <input class="form-control" type="text" name="lName" placeholder="last name" formControlName="lName"><br>
+    </ng-container>
+    <label for="password">Password</label><br>
+    <input class="form-control" type="password" name="password" placeholder="password" formControlName="password"><br>
+    <label for="repeatPassword">Confirm Password</label><br>
+    <input class="form-control" type="password" name="repeatPassword" placeholder="confirm password" formControlName="repeatPassword"><br>
     <h2>School Info</h2><br>
     <label for="faculty">Faculty</label><br>
-    <select name="faculty" id="faculty" formControlName="faculty">
+    <select class="form-control" name="faculty" id="faculty" formControlName="faculty">
         <option value="Applied Science">Applied Science</option>
         <option value="Arts and Social Science">Arts and Social Science</option>
         <option value="Communication Art and Technology">Communication Art and Technology</option>
@@ -33,25 +37,24 @@
     <ng-container formArrayName="courses">
 
         <ng-container *ngFor="let courseForm of courses.controls ; let i = index">
+            <h4>Course {{i+1}}</h4>
+            <div class="container selectRow" [formGroupName]="i">   
+                        <label for="course">Course</label>
+                        <select class="form-control" (change)="setSections(i)" name="course" id="course" formControlName="code">
+                            <option value="">Select a course</option>
+                            <option *ngFor="let course of allCourses" [value]='course.getCode()'>{{course.getCode()}}</option>
+                        </select>
 
-            <div [formGroupName]="i">        
-                    <label for="course">Course</label>
-                    <select (change)="setSections(i)" name="course" id="course" formControlName="code">
-                        <option value="">Select a course</option>
-                        <option *ngFor="let course of allCourses" [value]='course.getCode()'>{{course.getCode()}}</option>
-                    </select>
-
-                    <label for="section">Section</label>
-                    <select name="section" id="section" formControlName="section">
-                        <option value="">Select a section</option>
-                        <option  *ngFor="let section of setSections(i)">{{section.name}}</option>
-                    </select>
-                    <button id="xButton" type="button" (click)="removeCourse(i)" class="btn btn-danger"><i class="fa fa-times"></i></button>
-            </div>
+                        <label for="section">Section</label>
+                        <select class="form-control" name="section" id="section" formControlName="section">
+                            <option value="">Select a section</option>
+                            <option  *ngFor="let section of setSections(i)">{{section.name}}</option>
+                        </select>
+                        <button id="xButton" type="button" (click)="removeCourse(i)"><i class="fa fa-times"></i></button>
+                </div>
         </ng-container>
     </ng-container>
-
-    <button (click)="incrCount()" type="button">add course</button>
-    
-    <button (click)="submit()" type="button">test submit</button>
+    <br>
+    <button class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
+    <button [disabled]="!form.valid" class="btn btn-primary " (click)="submit()" type="button">test submit</button>
 </form>
