@@ -19,6 +19,7 @@ export class NewUserComponent implements OnInit{
   form : FormGroup
   constructor(private DS : DataService , private FB : FormBuilder){
     this.form = this.FB.group({
+      uName: ['' , Validators.required],
       fName: ['' , Validators.required],
       lName:['',Validators.required],
       faculty:['' , Validators.required],
@@ -76,7 +77,7 @@ export class NewUserComponent implements OnInit{
       userCourses.push( c )
       userSections.push(s)
     }
-    var user = new User(form.fName , form.lName , form.password , this.courseCount , userCourses ,userSections );
+    var user = new User( form.uName ,form.fName , form.lName , form.password , this.courseCount , userCourses ,userSections );
     this.DS.createUser(user);
   }
 

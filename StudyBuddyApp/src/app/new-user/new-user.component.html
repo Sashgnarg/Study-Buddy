@@ -6,6 +6,12 @@
     <h1>New User</h1>
     <ng-container class="row">
         <h2>Personal Info</h2>
+        <label for="uName">Username</label><br>
+        <input [ngClass]="{'is-invalid': form.get('uName')?.invalid && (form.get('uName')?.touched || form.get('uName')?.dirty)}" type="text" class="form-control" name="uName" placeholder="username" formControlName="uName">
+        <div *ngIf="form.get('uName')?.invalid && (form.get('uName')?.touched || form.get('uName')?.dirty)">
+            <div class='error-message'>Enter A Username</div><br>
+        </div>
+
         <label for="fName">First Name</label><br>
         <input [ngClass]="{'is-invalid': form.get('fName')?.invalid && (form.get('fName')?.touched || form.get('fName')?.dirty)}" class="form-control" type="text" name="fName" placeholder="first name" formControlName="fName">
         <div *ngIf="form.get('fName')?.invalid && (form.get('fName')?.touched || form.get('fName')?.dirty)">

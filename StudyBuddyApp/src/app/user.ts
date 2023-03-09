@@ -3,6 +3,7 @@ import { Section } from "./section"
 
 export class User {
 
+    userName: string
     fName: string
     lName : string
     password: string
@@ -16,7 +17,8 @@ export class User {
     // add more later 
     // ie friends messages etc
 
-    constructor(fn : string , ln :string,  p : string , cCount : number , courses:Course[] , sections:Section[]){
+    constructor( un:string,   fn : string , ln :string,  p : string , cCount : number , courses:Course[] , sections:Section[]){
+        this.userName = un
         this.fName = fn
         this.lName = ln
         this.password = p
