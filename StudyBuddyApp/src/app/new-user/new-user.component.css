@@ -13,7 +13,6 @@ button{
   select{
     margin-left: 10px;
     margin-right: 10px;
-    width: 50%;
     /* display: inline-block; */
     
   }
@@ -29,3 +28,6 @@ button{
     font-weight: bold;
   }
 
+.error-message{
+  color: rgb(192, 27, 27);
+}

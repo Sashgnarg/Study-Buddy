@@ -49,7 +49,6 @@ export class NewUserComponent implements OnInit{
     })
 
     this.courses.push(courseForm);
-
   }
 
   removeCourse(data:any){

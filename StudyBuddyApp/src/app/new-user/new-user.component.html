@@ -1,25 +1,37 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
+
 <form class="form-group center container" [formGroup]="form" action="">
     <h1>New User</h1>
     <ng-container class="row">
         <h2>Personal Info</h2>
         <label for="fName">First Name</label><br>
-        <input [ngClass]="{'ng-invalid': form.get('fName')?.invalid && (form.get('fName')?.touched || form.get('fName')?.dirty)}" class="form-control" type="text" name="fName" placeholder="first name" formControlName="fName"><br>
+        <input [ngClass]="{'is-invalid': form.get('fName')?.invalid && (form.get('fName')?.touched || form.get('fName')?.dirty)}" class="form-control" type="text" name="fName" placeholder="first name" formControlName="fName">
         <div *ngIf="form.get('fName')?.invalid && (form.get('fName')?.touched || form.get('fName')?.dirty)">
-            <div class='invalid'>Enter Name</div>
+            <div class='error-message'>Enter A First Name</div><br>
         </div>
         <label for="lName">Last Name</label><br>
-        <input class="form-control" type="text" name="lName" placeholder="last name" formControlName="lName"><br>
+        <input [ngClass]="{'is-invalid': form.get('lName')?.invalid && (form.get('lName')?.touched || form.get('lName')?.dirty)}"class="form-control" type="text" name="lName" placeholder="last name" formControlName="lName">
+        <div *ngIf="form.get('lName')?.invalid && (form.get('lName')?.touched || form.get('lName')?.dirty)">
+            <div class='error-message'>Enter A Last Name</div><br>
+        </div>
     </ng-container>
     <label for="password">Password</label><br>
-    <input class="form-control" type="password" name="password" placeholder="password" formControlName="password"><br>
+    <input [ngClass]="{'is-invalid': form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)}" class="form-control" type="password" name="password" placeholder="password" formControlName="password">
+    <div *ngIf="form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)">
+        <div *ngIf="form.get('password')?.errors['required']" class='error-message'>Enter A Password</div><br>
+        <div *ngIf="form.get('password')?.errors['match']" class='error-message'>Passwords Dont Match</div><br>
+    </div>
     <label for="repeatPassword">Confirm Password</label><br>
-    <input class="form-control" type="password" name="repeatPassword" placeholder="confirm password" formControlName="repeatPassword"><br>
+    <input [ngClass]="{'is-invalid': form.get('repeatPassword')?.invalid && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)}" class="form-control" type="password" name="repeatPassword" placeholder="confirm password" formControlName="repeatPassword">
+    <div *ngIf="form.get('repeatPassword')?.invalid && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)">
+        <div *ngIf="form.get('repeatPassword')?.errors['required']" class='error-message'>Confirm Your Password</div><br>
+        <div *ngIf="form.get('repeatPassword')?.errors['match']" class='error-message'>Passwords Dont Match</div><br>
+    </div>
     <h2>School Info</h2><br>
     <label for="faculty">Faculty</label><br>
-    <select class="form-control" name="faculty" id="faculty" formControlName="faculty">
+    <select [ngClass]="{'is-invalid': form.get('faculty')?.invalid && (form.get('faculty')?.touched || form.get('faculty')?.dirty)}" class="form-control" name="faculty" id="faculty" formControlName="faculty">
         <option value="Applied Science">Applied Science</option>
         <option value="Arts and Social Science">Arts and Social Science</option>
         <option value="Communication Art and Technology">Communication Art and Technology</option>
@@ -40,13 +52,13 @@
             <h4>Course {{i+1}}</h4>
             <div class="container selectRow" [formGroupName]="i">   
                         <label for="course">Course</label>
-                        <select class="form-control" (change)="setSections(i)" name="course" id="course" formControlName="code">
+                        <select [ngClass]="{'is-invalid': courses.at(i).get('code')?.invalid && (courses.at(i).get('code')?.touched || courses.at(i).get('code')?.dirty)}" class="form-control" (change)="setSections(i)" name="course" formControlName="code">
                             <option value="">Select a course</option>
                             <option *ngFor="let course of allCourses" [value]='course.getCode()'>{{course.getCode()}}</option>
                         </select>
 
                         <label for="section">Section</label>
-                        <select class="form-control" name="section" id="section" formControlName="section">
+                        <select [ngClass]="{'is-invalid': courses.at(i).get('section')?.invalid && (courses.at(i).get('section')?.touched || courses.at(i).get('section')?.dirty)}" class="form-control" name="section" formControlName="section">
                             <option value="">Select a section</option>
                             <option  *ngFor="let section of setSections(i)">{{section.name}}</option>
                         </select>
