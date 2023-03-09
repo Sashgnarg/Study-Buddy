@@ -1,6 +1,4 @@
-button{
-    margin-left: 60px;
-}
+
 #xButton {
     background: transparent;
     border: none;
@@ -30,4 +28,7 @@ button{
 
 .error-message{
   color: rgb(192, 27, 27);
+}
+#addCourseButton{
+  margin-right: 30px;
 }

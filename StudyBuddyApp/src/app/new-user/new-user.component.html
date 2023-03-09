@@ -49,8 +49,9 @@
     <ng-container formArrayName="courses">
 
         <ng-container *ngFor="let courseForm of courses.controls ; let i = index">
-            <h4>Course {{i+1}}</h4>
-            <div class="container selectRow" [formGroupName]="i">   
+            <h4><button id="xButton" type="button" (click)="removeCourse(i)"><i class="fa fa-times"></i></button>
+                Course {{i+1}}</h4>
+            <div class="container selectRow row" [formGroupName]="i">   
                         <label for="course">Course</label>
                         <select [ngClass]="{'is-invalid': courses.at(i).get('code')?.invalid && (courses.at(i).get('code')?.touched || courses.at(i).get('code')?.dirty)}" class="form-control" (change)="setSections(i)" name="course" formControlName="code">
                             <option value="">Select a course</option>
@@ -62,11 +63,10 @@
                             <option value="">Select a section</option>
                             <option  *ngFor="let section of setSections(i)">{{section.name}}</option>
                         </select>
-                        <button id="xButton" type="button" (click)="removeCourse(i)"><i class="fa fa-times"></i></button>
                 </div>
         </ng-container>
     </ng-container>
     <br>
-    <button class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
+    <button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
     <button [disabled]="!form.valid" class="btn btn-primary " (click)="submit()" type="button">test submit</button>
 </form>
