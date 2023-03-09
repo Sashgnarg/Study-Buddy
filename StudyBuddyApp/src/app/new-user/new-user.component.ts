@@ -1,6 +1,6 @@
 import { Component , OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl , ValidatorFn, ValidationErrors, FormControl } from '@angular/forms';
 import { User } from '../user';
 import { Course } from '../course';
 import { Section } from '../section';
@@ -23,10 +23,10 @@ export class NewUserComponent implements OnInit{
       fName: ['' , Validators.required],
       lName:['',Validators.required],
       faculty:['' , Validators.required],
-      password:['' , Validators.required],
-      repeatPassword:['' , Validators.required],
+      password:['' , [Validators.required , Validators.minLength(6)]],
+      repeatPassword:['' , [Validators.required , Validators.minLength(6)]],
       courses : this.FB.array([]),
-    })
+    } , {validators : this.checkPasswords})
     this.allCourses=[]
     this.allSections=[]
     this.courseCount=0
@@ -40,6 +40,16 @@ export class NewUserComponent implements OnInit{
 
   get courses() : FormArray{
     return this.form.get('courses') as FormArray
+  }
+
+
+  checkPasswords: ValidatorFn = (group: AbstractControl):  ValidationErrors | null => { 
+    let pass = group.get('password')?.value;
+    let confirmPass = group.get('repeatPassword')?.value
+    if(pass != confirmPass){
+      console.log("dont match")
+    }
+    return pass === confirmPass ? null : { match_error: true }
   }
 
   incrCount(){

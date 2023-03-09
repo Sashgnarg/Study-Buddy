@@ -24,17 +24,18 @@
         </div>
     </ng-container>
     <label for="password">Password</label><br>
-    <input [ngClass]="{'is-invalid': form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)}" class="form-control" type="password" name="password" placeholder="password" formControlName="password">
+    <input minlength="6" [ngClass]="{'is-invalid': form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)}" class="form-control" type="password" name="password" placeholder="password" formControlName="password">
     <div *ngIf="form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)">
         <div *ngIf="form.get('password')?.errors['required']" class='error-message'>Enter A Password</div><br>
-        <div *ngIf="form.get('password')?.errors['match']" class='error-message'>Passwords Dont Match</div><br>
+        <div *ngIf="form.get('password')?.errors['minlength']" class='error-message'>Password Be At Least 6 Characters Long</div><br>
     </div>
     <label for="repeatPassword">Confirm Password</label><br>
     <input [ngClass]="{'is-invalid': form.get('repeatPassword')?.invalid && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)}" class="form-control" type="password" name="repeatPassword" placeholder="confirm password" formControlName="repeatPassword">
     <div *ngIf="form.get('repeatPassword')?.invalid && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)">
         <div *ngIf="form.get('repeatPassword')?.errors['required']" class='error-message'>Confirm Your Password</div><br>
-        <div *ngIf="form.get('repeatPassword')?.errors['match']" class='error-message'>Passwords Dont Match</div><br>
+        <div *ngIf="form.hasError('match_error')" class='error-message'>Passwords Dont Match</div><br>
     </div>
+    <br>
     <h2>School Info</h2><br>
     <label for="faculty">Faculty</label><br>
     <select [ngClass]="{'is-invalid': form.get('faculty')?.invalid && (form.get('faculty')?.touched || form.get('faculty')?.dirty)}" class="form-control" name="faculty" id="faculty" formControlName="faculty">
