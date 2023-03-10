@@ -8,7 +8,8 @@ const pool = new Pool({
 })
 
 pool.connect();
-
+ 
+module.exports = pool
 async function selectQuery() {
     try {
         var myquery = await pool.query("SELECT * FROM students")
@@ -21,5 +22,5 @@ async function selectQuery() {
     }
 }
 
-selectQuery()
+//selectQuery()
 

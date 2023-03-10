@@ -2,7 +2,7 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
 
-<form class="form-group center container" [formGroup]="form" action="">
+<form class="form-group center container" [formGroup]="form" action="http://localhost:8080/signUp">
     <h1>New User</h1>
     <ng-container class="row">
         <h2>Personal Info</h2>
@@ -30,9 +30,9 @@
         <div *ngIf="form.get('password')?.errors['minlength']" class='error-message'>Password Be At Least 6 Characters Long</div><br>
     </div>
     <label for="repeatPassword">Confirm Password</label><br>
-    <input [ngClass]="{'is-invalid': form.get('repeatPassword')?.invalid && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)}" class="form-control" type="password" name="repeatPassword" placeholder="confirm password" formControlName="repeatPassword">
-    <div *ngIf="form.get('repeatPassword')?.invalid && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)">
-        <div *ngIf="form.get('repeatPassword')?.errors['required']" class='error-message'>Confirm Your Password</div><br>
+    <input [ngClass]="{'is-invalid': (form.get('repeatPassword')?.invalid || form.getError('match_error')) && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)}" class="form-control" type="password" name="repeatPassword" placeholder="confirm password" formControlName="repeatPassword">
+    <div *ngIf="(form.get('repeatPassword')?.invalid || form.hasError('match_error')) && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)">
+        <div *ngIf="form.get('repeatPassword')?.hasError('required')" class='error-message'>Confirm Your Password</div><br>
         <div *ngIf="form.hasError('match_error')" class='error-message'>Passwords Dont Match</div><br>
     </div>
     <br>

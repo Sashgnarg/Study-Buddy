@@ -15,7 +15,10 @@ export class DataService {
 
   
   createUser(U : User){
-    console.log(U)
+    var signUpUrl = 'http://localhost:8080/signUp'
+    
+    this.http.post(signUpUrl , U).subscribe();
+    console.log(JSON.stringify(U))
   }
 
   getTermCourses() : Course[]{

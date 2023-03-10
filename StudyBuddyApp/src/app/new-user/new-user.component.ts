@@ -87,7 +87,7 @@ export class NewUserComponent implements OnInit{
       userCourses.push( c )
       userSections.push(s)
     }
-    var user = new User( form.uName ,form.fName , form.lName , form.password , this.courseCount , userCourses ,userSections );
+    var user = new User( form.uName ,form.fName , form.lName , form.faculty, form.password , this.courseCount , userCourses ,userSections );
     this.DS.createUser(user);
   }
 
