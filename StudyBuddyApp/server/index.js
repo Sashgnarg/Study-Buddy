@@ -1,31 +1,60 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const pool = require('./data')
+const { Pool } = require('pg');
+
+var port = process.env.PORT || 8080
+
+const pool = new Pool({
+    user: "postgres",
+    password: "cmpt372",
+    host: "34.145.35.44",
+    database: "postgres"
+})
+
 app.use(express.json())
 app.use(cors())
 
 const PORT = 8080
 
 
-app.post('/signUp' , (req,res)=>{
+// For logging incoming requests
+app.use('/', function (req, res, next) {
+    console.log(req.method, 'request: ', req.url, JSON.stringify(req.body))
+    next()
+})
+
+app.post('/signUp', (req, res) => {
     try {
-        const {uName , fName , lName , faculty , courseCount, password } = req.body
+        const { uName, fName, lName, faculty, courseCount, password } = req.body
         const courses = req.body.courses
         const sections = req.body.sections
         // should use md5 on the password at this stage
-        console.log(uName , fName , lName , faculty , password , courseCount ,  courses , sections)
+        console.log(uName, fName, lName, faculty, password, courseCount, courses, sections)
         res.json(req.body)
         // all parts of user are saved above ^^ just needs to be sent into database
     } catch (error) {
         console.log(error.message)
     }
 })
-app.get('/' , (req,res)=>{
+app.get('/', (req, res) => {
     console.log('hi')
     res.send('hi')
 })
 
-app.listen(PORT , ()=>{
+app.listen(PORT, () => {
     console.log(`app is listening on ${PORT}`);
+})
+
+app.get('/get-faculties', async (req, res) => {
+    try {
+        var result = await pool.query(`
+            SELECT * FROM faculty;
+        `)
+        console.log(`sending back:`, result.rows)
+        res.send(result.rows)
+        res.end()
+    } catch (e) {
+        console.log(e)
+    }
 })

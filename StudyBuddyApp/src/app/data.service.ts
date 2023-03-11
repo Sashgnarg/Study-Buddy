@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from './user';
 import { HttpClient } from '@angular/common/http'
 import { Course } from './course';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +33,11 @@ export class DataService {
     temp2.addSection("d400" , "9:00" , "10:00");
     return [temp1 , temp2]
 
+  }
+
+  getFaculties(): Observable<any> {
+    var getFacultyUrl = 'http://localhost:8080/get-faculties'
+
+    return this.http.get(getFacultyUrl);
   }
 }

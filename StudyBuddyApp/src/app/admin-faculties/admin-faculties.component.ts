@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { Observable } from 'rxjs';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-admin-faculties',
@@ -8,6 +10,13 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./admin-faculties.component.css']
 })
 export class AdminFacultiesComponent {
+  facultiesObservable: Observable<any> | undefined;
+  faculties: any[] = [];
+
+  constructor(private ds: DataService) {
+
+  }
+
   displayedColumns: string[] = ["faculty-id", "faculty-name"]
   data = [
     { faculty_id: 1, faculty_name: "Applied Sciences" },
@@ -36,5 +45,16 @@ export class AdminFacultiesComponent {
     this.data.push({ faculty_id: newFacultyId, faculty_name: newFacultyName })
     this.dataSource.data = this.data
   }
+
+  ngOnInit() {
+    this.facultiesObservable = this.ds.getFaculties()
+    this.facultiesObservable.subscribe((response) => {
+      this.faculties = response
+      this.dataSource.data = this.faculties
+      console.log(response)
+    })
+
+  }
 }
+
 
