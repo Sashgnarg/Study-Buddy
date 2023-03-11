@@ -41,9 +41,7 @@ export class AdminFacultiesComponent {
     console.log(newFacultyId)
     console.log(newFacultyName)
 
-    // TODO: Send new faculty to database
-    this.data.push({ faculty_id: newFacultyId, faculty_name: newFacultyName })
-    this.dataSource.data = this.data
+    this.ds.addFaculty(newFacultyId, newFacultyName)
   }
 
   ngOnInit() {
@@ -53,8 +51,5 @@ export class AdminFacultiesComponent {
       this.dataSource.data = this.faculties
       console.log(response)
     })
-
   }
 }
-
-

@@ -17,7 +17,6 @@ app.use(cors())
 
 const PORT = 8080
 
-
 // For logging incoming requests
 app.use('/', function (req, res, next) {
     console.log(req.method, 'request: ', req.url, JSON.stringify(req.body))
@@ -55,6 +54,27 @@ app.get('/get-faculties', async (req, res) => {
         res.send(result.rows)
         res.end()
     } catch (e) {
+        console.log(e)
+    }
+})
+
+app.post('/add-faculty', async (req, res) => {
+    queryWithId = `
+    INSERT INTO faculty (faculty_id, faculty_name) VALUES ($1, $2);
+    `
+    queryWithoutId = `
+    INSERT INTO faculty (faculty_name) VALUES ($1);
+    `
+    console.log(req.body)
+    try {
+        if (req.body.faculty_id == 0) {
+            await pool.query(queryWithoutId, [req.body.faculty_name])
+        }
+        else {
+            await pool.query(queryWithId, [req.body.faculty_id, req.body.faculty_name])
+        }
+    }
+    catch (e) {
         console.log(e)
     }
 })
