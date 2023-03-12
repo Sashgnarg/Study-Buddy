@@ -10,11 +10,11 @@ import { DataService } from '../data.service';
   styleUrls: ['./admin-faculties.component.css']
 })
 export class AdminFacultiesComponent {
-  facultiesObservable: Observable<any> | undefined;
+  facultiesObservable: Observable<any>;
   faculties: any[] = [];
 
   constructor(private ds: DataService) {
-
+    this.facultiesObservable = this.ds.getFacultiesObservable()
   }
 
   displayedColumns: string[] = ["faculty-id", "faculty-name", "delete-col"]
@@ -41,24 +41,31 @@ export class AdminFacultiesComponent {
     console.log(newFacultyId)
     console.log(newFacultyName)
 
-    this.ds.addFaculty(newFacultyId, newFacultyName)
-    // TODO: Refresh UI when new faculty added
+    // Send new faculty to database, then refresh this page's table
+    this.ds.addFacultyObservable(newFacultyId, newFacultyName).subscribe((res) => {
+      this.refreshFacultyTable()
+    })
   }
 
-  openDeleteDialog(element: any): void {
+  async openDeleteDialog(element: any): Promise<void> {
     // TODO: Confirm deletion with alert window
     console.log(element.faculty_id)
 
-    this.ds.deleteFaculty(element.faculty_id)
-    // TODO: Refresh UI when faculty deleted
+    // Send deletion to database, then refresh this page's table
+    this.ds.deleteFacultyObservable(element.faculty_id).subscribe((res) => {
+      this.refreshFacultyTable()
+    })
   }
 
   ngOnInit() {
-    this.facultiesObservable = this.ds.getFaculties()
-    this.facultiesObservable.subscribe((response) => {
-      this.faculties = response
+    this.refreshFacultyTable()
+  }
+
+  refreshFacultyTable() {
+    this.facultiesObservable.subscribe((res) => {
+      this.faculties = res
       this.dataSource.data = this.faculties
-      console.log(response)
+      console.log(res)
     })
   }
 }

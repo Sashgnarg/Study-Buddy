@@ -36,20 +36,60 @@ export class DataService {
     return [temp1, temp2]
   }
 
-  getFaculties(): Observable<any> {
+  /**
+  * Makes an HTTP GET request for the array of the faculty table from the database
+  * @returns an observable that can be subscribed to for the response
+  */
+  getFacultiesObservable(): Observable<any> {
     var methodUrl = '/get-faculties'
 
     return this.http.get(this.baseUrl + methodUrl);
   }
 
-  addFaculty(faculty_id: number, faculty_name: string) {
+  /**
+  * Makes an HTTP POST request to add a faculty to the database
+  * @param faculty_id optional faculty id for reference
+  * @param faculty_name faculty name (maximum 30 characters)
+  */
+  addFaculty(faculty_id: number, faculty_name: string): void {
     var methodUrl = '/add-faculty'
 
     this.http.post(this.baseUrl + methodUrl, { faculty_id: faculty_id, faculty_name: faculty_name }).subscribe()
   }
 
-  deleteFaculty(faculty_id: number) {
+  /**
+  * Makes an HTTP POST request to add a faculty to the database
+  * @param faculty_id - optional faculty id for reference
+  * @param faculty_name - faculty name (maximum 30 characters)
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
+  addFacultyObservable(faculty_id: number, faculty_name: string): Observable<any> {
+    var methodUrl = '/add-faculty'
+
+    return this.http.post(this.baseUrl + methodUrl, { faculty_id: faculty_id, faculty_name: faculty_name })
+  }
+
+  /**
+  * Makes an HTTP DELETE request to delete a faculty from the database
+  * @param faculty_id faculty id of the faculty to be deleted
+  */
+  deleteFaculty(faculty_id: number): void {
     var methodUrl = '/delete-faculty'
+
     this.http.request('delete', this.baseUrl + methodUrl, { body: { faculty_id: faculty_id } }).subscribe()
+  }
+
+
+  /**
+  * Makes an HTTP DELETE request to delete a faculty from the database and return an observable for response
+  * @param faculty_id faculty id of the faculty to be deleted
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
+  deleteFacultyObservable(faculty_id: number): Observable<any> {
+    var methodUrl = '/delete-faculty'
+
+    return this.http.request('delete', this.baseUrl + methodUrl, { body: { faculty_id: faculty_id } })
   }
 }

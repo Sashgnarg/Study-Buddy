@@ -73,6 +73,7 @@ app.post('/add-faculty', async (req, res) => {
         else {
             await pool.query(queryWithId, [req.body.faculty_id, req.body.faculty_name])
         }
+        res.end()
     }
     catch (e) {
         console.log(e)
@@ -85,6 +86,7 @@ app.delete('/delete-faculty', async (req, res) => {
     `
     try {
         await pool.query(query, [req.body.faculty_id])
+        res.end()
     }
     catch (e) {
         console.log(e)
