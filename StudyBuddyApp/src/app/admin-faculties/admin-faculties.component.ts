@@ -17,7 +17,7 @@ export class AdminFacultiesComponent {
 
   }
 
-  displayedColumns: string[] = ["faculty-id", "faculty-name"]
+  displayedColumns: string[] = ["faculty-id", "faculty-name", "delete-col"]
   data = [
     { faculty_id: 1, faculty_name: "Applied Sciences" },
     { faculty_id: 2, faculty_name: "Arts and Social Sciences" },
@@ -42,6 +42,15 @@ export class AdminFacultiesComponent {
     console.log(newFacultyName)
 
     this.ds.addFaculty(newFacultyId, newFacultyName)
+    // TODO: Refresh UI when new faculty added
+  }
+
+  openDeleteDialog(element: any): void {
+    // TODO: Confirm deletion with alert window
+    console.log(element.faculty_id)
+
+    this.ds.deleteFaculty(element.faculty_id)
+    // TODO: Refresh UI when faculty deleted
   }
 
   ngOnInit() {

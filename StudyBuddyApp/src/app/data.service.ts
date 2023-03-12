@@ -14,6 +14,8 @@ export class DataService {
 
   }
 
+  baseUrl = 'http://localhost:8080'
+
 
   createUser(U: User) {
     var signUpUrl = 'http://localhost:8080/signUp'
@@ -32,18 +34,22 @@ export class DataService {
     temp2.addSection('d300', '5:00', '6:00')
     temp2.addSection("d400", "9:00", "10:00");
     return [temp1, temp2]
-
   }
 
   getFaculties(): Observable<any> {
-    var getFacultyUrl = 'http://localhost:8080/get-faculties'
+    var methodUrl = '/get-faculties'
 
-    return this.http.get(getFacultyUrl);
+    return this.http.get(this.baseUrl + methodUrl);
   }
 
   addFaculty(faculty_id: number, faculty_name: string) {
-    var addFacultyUrl = 'http://localhost:8080/add-faculty'
+    var methodUrl = '/add-faculty'
 
-    this.http.post(addFacultyUrl, { faculty_id: faculty_id, faculty_name: faculty_name }).subscribe()
+    this.http.post(this.baseUrl + methodUrl, { faculty_id: faculty_id, faculty_name: faculty_name }).subscribe()
+  }
+
+  deleteFaculty(faculty_id: number) {
+    var methodUrl = '/delete-faculty'
+    this.http.request('delete', this.baseUrl + methodUrl, { body: { faculty_id: faculty_id } }).subscribe()
   }
 }

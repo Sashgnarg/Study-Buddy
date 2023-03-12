@@ -78,3 +78,15 @@ app.post('/add-faculty', async (req, res) => {
         console.log(e)
     }
 })
+
+app.delete('/delete-faculty', async (req, res) => {
+    query = `
+    DELETE FROM faculty WHERE faculty_id=$1
+    `
+    try {
+        await pool.query(query, [req.body.faculty_id])
+    }
+    catch (e) {
+        console.log(e)
+    }
+})
