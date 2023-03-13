@@ -92,3 +92,18 @@ app.delete('/delete-faculty', async (req, res) => {
         console.log(e)
     }
 })
+
+app.patch('/edit-faculty', async (req, res) => {
+    query = `
+    UPDATE faculty
+    SET faculty_name = $1
+    WHERE faculty_id = $2;
+    `
+    try {
+        await pool.query(query, [req.body.new_faculty_name, req.body.faculty_id])
+        res.end()
+    }
+    catch (e) {
+        console.log(e)
+    }
+})

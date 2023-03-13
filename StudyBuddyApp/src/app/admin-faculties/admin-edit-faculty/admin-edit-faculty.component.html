@@ -1,0 +1,6 @@
+<mat-form-field>
+    <mat-label>New Faculty Name:</mat-label>
+    <input matInput type="text" name="faculty-name-input" [(ngModel)]=data.element.new_faculty_name required>
+</mat-form-field>
+<br>
+<button mat-button [mat-dialog-close]="data.element.new_faculty_name">Ok</button>

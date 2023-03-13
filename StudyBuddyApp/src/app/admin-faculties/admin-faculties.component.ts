@@ -1,8 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { DataService } from '../data.service';
+import { AdminEditFacultyComponent } from './admin-edit-faculty/admin-edit-faculty.component';
 
 @Component({
   selector: 'app-admin-faculties',
@@ -13,11 +15,11 @@ export class AdminFacultiesComponent {
   facultiesObservable: Observable<any>;
   faculties: any[] = [];
 
-  constructor(private ds: DataService) {
+  constructor(private ds: DataService, public dialog: MatDialog) {
     this.facultiesObservable = this.ds.getFacultiesObservable()
   }
 
-  displayedColumns: string[] = ["faculty-id", "faculty-name", "delete-col"]
+  displayedColumns: string[] = ["faculty-id", "faculty-name", "edit-col", "delete-col"]
   data = [
     { faculty_id: 1, faculty_name: "Applied Sciences" },
     { faculty_id: 2, faculty_name: "Arts and Social Sciences" },
@@ -54,6 +56,23 @@ export class AdminFacultiesComponent {
     // Send deletion to database, then refresh this page's table
     this.ds.deleteFacultyObservable(element.faculty_id).subscribe((res) => {
       this.refreshFacultyTable()
+    })
+  }
+
+  async openEditDialog(element: any): Promise<void> {
+    console.log(element.faculty_id)
+    const dialogRef = this.dialog.open(AdminEditFacultyComponent, {
+      height: '200px',
+      width: '300px',
+      data: { element: element }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        console.log(result)
+        this.ds.editFacultyObservable(element.faculty_id, result).subscribe(() => {
+          this.refreshFacultyTable()
+        })
+      }
     })
   }
 

@@ -92,4 +92,17 @@ export class DataService {
 
     return this.http.request('delete', this.baseUrl + methodUrl, { body: { faculty_id: faculty_id } })
   }
+
+  /**
+  * Makes an HTTP PATCH request to edit a faculty name in the database and return an observable for response
+  * @param faculty_id faculty id of the faculty to be edited
+  * @param new_faculty_name the new faculty name
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
+  editFacultyObservable(faculty_id: number, new_faculty_name: string): Observable<any> {
+    var methodUrl = '/edit-faculty'
+
+    return this.http.patch(this.baseUrl + methodUrl, { faculty_id: faculty_id, new_faculty_name: new_faculty_name })
+  }
 }

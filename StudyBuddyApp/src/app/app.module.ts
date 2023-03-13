@@ -18,6 +18,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AdminEditFacultyComponent } from './admin-faculties/admin-edit-faculty/admin-edit-faculty.component';
 
 
 @NgModule({
@@ -29,6 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
     AdminDepartmentsComponent,
     AdminCoursesComponent,
     AdminUsersComponent,
+    AdminEditFacultyComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,6 +45,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
