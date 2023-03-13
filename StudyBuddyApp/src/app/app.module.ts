@@ -21,6 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSortModule } from '@angular/material/sort';
 import { AdminEditFacultyComponent } from './admin-faculties/admin-edit-faculty/admin-edit-faculty.component';
+import { AdminDeleteFacultyComponent } from './admin-faculties/admin-delete-faculty/admin-delete-faculty.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { AdminEditFacultyComponent } from './admin-faculties/admin-edit-faculty/
     AdminCoursesComponent,
     AdminUsersComponent,
     AdminEditFacultyComponent,
+    AdminDeleteFacultyComponent,
   ],
   imports: [
     BrowserModule,

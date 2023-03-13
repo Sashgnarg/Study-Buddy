@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { DataService } from '../data.service';
+import { AdminDeleteFacultyComponent } from './admin-delete-faculty/admin-delete-faculty.component';
 import { AdminEditFacultyComponent } from './admin-edit-faculty/admin-edit-faculty.component';
 
 @Component({
@@ -55,12 +56,19 @@ export class AdminFacultiesComponent {
   }
 
   async openDeleteDialog(element: any): Promise<void> {
-    // TODO: Confirm deletion with alert window
     console.log(element.faculty_id)
-
-    // Send deletion to database, then refresh this page's table
-    this.ds.deleteFacultyObservable(element.faculty_id).subscribe((res) => {
-      this.refreshFacultyTable()
+    const dialogRef = this.dialog.open(AdminDeleteFacultyComponent, {
+      height: '200px',
+      width: '300px',
+      data: { element: element }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+      if (result == true) {
+        this.ds.deleteFacultyObservable(element.faculty_id).subscribe(() => {
+          this.refreshFacultyTable()
+        })
+      }
     })
   }
 
@@ -85,7 +93,6 @@ export class AdminFacultiesComponent {
     this.facultiesObservable.subscribe((res) => {
       this.faculties = res
       this.dataSource.data = this.faculties
-      console.log(this.sort)
       this.dataSource.sort = this.sort
       console.log(res)
     })
