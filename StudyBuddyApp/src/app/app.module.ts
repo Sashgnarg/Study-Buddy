@@ -19,6 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSortModule } from '@angular/material/sort';
 import { AdminEditFacultyComponent } from './admin-faculties/admin-edit-faculty/admin-edit-faculty.component';
 
 
@@ -46,6 +47,7 @@ import { AdminEditFacultyComponent } from './admin-faculties/admin-edit-faculty/
     MatInputModule,
     MatIconModule,
     MatDialogModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]

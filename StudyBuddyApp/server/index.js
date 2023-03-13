@@ -48,7 +48,7 @@ app.listen(PORT, () => {
 app.get('/get-faculties', async (req, res) => {
     try {
         var result = await pool.query(`
-            SELECT * FROM faculty;
+            SELECT * FROM faculty ORDER BY faculty_name;
         `)
         console.log(`sending back:`, result.rows)
         res.send(result.rows)

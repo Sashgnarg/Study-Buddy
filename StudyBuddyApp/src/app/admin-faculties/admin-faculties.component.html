@@ -20,20 +20,20 @@
 </form>
 
 <!-- Display Faculties table -->
-<table mat-table [dataSource]="dataSource">
+<table mat-table [dataSource]="dataSource" matSort matSortActive="faculty_name" matSortDirection="asc">
     <!-- faculty_id column -->
-    <ng-container matColumnDef="faculty-id">
-        <th mat-header-cell *matHeaderCellDef> faculty_id </th>
+    <ng-container matColumnDef="faculty_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> faculty_id </th>
         <td mat-cell *matCellDef="let element"> {{element.faculty_id}} </td>
     </ng-container>
 
     <!-- faculty_name column -->
-    <ng-container matColumnDef="faculty-name">
-        <th mat-header-cell *matHeaderCellDef> faculty_name </th>
+    <ng-container matColumnDef="faculty_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> faculty_name </th>
         <td mat-cell *matCellDef="let element"> {{element.faculty_name}} </td>
     </ng-container>
 
-    <!-- delete column -->
+    <!-- edit column -->
     <ng-container matColumnDef="edit-col">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
