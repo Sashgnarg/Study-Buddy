@@ -107,3 +107,17 @@ app.patch('/edit-faculty', async (req, res) => {
         console.log(e)
     }
 })
+
+app.get('/get-students', async (req, res) => {
+    query = `
+    SELECT * FROM student ORDER BY student_id
+    `
+    try {
+        var result = await pool.query(query)
+        console.log(`sending back:`, result.rows)
+        res.send(result.rows)
+        res.end()
+    } catch (e) {
+        console.log(e)
+    }
+})

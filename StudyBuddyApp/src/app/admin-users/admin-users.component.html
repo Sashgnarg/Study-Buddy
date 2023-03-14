@@ -1,1 +1,116 @@
 <p>admin-users works!</p>
+
+<!-- Form for adding a new faculty -->
+<form [formGroup]="studentForm" (ngSubmit)="addStudent()">
+    <mat-form-field>
+        <mat-label>Student ID</mat-label>
+        <input matInput type="number" name="student-id-input" formControlName="studentIdControl">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput type="text" name="username-input" formControlName="usernameControl" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>First Name</mat-label>
+        <input matInput type="text" name="first-name-input" formControlName="firstNameControl" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Last Name</mat-label>
+        <input matInput type="text" name="last-name-input" formControlName="lastNameControl" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput type="password" name="password-input" formControlName="passwordControl" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Faculty</mat-label>
+        <mat-select>
+            <mat-option *ngFor="let faculty of faculties" [value]="faculty.faculty_id">
+                {{faculty.faculty_name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Bio</mat-label>
+        <textarea matInput name="bio-input" formControlName="bioControl" required></textarea>
+    </mat-form-field>
+
+    <mat-checkbox name="admin-input" formControlName="isAdminControl">Admin</mat-checkbox>
+
+    <br>
+
+    <button mat-raised-button color="primary">CREATE</button>
+</form>
+
+<!-- Display Student table -->
+<table mat-table [dataSource]="dataSource" matSort matSortActive="faculty_name" matSortDirection="asc">
+    <ng-container matColumnDef="student_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>student_id</th>
+        <td mat-cell *matCellDef="let element"> {{element.student_id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>username</th>
+        <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="first_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>first_name</th>
+        <td mat-cell *matCellDef="let element"> {{element.first_name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="last_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>last_name</th>
+        <td mat-cell *matCellDef="let element"> {{element.last_name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="password">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>password (hashed)</th>
+        <td mat-cell *matCellDef="let element"> {{element.password}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="faculty_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>faculty_id</th>
+        <td mat-cell *matCellDef="let element">
+            {{element.faculty_id}} ({{element.faculty_id | facultyName: this.faculties}})
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>bio</th>
+        <td mat-cell *matCellDef="let element"> {{element.bio}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="is_admin">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>is_admin</th>
+        <td mat-cell *matCellDef="let element"> {{element.is_admin}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit-col">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+            <a (click)="openEditDialog(element)" mat-mini-fab color="basic">
+                <mat-icon>edit</mat-icon>
+            </a>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete-col">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+            <a (click)="openDeleteDialog(element)" mat-mini-fab color="warn">
+                <mat-icon>delete_forever</mat-icon>
+            </a>
+        </td>
+    </ng-container>
+
+    <!-- Render header and rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

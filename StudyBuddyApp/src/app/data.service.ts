@@ -105,4 +105,10 @@ export class DataService {
 
     return this.http.patch(this.baseUrl + methodUrl, { faculty_id: faculty_id, new_faculty_name: new_faculty_name })
   }
+
+  getStudentsObservable(): Observable<any> {
+    var methodUrl = '/get-students'
+
+    return this.http.get(this.baseUrl + methodUrl)
+  }
 }
