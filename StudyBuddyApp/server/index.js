@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const { Pool } = require('pg');
+var md5 = require('md5');
 
 var port = process.env.PORT || 8080
 
@@ -118,6 +119,71 @@ app.get('/get-students', async (req, res) => {
         res.send(result.rows)
         res.end()
     } catch (e) {
+        console.log(e)
+    }
+})
+
+app.post('/add-student', async (req, res) => {
+    queryWithId = `
+    INSERT INTO student (student_id, username, first_name, last_name, password, faculty_id, bio, is_admin)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    `
+    queryWithoutId = `
+    INSERT INTO student (username, first_name, last_name, password, faculty_id, bio, is_admin)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `
+    if (req.body.student_id != null) {
+        try {
+            await pool.query(queryWithId,
+                [
+                    req.body.student_id,
+                    req.body.username,
+                    req.body.first_name,
+                    req.body.last_name,
+                    md5(req.body.password),
+                    req.body.faculty_id,
+                    req.body.bio,
+                    req.body.is_admin
+                ]
+            )
+            res.end()
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+    else {
+        try {
+            await pool.query(queryWithoutId,
+                [
+                    req.body.username,
+                    req.body.first_name,
+                    req.body.last_name,
+                    md5(req.body.password),
+                    req.body.faculty_id,
+                    req.body.bio,
+                    req.body.is_admin
+                ]
+            )
+            res.end()
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+})
+
+app.delete('/delete-student', async (req, res) => {
+    query = `
+    DELETE FROM student
+    WHERE student_id = $1
+    `
+    try {
+        console.log(req.body.student_id)
+        await pool.query(query, [req.body.student_id])
+        res.end()
+    }
+    catch (e) {
         console.log(e)
     }
 })

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from './user';
 import { HttpClient } from '@angular/common/http'
 import { Course } from './course';
-import { Observable } from 'rxjs';
+import { last, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -110,5 +110,59 @@ export class DataService {
     var methodUrl = '/get-students'
 
     return this.http.get(this.baseUrl + methodUrl)
+  }
+
+  addStudentObservable(
+    student_id: number,
+    username: string,
+    first_name: string,
+    last_name: string,
+    password: string,
+    faculty_id: number,
+    bio: string,
+    is_admin: boolean): Observable<any> {
+    var methodUrl = '/add-student'
+
+    if (student_id != 0) {
+      return this.http.post(
+        this.baseUrl + methodUrl,
+        {
+          student_id: student_id,
+          username: username,
+          first_name: first_name,
+          last_name: last_name,
+          password: password,
+          faculty_id: faculty_id,
+          bio: bio,
+          is_admin: is_admin
+        }
+      )
+    }
+    else {
+      return this.http.post(
+        this.baseUrl + methodUrl,
+        {
+          username: username,
+          first_name: first_name,
+          last_name: last_name,
+          password: password,
+          faculty_id: faculty_id,
+          bio: bio,
+          is_admin: is_admin
+        }
+      )
+    }
+  }
+
+  /**
+  * Makes an HTTP DELETE request to delete a student from the database and return an observable for response
+  * @param student_id student id of the faculty to be deleted
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
+  deleteStudentObservable(student_id: number): Observable<any> {
+    var methodUrl = '/delete-student'
+
+    return this.http.request('delete', this.baseUrl + methodUrl, { body: { student_id: student_id } })
   }
 }

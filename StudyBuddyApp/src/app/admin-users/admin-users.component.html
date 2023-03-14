@@ -29,7 +29,7 @@
 
     <mat-form-field>
         <mat-label>Faculty</mat-label>
-        <mat-select>
+        <mat-select formControlName="facultyIdControl">
             <mat-option *ngFor="let faculty of faculties" [value]="faculty.faculty_id">
                 {{faculty.faculty_name}}
             </mat-option>

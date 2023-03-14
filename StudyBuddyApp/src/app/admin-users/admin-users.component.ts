@@ -56,21 +56,25 @@ export class AdminUsersComponent {
     var newFirstName = String(this.studentForm.value.firstNameControl)
     var newLastName = String(this.studentForm.value.lastNameControl)
     var newPassword = String(this.studentForm.value.passwordControl)
-    var newFaculty = String(this.studentForm.value.facultyIdControl)
+    var newFaculty = Number(this.studentForm.value.facultyIdControl)
     var newBio = String(this.studentForm.value.bioControl)
-    var newisAdmin = String(this.studentForm.value.isAdminControl)
+    var newIsAdmin = Boolean(this.studentForm.value.isAdminControl)
 
     console.log(newStudentId)
     console.log(newUsername)
+    console.log("newFaculty", newFaculty)
 
     // Send new student to database, then refresh this page's table
-    this.ds.addFacultyObservable(newStudentId, newUsername).subscribe((res) => {
+    this.ds.addStudentObservable(newStudentId, newUsername, newFirstName, newLastName, newPassword, newFaculty, newBio, newIsAdmin).subscribe((res) => {
       this.refreshStudentTable()
     })
   }
 
   async openDeleteDialog(element: any): Promise<void> {
     console.log(element.student_id)
+    this.ds.deleteStudentObservable(element.student_id).subscribe((res) => {
+      this.refreshStudentTable()
+    })
   }
 
   async openEditDialog(element: any): Promise<void> {

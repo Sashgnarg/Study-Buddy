@@ -6,10 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FacultyNamePipe implements PipeTransform {
 
   transform(faculty_id: number, faculties: any[]): string {
-    console.log('faculty_id', faculty_id)
-    console.log('faculties', faculties)
     var result = faculties.find(f => f.faculty_id == faculty_id)
-    console.log(result)
     if (result == null) {
       return ''
     }
