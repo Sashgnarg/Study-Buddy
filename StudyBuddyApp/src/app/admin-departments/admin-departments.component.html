@@ -1,1 +1,66 @@
-<p>admin-departments works!</p>
+<!-- Form for adding a new department -->
+<form [formGroup]="departmentForm" (ngSubmit)="addDepartment()">
+    <mat-form-field>
+        <mat-label>Faculty</mat-label>
+        <mat-select formControlName="facultyIdControl" required>
+            <mat-option *ngFor="let faculty of faculties" [value]="faculty.faculty_id">
+                {{faculty.faculty_name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Department ID:</mat-label>
+        <input matInput type="number" name="faculty-name-input" formControlName="departmentIdControl">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Department Name:</mat-label>
+        <input matInput type="text" name="faculty-name-input" formControlName="departmentNameControl" required>
+    </mat-form-field>
+
+    <br>
+
+    <button mat-raised-button color="primary">CREATE</button>
+</form>
+
+<table mat-table [dataSource]="dataSource" matSort matSortActive="faculty_id" matSortDirection="asc">
+    <ng-container matColumnDef="faculty_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>faculty_id</th>
+        <td mat-cell *matCellDef="let element">
+            {{element.faculty_id}} ({{element.faculty_id | facultyName: this.faculties}})
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="department_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> department_id </th>
+        <td mat-cell *matCellDef="let element"> {{element.department_id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="department_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> department_name </th>
+        <td mat-cell *matCellDef="let element"> {{element.department_name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit-col">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+            <a (click)="openEditDialog(element)" mat-mini-fab color="basic">
+                <mat-icon>edit</mat-icon>
+            </a>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete-col">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+            <a (click)="openDeleteDialog(element)" mat-mini-fab color="warn">
+                <mat-icon>delete_forever</mat-icon>
+            </a>
+        </td>
+    </ng-container>
+
+    <!-- Render header and rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

@@ -1,0 +1,8 @@
+<mat-form-field mat-dialog-content>
+    <mat-label>New Department Name:</mat-label>
+    <input matInput type="text" name="department-name-input" [(ngModel)]=data.element.new_department_name required>
+</mat-form-field>
+<mat-dialog-actions align="center">
+    <button mat-flat-button [mat-dialog-close]="data.element.new_department_name" color="primary">CONFIRM</button>
+    <button mat-flat-button [mat-dialog-close]=null>CANCEL</button>
+</mat-dialog-actions>

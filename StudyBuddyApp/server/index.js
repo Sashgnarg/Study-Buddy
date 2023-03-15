@@ -187,3 +187,87 @@ app.delete('/delete-student', async (req, res) => {
         console.log(e)
     }
 })
+
+app.get('/get-departments', async (req, res) => {
+    query = `
+    SELECT * FROM department ORDER BY faculty_id, department_id
+    `
+    try {
+        var result = await pool.query(query)
+        console.log(`sending back:`, result.rows)
+        res.send(result.rows)
+        res.end()
+    } catch (e) {
+        console.log(e)
+    }
+})
+
+app.post('/add-department', async (req, res) => {
+    queryWithId = `
+    INSERT INTO department (faculty_id, department_id, department_name)
+    VALUES ($1, $2, $3)
+    `
+    queryWithoutId = `
+    INSERT INTO department (faculty_id, department_name)
+    VALUES ($1, $2)
+    `
+    if (req.body.department_id != null) {
+        try {
+            await pool.query(queryWithId,
+                [
+                    req.body.faculty_id,
+                    req.body.department_id,
+                    req.body.department_name,
+                ]
+            )
+            res.end()
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+    else {
+        try {
+            await pool.query(queryWithoutId,
+                [
+                    req.body.faculty_id,
+                    req.body.department_name,
+                ]
+            )
+            res.end()
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+})
+
+app.delete('/delete-department', async (req, res) => {
+    query = `
+    DELETE FROM department
+    WHERE faculty_id = $1 AND department_id = $2
+    `
+    try {
+        console.log(req.body.student_id)
+        await pool.query(query, [req.body.faculty_id, req.body.department_id])
+        res.end()
+    }
+    catch (e) {
+        console.log(e)
+    }
+})
+
+app.patch('/edit-department', async (req, res) => {
+    query = `
+    UPDATE department
+    SET department_name = $1
+    WHERE faculty_id = $2 AND department_id = $3;
+    `
+    try {
+        await pool.query(query, [req.body.new_department_name, req.body.faculty_id, req.body.department_id])
+        res.end()
+    }
+    catch (e) {
+        console.log(e)
+    }
+})

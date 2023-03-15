@@ -106,12 +106,30 @@ export class DataService {
     return this.http.patch(this.baseUrl + methodUrl, { faculty_id: faculty_id, new_faculty_name: new_faculty_name })
   }
 
+  /**
+  * Makes an HTTP GET request to retrieve all students from the database and return an observable for response
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
   getStudentsObservable(): Observable<any> {
     var methodUrl = '/get-students'
 
     return this.http.get(this.baseUrl + methodUrl)
   }
 
+
+  /**
+  * Makes an HTTP POST request to add a department to the database and return an observable for the response
+  * @param student_id optional student_id of the new student
+  * @param username username of the student to be added, must be unique
+  * @param first_name first name of the student, must be < 35 characters
+  * @param last_name last name of the student, must be < 35 characters
+  * @param password password of the student
+  * @param faculty_id faculty id of the student, must exist in the faculty table
+  * @param bio personal biography of the student to be added, < 255 characters
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
   addStudentObservable(
     student_id: number,
     username: string,
@@ -164,5 +182,79 @@ export class DataService {
     var methodUrl = '/delete-student'
 
     return this.http.request('delete', this.baseUrl + methodUrl, { body: { student_id: student_id } })
+  }
+
+  /**
+  * Makes an HTTP GET request to retrieve all departments from the database and return an observable for the response
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
+  getDepartmentsObservable(): Observable<any> {
+    var methodUrl = '/get-departments'
+
+    return this.http.get(this.baseUrl + methodUrl)
+  }
+
+  /**
+  * Makes an HTTP POST request to add a department to the database and return an observable for the response
+  * @param faculty_id faculty id of the department to be deleted
+  * @param department_id department id of the department to be deleted
+  * @param department_name name of the department to be deleted
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
+  addDepartmentObservable(faculty_id: number, department_id: number, department_name: string,): Observable<any> {
+    var methodUrl = '/add-department'
+
+    if (department_id != 0 && department_id != null) {
+      return this.http.post(
+        this.baseUrl + methodUrl,
+        {
+          faculty_id: faculty_id,
+          department_id: department_id,
+          department_name: department_name
+        }
+      )
+    }
+    else {
+      return this.http.post(
+        this.baseUrl + methodUrl,
+        {
+          faculty_id: faculty_id,
+          department_name: department_name
+        }
+      )
+    }
+  }
+
+  /**
+  * Makes an HTTP PATCH request to edit a department name in the database and return an observable for response
+  * @param faculty_id faculty id of the department to be edited
+  * @param department_id faculty id of the department to be edited
+  * @param new_department_name the new department name
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
+  editDepartmentObservable(faculty_id: number, department_id: number, new_department_name: string): Observable<any> {
+    var methodUrl = '/edit-department'
+
+    return this.http.patch(this.baseUrl + methodUrl, { faculty_id: faculty_id, department_id: department_id, new_department_name: new_department_name })
+  }
+
+  /**
+  * Makes an HTTP DELETE request to delete a department from the database and return an observable for response
+  * @param faculty_id faculty id of the department to be deleted
+  * @param department_id department id of the department to be deleted
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
+  deleteDepartmentObservable(faculty_id: number, department_id: number): Observable<any> {
+    var methodUrl = '/delete-department'
+
+    return this.http.request('delete', this.baseUrl + methodUrl,
+      {
+        body: { faculty_id: faculty_id, department_id: department_id }
+      }
+    )
   }
 }
