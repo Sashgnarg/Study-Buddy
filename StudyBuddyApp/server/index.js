@@ -188,6 +188,38 @@ app.delete('/delete-student', async (req, res) => {
     }
 })
 
+app.patch('/edit-student', async (req, res) => {
+    query = `
+    UPDATE student
+    SET username = $1, first_name = $2, last_name = $3, password = $4, faculty_id = $5, bio = $6, is_admin = $7
+    WHERE student_id = $8;
+    `
+    queryNoPassword = `
+    UPDATE student
+    SET username = $1, first_name = $2, last_name = $3, faculty_id = $4, bio = $5, is_admin = $6
+    WHERE student_id = $7;
+    `
+    if (req.body.new_password != '') {
+        try {
+            await pool.query(query, [req.body.new_username, req.body.new_first_name, req.body.new_last_name, md5(req.body.new_password), req.body.new_faculty_id, req.body.new_bio, req.body.new_is_admin, req.body.student_id])
+            res.end()
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+    else {
+        try {
+            await pool.query(queryNoPassword, [req.body.new_username, req.body.new_first_name, req.body.new_last_name, req.body.new_faculty_id, req.body.new_bio, req.body.new_is_admin, req.body.student_id])
+            res.end()
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+
+})
+
 app.get('/get-departments', async (req, res) => {
     query = `
     SELECT * FROM department ORDER BY faculty_id, department_id

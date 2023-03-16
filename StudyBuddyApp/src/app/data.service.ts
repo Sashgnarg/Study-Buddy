@@ -185,6 +185,38 @@ export class DataService {
   }
 
   /**
+* Makes an HTTP PATCH request to modify a student in the database and return an observable for response*
+*
+* @returns an observable that can be subscribed to for the response
+*/
+  editStudentObservable(
+    student_id: number,
+    new_username: string,
+    new_first_name: string,
+    new_last_name: string,
+    new_password: string,
+    new_faculty_id: number,
+    new_bio: string,
+    new_is_admin: boolean): Observable<any> {
+
+
+    var methodUrl = '/edit-student'
+    return this.http.patch(
+      this.baseUrl + methodUrl,
+      {
+        student_id: student_id,
+        new_username: new_username,
+        new_first_name: new_first_name,
+        new_last_name: new_last_name,
+        new_password: new_password,
+        new_faculty_id: new_faculty_id,
+        new_bio: new_bio,
+        new_is_admin: new_is_admin
+      }
+    )
+  }
+
+  /**
   * Makes an HTTP GET request to retrieve all departments from the database and return an observable for the response
   *
   * @returns an observable that can be subscribed to for the response

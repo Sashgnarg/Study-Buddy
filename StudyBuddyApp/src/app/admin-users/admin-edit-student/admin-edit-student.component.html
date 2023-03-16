@@ -1,0 +1,39 @@
+<mat-dialog-content>
+    <mat-form-field>
+        <mat-label>New username:</mat-label>
+        <input matInput type="text" name="username-input" [(ngModel)]=data.element.new_username required>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>New first name:</mat-label>
+        <input matInput type="text" name="first-name-input" [(ngModel)]=data.element.new_first_name required>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>New last name:</mat-label>
+        <input matInput type="text" name="last-name-input" [(ngModel)]=data.element.new_last_name required>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>New password:</mat-label>
+        <input matInput type="password" name="password-input" [(ngModel)]=data.element.new_password>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>New Faculty</mat-label>
+        <mat-select [(ngModel)]=data.element.new_faculty_id>
+            <mat-option *ngFor="let faculty of faculties" [value]="faculty.faculty_id">
+                {{faculty.faculty_name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>New bio:</mat-label>
+        <textarea matInput type="text" name="bio-input" [(ngModel)]=data.element.new_bio required></textarea>
+    </mat-form-field>
+
+    <mat-checkbox name="admin-input" [(ngModel)]=data.element.new_is_admin color="primary">Admin</mat-checkbox>
+
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="center">
+    <button mat-flat-button [mat-dialog-close]="data.element" color="primary">CONFIRM</button>
+    <button mat-flat-button [mat-dialog-close]=null>CANCEL</button>
+</mat-dialog-actions>

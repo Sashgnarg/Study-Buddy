@@ -27,6 +27,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { FacultyNamePipe } from './faculty-name.pipe';
 import { AdminDeleteDepartmentComponent } from './admin-departments/admin-delete-department/admin-delete-department.component';
 import { AdminEditDepartmentComponent } from './admin-departments/admin-edit-department/admin-edit-department.component';
+import { AdminEditStudentComponent } from './admin-users/admin-edit-student/admin-edit-student.component';
+import { AdminDeleteStudentComponent } from './admin-users/admin-delete-student/admin-delete-student.component';
 
 
 @NgModule({
@@ -43,6 +45,8 @@ import { AdminEditDepartmentComponent } from './admin-departments/admin-edit-dep
     FacultyNamePipe,
     AdminDeleteDepartmentComponent,
     AdminEditDepartmentComponent,
+    AdminEditStudentComponent,
+    AdminDeleteStudentComponent,
   ],
   imports: [
     BrowserModule,
