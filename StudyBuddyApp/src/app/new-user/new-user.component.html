@@ -2,7 +2,7 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
 
-<form class="form-group center container" [formGroup]="form" action="http://localhost:8080/signUp">
+<form class="form-group center container" [formGroup]="form" action="http://localhost:8080/new-student">
     <h1>New User</h1>
     <ng-container class="row">
         <h2>Personal Info</h2>
@@ -70,10 +70,43 @@
                             <option value="">Select a section</option>
                             <option  *ngFor="let section of setSections(i)">{{section.name}}</option>
                         </select>
+                        <br><br>
                 </div>
         </ng-container>
     </ng-container>
-    <br>
+    <br><br>
     <button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
+    <br><br><br>
+    <h3>Study Time</h3>
+
+    <ng-container formArrayName="studyTime">
+        <ng-container *ngFor="let studyTimeForm of studyTime.controls ; let i = index">
+            <h4><button id="xButton" type="button" (click)="removeStudyTime(i)"><i class="fa fa-times"></i></button>
+                Study Time {{i+1}}</h4>
+            <div class="selectRow" [formGroupName]="i">
+                    <div *ngFor="let day of weekDays; let j=index" class="col-md-1">
+                        <label>{{day}}</label>
+                        <input type="checkbox" [value]="day" [formControlName]="day"><br><br><br>
+                    </div>
+                <br><br>
+            </div>
+            <div class="selectRow" [formGroupName]="i">
+                <label for="startTime">Start Time</label>
+                <select name="startTime" formControlName="startTime" >
+                    <option value="">Select Start</option>
+                    <option *ngFor="let time of hoursOfDay" [value]="time">{{time}}</option>
+                </select>
+                <label for="startTime">End Time</label>
+                <select name="endTime" formControlName="endTime">
+                    <option value="">Select End</option>
+                    <option *ngFor="let time of hoursOfDay" [value]="time">{{time}}</option>
+                </select>
+            </div>
+        </ng-container>
+    </ng-container>
+    <button id='addStudyTimeButton' class="btn btn-warning" (click)="incrStudyTime()" type="button">add study time</button> <br><br>
+
+
+
     <button [disabled]="!form.valid" class="btn btn-primary " (click)="submit()" type="button">test submit</button>
 </form>
