@@ -25,6 +25,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { FacultyNamePipe } from './faculty-name.pipe';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { FacultyNamePipe } from './faculty-name.pipe';
     AdminEditFacultyComponent,
     AdminDeleteFacultyComponent,
     FacultyNamePipe,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
