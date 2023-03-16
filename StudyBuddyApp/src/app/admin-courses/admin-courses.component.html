@@ -1,1 +1,116 @@
-<p>admin-courses works!</p>
+<form [formGroup]="courseForm" (ngSubmit)="addCourse()">
+    <mat-form-field>
+        <mat-label>Course ID</mat-label>
+        <input matInput type="number" name="course-id-input" formControlName="courseIdControl">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Course Code</mat-label>
+        <input matInput type="text" name="code-input" formControlName="codeControl" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Term</mat-label>
+        <input matInput type="text" name="term-input" formControlName="termControl" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Section</mat-label>
+        <input matInput type="text" name="section-input" formControlName="sectionControl" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput type="text" name="name-input" formControlName="nameControl" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Faculty</mat-label>
+        <mat-select formControlName="facultyIdControl">
+            <mat-option *ngFor="let faculty of faculties" [value]="faculty.faculty_id">
+                {{faculty.faculty_name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Department</mat-label>
+        <mat-select formControlName="departmentIdControl">
+            <mat-optgroup *ngFor="let faculty of faculties" [label]="faculty.faculty_name">
+                <mat-option *ngFor="let department of departments" [value]="department.department_id">
+                    {{department.department_name}}
+                </mat-option>
+            </mat-optgroup>
+        </mat-select>
+    </mat-form-field>
+
+    <br>
+
+    <button mat-raised-button color="primary">CREATE</button>
+</form>
+
+<!-- Display Student table -->
+<table mat-table [dataSource]="dataSource" matSort matSortActive="code" matSortDirection="asc">
+    <ng-container matColumnDef="course_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>course_id</th>
+        <td mat-cell *matCellDef="let element"> {{element.course_id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>code</th>
+        <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="term">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>term</th>
+        <td mat-cell *matCellDef="let element"> {{element.term}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="section">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>section</th>
+        <td mat-cell *matCellDef="let element"> {{element.section}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>name</th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="faculty_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>faculty_id</th>
+        <td mat-cell *matCellDef="let element">
+            {{element.faculty_id}} ({{element.faculty_id | facultyName: this.faculties}})
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="department_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>department_id</th>
+        <td mat-cell *matCellDef="let element">
+            {{element.department_id}} ({{element.faculty_id | departmentName: element.department_id : this.departments :
+            this.departments}})
+        </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="edit-col">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+            <a (click)="openEditDialog(element)" mat-mini-fab color="basic">
+                <mat-icon>edit</mat-icon>
+            </a>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete-col">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+            <a (click)="openDeleteDialog(element)" mat-mini-fab color="warn">
+                <mat-icon>delete_forever</mat-icon>
+            </a>
+        </td>
+    </ng-container>
+
+    <!-- Render header and rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

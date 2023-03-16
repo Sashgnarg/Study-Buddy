@@ -303,3 +303,102 @@ app.patch('/edit-department', async (req, res) => {
         console.log(e)
     }
 })
+
+app.get('/get-courses', async (req, res) => {
+    query = `
+    SELECT * FROM course ORDER BY code
+    `
+    try {
+        var result = await pool.query(query)
+        console.log(`sending back:`, result.rows)
+        res.send(result.rows)
+        res.end()
+    } catch (e) {
+        console.log(e)
+    }
+})
+
+app.post('/add-course', async (req, res) => {
+    queryWithId = `
+    INSERT INTO course (course_id, code, term, section, name, faculty_id, department_id)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `
+    queryWithoutId = `
+    INSERT INTO course (code, term, section, name, faculty_id, department_id)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    `
+    if (req.body.course_id != 0) {
+        try {
+            await pool.query(queryWithId,
+                [
+                    req.body.course_id,
+                    req.body.code,
+                    req.body.term,
+                    req.body.section,
+                    req.body.name,
+                    req.body.faculty_id,
+                    req.body.department_id
+                ]
+            )
+            res.end()
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+    else {
+        try {
+            await pool.query(queryWithoutId,
+                [
+                    req.body.code,
+                    req.body.term,
+                    req.body.section,
+                    req.body.name,
+                    req.body.faculty_id,
+                    req.body.department_id
+                ]
+            )
+            res.end()
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+})
+
+app.delete('/delete-course', async (req, res) => {
+    query = `
+    DELETE FROM course
+    WHERE course_id = $1
+    `
+    try {
+        await pool.query(query, [req.body.course_id])
+        res.end()
+    }
+    catch (e) {
+        console.log(e)
+    }
+})
+
+app.patch('/edit-course', async (req, res) => {
+    query = `
+    UPDATE course
+    SET code = $1, term = $2, section = $3, name = $4, faculty_id = $5, department_id = $6
+    WHERE course_id = $8;
+    `
+    try {
+        await pool.query(query, [
+            req.body.new_code,
+            req.body.new_term,
+            req.body.new_section,
+            req.body.new_name,
+            req.body.new_faculty_id,
+            req.body.new_department_id,
+            req.body.course_id,
+        ])
+        res.end()
+    }
+    catch (e) {
+        console.log(e)
+    }
+})

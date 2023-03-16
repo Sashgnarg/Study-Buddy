@@ -289,4 +289,94 @@ export class DataService {
       }
     )
   }
+
+  /**
+* Makes an HTTP GET request to retrieve all courses from the database and return an observable for response
+*
+* @returns an observable that can be subscribed to for the response
+*/
+  getCoursesObservable(): Observable<any> {
+    var methodUrl = '/get-courses'
+
+    return this.http.get(this.baseUrl + methodUrl)
+  }
+
+
+  /**
+  * Makes an HTTP POST request to add a course to the database and return an observable for the response
+  * @param course_id optional course_id of the new student
+  * @param username username of the student to be added, must be unique
+  * @param first_name first name of the student, must be < 35 characters
+  * @param last_name last name of the student, must be < 35 characters
+  * @param password password of the student
+  * @param faculty_id faculty id of the student, must exist in the faculty table
+  * @param bio personal biography of the student to be added, < 255 characters
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
+  addCourseObservable(
+    course_id: number,
+    code: string,
+    term: string,
+    section: string,
+    name: string,
+    faculty_id: number,
+    department_id: number,): Observable<any> {
+    var methodUrl = '/add-course'
+
+    return this.http.post(
+      this.baseUrl + methodUrl,
+      {
+        course_id: course_id,
+        code: code,
+        term: term,
+        section: section,
+        name: name,
+        faculty_id: faculty_id,
+        department_id: department_id
+      }
+    )
+  }
+
+  /**
+  * Makes an HTTP DELETE request to delete a course from the database and return an observable for response
+  * @param course_id course id of the faculty to be deleted
+  *
+  * @returns an observable that can be subscribed to for the response
+  */
+  deleteCourseObservable(course_id: number): Observable<any> {
+    var methodUrl = '/delete-course'
+
+    return this.http.request('delete', this.baseUrl + methodUrl, { body: { course_id: course_id } })
+  }
+
+  /**
+* Makes an HTTP PATCH request to modify a course in the database and return an observable for response
+*
+* @returns an observable that can be subscribed to for the response
+*/
+  editCourseObservable(
+    course_id: number,
+    new_code: string,
+    new_term: string,
+    new_section: string,
+    new_name: string,
+    new_faculty_id: number,
+    new_department_id: number,): Observable<any> {
+
+
+    var methodUrl = '/edit-course'
+    return this.http.patch(
+      this.baseUrl + methodUrl,
+      {
+        course_id: course_id,
+        new_code: new_code,
+        new_term: new_term,
+        new_section: new_section,
+        new_name: new_name,
+        new_faculty_id: new_faculty_id,
+        new_department_id: new_department_id
+      }
+    )
+  }
 }
