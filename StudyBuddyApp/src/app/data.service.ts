@@ -19,8 +19,9 @@ export class DataService {
 
   createUser(U: User) {
     var signUpUrl = 'http://localhost:8080/add-student'
-
-    //this.http.post(signUpUrl, U).subscribe();
+    
+    this.http.post(signUpUrl, U).subscribe();
+    // this.http.post()
     console.log(JSON.stringify(U))
   }
 

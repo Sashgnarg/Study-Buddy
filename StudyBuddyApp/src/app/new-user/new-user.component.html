@@ -26,19 +26,19 @@
     <label for="password">Password</label><br>
     <input minlength="6" [ngClass]="{'is-invalid': form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)}" class="form-control" type="password" name="password" placeholder="password" formControlName="password">
     <div *ngIf="form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)">
-        <div *ngIf="form.get('password')?.errors['required']" class='error-message'>Enter A Password</div><br>
+        <div *ngIf="form.get('password')?.errors['required']" class='error-message'>Enter A Password</div>
         <div *ngIf="form.get('password')?.errors['minlength']" class='error-message'>Password Be At Least 6 Characters Long</div><br>
     </div>
     <label for="repeatPassword">Confirm Password</label><br>
     <input [ngClass]="{'is-invalid': (form.get('repeatPassword')?.invalid || form.getError('match_error')) && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)}" class="form-control" type="password" name="repeatPassword" placeholder="confirm password" formControlName="repeatPassword">
     <div *ngIf="(form.get('repeatPassword')?.invalid || form.hasError('match_error')) && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)">
-        <div *ngIf="form.get('repeatPassword')?.hasError('required')" class='error-message'>Confirm Your Password</div><br>
+        <div *ngIf="form.get('repeatPassword')?.hasError('required')" class='error-message'>Confirm Your Password</div>
         <div *ngIf="form.hasError('match_error')" class='error-message'>Passwords Dont Match</div><br>
     </div>
     <br>
     <h2>School Info</h2><br>
     <label for="faculty">Faculty</label><br>
-    <select [ngClass]="{'is-invalid': form.get('faculty')?.invalid && (form.get('faculty')?.touched || form.get('faculty')?.dirty)}" class="form-control" name="faculty" id="faculty" formControlName="faculty">
+    <select [ngClass]="{'is-invalid': form.get('faculty')?.invalid && (form.get('faculty')?.touched || form.get('faculty')?.dirty)}" class="form-select" name="faculty" id="faculty" formControlName="faculty">
         <option value="Applied Science">Applied Science</option>
         <option value="Arts and Social Science">Arts and Social Science</option>
         <option value="Communication Art and Technology">Communication Art and Technology</option>
@@ -85,22 +85,26 @@
                 Study Time {{i+1}}</h4>
             <div class="selectRow" [formGroupName]="i">
                     <div *ngFor="let day of weekDays; let j=index" class="col-md-1">
-                        <label>{{day}}</label>
+                        <label [ngClass]="">{{day}}</label>
                         <input type="checkbox" [value]="day" [formControlName]="day"><br><br><br>
                     </div>
                 <br><br>
             </div>
-            <div class="selectRow" [formGroupName]="i">
-                <label for="startTime">Start Time</label>
-                <select name="startTime" formControlName="startTime" >
-                    <option value="">Select Start</option>
-                    <option *ngFor="let time of hoursOfDay" [value]="time">{{time}}</option>
-                </select>
-                <label for="startTime">End Time</label>
-                <select name="endTime" formControlName="endTime">
-                    <option value="">Select End</option>
-                    <option *ngFor="let time of hoursOfDay" [value]="time">{{time}}</option>
-                </select>
+            <div [formGroupName]="i">
+                <div class="selectRow">
+                    <label [ngClass]="{'error-message' : studyTime.at(i).hasError('overlap_error')}" for="startTime">Start Time</label>
+                    <select class="times form-selects"  name="startTime" formControlName="startTime" >
+                        <option value="">Select Start</option>
+                        <option *ngFor="let time of hoursOfDay" [value]="time">{{time}}</option>
+                    </select>
+                    <label [ngClass]="{'error-message' : studyTime.at(i).hasError('overlap_error')}" for="startTime">End Time</label>
+                    <select class="form-select" name="endTime" formControlName="endTime">
+                        <option value="">Select End</option>
+                        <option *ngFor="let time of hoursOfDay" [value]="time">{{time}}</option>
+                    </select>
+                </div>
+                <div class="error-message" *ngIf="studyTime.at(i).hasError('overlap_error')">End Time Must Be Before Start Time</div>
+                <br><br>
             </div>
         </ng-container>
     </ng-container>
@@ -110,3 +114,5 @@
 
     <button [disabled]="!form.valid" class="btn btn-primary " (click)="submit()" type="button">test submit</button>
 </form>
+
+<br><br><br><br><br><br><br>

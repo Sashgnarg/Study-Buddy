@@ -38,7 +38,7 @@ export class NewUserComponent implements OnInit{
     this.courseCount=0
     this.hoursOfDay =[];
 
-    for(let i = 0 ; i < 11 ;i++){
+    for(let i = 0 ; i < 14 ;i++){
       let hour = 8+i
       this.hoursOfDay.push(`${hour}:00`)
       this.hoursOfDay.push(`${hour}:30`)
@@ -79,18 +79,19 @@ export class NewUserComponent implements OnInit{
     const hours1 = parseInt(timeParts1[0], 10); // parse hours as an integer
     const minutes1 = parseInt(timeParts1[1], 10); // parse minutes as an integer
     const timeInMinutes1 = (hours1 * 60) + minutes1; // calculate the total minutes since midnight
-    console.log(timeInMinutes1); // outputs 810 (13 hours * 60 minutes/hour + 30 minutes)
 
     const timeParts2 = timeStr2.split(':'); 
     const hours2 = parseInt(timeParts2[0], 10); 
     const minutes2 = parseInt(timeParts2[1], 10); 
     const timeInMinutes2 = (hours2 * 60) + minutes2; 
-    console.log(timeInMinutes2); 
+    console.log(this.form)
 
-    if(timeInMinutes2 - timeInMinutes1 < 0){
+    if(timeInMinutes2 - timeInMinutes1 <= 0){
       console.log("End is before start")
+      console.log(document.getElementsByClassName('times'))
+      return { overlap_error: true }
     }
-    return timeInMinutes2-timeInMinutes1? null : { overlap_error: true }
+    return null 
   }
 
   atLeastOneDay: ValidatorFn = (group: AbstractControl):  ValidationErrors | null => { 
