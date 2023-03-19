@@ -32,7 +32,7 @@ export class NewUserComponent implements OnInit{
       repeatPassword:['' , [Validators.required , Validators.minLength(6)]],
       courses : this.FB.array([]),
       studyTime : this.FB.array([])
-    } , {validators : this.checkPasswords})
+    } , {validators : [this.checkPasswords]})
     this.allCourses=[]
     this.allSections=[]
     this.courseCount=0
@@ -47,7 +47,26 @@ export class NewUserComponent implements OnInit{
 
 
   ngOnInit(){
-    this.allCourses = this.DS.getTermCourses();
+    let courses:Course[] =[]
+    this.DS.getTermCoursesObservable().subscribe(data =>{
+      let temp = new Course();
+      let prevCode =''
+      data.forEach((e: { code: string; section: string; }) => {
+        if(prevCode != e.code){
+          temp.setCode(prevCode)
+          courses.push(temp);
+          temp = new Course();
+        }
+        temp.addSection(e.section , 'not needed' , 'not needed');
+        prevCode = e.code
+      })
+      temp.setCode(prevCode)
+      courses.push(temp);
+      courses.splice(0, 1)
+      console.log(courses)
+    });
+    this.allCourses = courses
+    console.log(this.allCourses)
     this.allCourses.forEach(e => {
       this.allSections.push(e.getSections());
     });

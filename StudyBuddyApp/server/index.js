@@ -188,3 +188,33 @@ app.delete('/delete-student', async (req, res) => {
         console.log(e)
     }
 })
+
+
+app.get('/get-courses', async (req, res) => {
+    query = `
+    SELECT * FROM course ORDER BY code , section
+    `
+    try {
+        var result = await pool.query(query)
+        console.log(`sending back:`, result.rows)
+        res.send(result.rows)
+        res.end()
+    } catch (e) {
+        console.log(e)
+    }
+})
+
+
+app.post('/add-enrollment' , async(req , res) =>{
+    const query = `INSERT INTO enrollment (student_id , course_id) VALUES ($1 , $2)`;
+
+    try {
+        const {student_id , course_id} = req.body
+        console.log(student_id , course_id)
+        pool.query(query , [student_id , course_id] );
+        res.end()
+    } catch (error) {
+        console.log(error)
+        
+    }
+})

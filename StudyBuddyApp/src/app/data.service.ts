@@ -3,6 +3,7 @@ import { User } from './user';
 import { HttpClient } from '@angular/common/http'
 import { Course } from './course';
 import { last, Observable } from 'rxjs';
+import { BlockScrollStrategy } from '@angular/cdk/overlay';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class DataService {
   }
 
   createUser(U: User) {
-    var signUpUrl =this.baseUrl + '/add-student'
+    var addStudentUrl =this.baseUrl + '/add-student'
 
     let username = U.uName;
     let first_name = U.fName;
@@ -51,23 +52,16 @@ export class DataService {
     let is_admin = false;
     let body = {username:username , first_name:first_name , last_name:last_name , password:password , 
                 faculty_id:faculty_id, bio:bio , is_admin:is_admin  }
-    this.http.post(signUpUrl,body).subscribe();
-    // this.http.post()
-    console.log(body)
+    this.http.post(addStudentUrl,body).subscribe();
+
+
+    U.courses
   }
 
-  getTermCourses(): Course[] {
+  getTermCoursesObservable(): Observable<any> {
     const methodUrl = '/get-courses'
-
-    let temp1 = new Course()
-    temp1.setCode('cmpt295')
-    temp1.addSection("d100", '1:00', '2:00')
-    temp1.addSection('d200', '4:00', '5:00')
-    let temp2 = new Course()
-    temp2.setCode('cmpt500');
-    temp2.addSection('d300', '5:00', '6:00')
-    temp2.addSection("d400", "9:00", "10:00");
-    return [temp1, temp2]
+    let courses : Course[]= [];
+    return this.http.get<any[]>(this.baseUrl + methodUrl)
   }
 
   /**
@@ -199,4 +193,11 @@ export class DataService {
 
     return this.http.request('delete', this.baseUrl + methodUrl, { body: { student_id: student_id } })
   }
+
+  addEnrollmentObservable(student_id : number, course_id : number): Observable<any> {
+    var methodUrl = '/add-enrollment'
+  
+    return this.http.post(this.baseUrl + methodUrl, { student_id:student_id, course_id: course_id })
+  }
 }
+

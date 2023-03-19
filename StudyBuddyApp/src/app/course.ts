@@ -3,7 +3,8 @@ import { TimeStartEnd } from "./time-start-end"
 
 export class Course {
     private code:string 
-    private sections: Section[] 
+    private sections: Section[]
+    private course_id? :number
 
     constructor(){
         this.code =''
