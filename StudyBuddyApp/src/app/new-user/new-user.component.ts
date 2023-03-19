@@ -65,9 +65,6 @@ export class NewUserComponent implements OnInit{
   checkPasswords: ValidatorFn = (group: AbstractControl):  ValidationErrors | null => { 
     let pass = group.get('password')?.value;
     let confirmPass = group.get('repeatPassword')?.value
-    if(pass != confirmPass){
-      console.log("dont match")
-    }
     return pass === confirmPass ? null : { match_error: true }
   }
 
@@ -87,8 +84,6 @@ export class NewUserComponent implements OnInit{
     console.log(this.form)
 
     if(timeInMinutes2 - timeInMinutes1 <= 0){
-      console.log("End is before start")
-      console.log(document.getElementsByClassName('times'))
       return { overlap_error: true }
     }
     return null 
@@ -98,7 +93,7 @@ export class NewUserComponent implements OnInit{
     let values : any[] = [];
     this.weekDays.forEach(element => { values.push(group.get(`${element}`)?.value)
     });
-    console.log(values)
+
 
     for(var i = 0 ; i<values.length ; i++){
       if(values[i] == true){
@@ -174,7 +169,6 @@ export class NewUserComponent implements OnInit{
         } 
       }) 
     }
-    console.log(availability)
     var user = new User( form.uName ,form.fName , form.lName , form.faculty, form.password , this.courseCount , userCourses ,userSections , availability);
     this.DS.createUser(user);
   }

@@ -16,16 +16,49 @@ export class DataService {
 
   baseUrl = 'http://localhost:8080'
 
+  getFacultyID(s : string){
+    switch(s){
+      case 'Applied Science':
+        return 1
+      case 'Arts and Social Science':
+        return 2;
+      case 'Communication Art and Technology':
+        return 3;
+      case 'Business':
+        return 4;
+      case 'Education':
+        return 5;
+      case 'Environment':
+        return 6;
+      case 'Health Science':
+        return 7;
+      case 'Science':
+        return 8;
+    }
+    return -1
+  }
 
   createUser(U: User) {
-    var signUpUrl = 'http://localhost:8080/add-student'
-    
-    this.http.post(signUpUrl, U).subscribe();
+    var signUpUrl =this.baseUrl + '/add-student'
+
+    let username = U.uName;
+    let first_name = U.fName;
+    let last_name = U.lName;
+    let password = U.password;
+    let faculty = U.faculty // need to turn this to an ID
+    let faculty_id = this.getFacultyID(faculty)
+    let bio = ""
+    let is_admin = false;
+    let body = {username:username , first_name:first_name , last_name:last_name , password:password , 
+                faculty_id:faculty_id, bio:bio , is_admin:is_admin  }
+    this.http.post(signUpUrl,body).subscribe();
     // this.http.post()
-    console.log(JSON.stringify(U))
+    console.log(body)
   }
 
   getTermCourses(): Course[] {
+    const methodUrl = '/get-courses'
+
     let temp1 = new Course()
     temp1.setCode('cmpt295')
     temp1.addSection("d100", '1:00', '2:00')
