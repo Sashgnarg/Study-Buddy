@@ -62,7 +62,7 @@
                         <label for="course">Course</label>
                         <select [ngClass]="{'is-invalid': courses.at(i).get('code')?.invalid && (courses.at(i).get('code')?.touched || courses.at(i).get('code')?.dirty)}" class="form-control" (change)="setSections(i)" name="course" formControlName="code">
                             <option value="">Select a course</option>
-                            <option *ngFor="let course of allCourses" [value]='course.getCode()'>{{course.getCode()}}</option>
+                            <option *ngFor="let course of allCourses" [value]='course.getCode()' [disabled]="isSelected(course)">{{course.getCode()}}</option>
                         </select>
 
                         <label for="section">Section</label>

@@ -15,7 +15,7 @@ export class DataService {
 
   }
 
-  baseUrl = 'http://localhost:8080'
+  baseUrl = 'http://localhost:8081'
 
   getFacultyID(s : string){
     switch(s){
@@ -39,9 +39,8 @@ export class DataService {
     return -1
   }
 
-  createUser(U: User) {
+  async createUser(U: User) {
     var addStudentUrl =this.baseUrl + '/add-student'
-
     let username = U.uName;
     let first_name = U.fName;
     let last_name = U.lName;
@@ -52,10 +51,28 @@ export class DataService {
     let is_admin = false;
     let body = {username:username , first_name:first_name , last_name:last_name , password:password , 
                 faculty_id:faculty_id, bio:bio , is_admin:is_admin  }
-    this.http.post(addStudentUrl,body).subscribe();
+    let student_id : number
+    await this.http.post(addStudentUrl,body).subscribe(e=>{
+      this.getStudentByUsernameObservable(username).subscribe(data=>{
+        console.log(data)
+        let temp = data[0]
+        student_id = temp.student_id;
+        for(let i = 0 ; i<U.courseCount ; i++){
+          let code = U.courses.at(i)?.getCode();
+          let section = U.sections.at(i)?.name
+          if(code && section){
+            this.getCourseIDObservable(code , section).subscribe(data=>{
+              let temp = data[0]
+              this.addEnrollmentObservable(student_id , temp.course_id).subscribe()
+            })
+          }
+        }
+      })
+    })
 
 
-    U.courses
+    //this.addEnrollmentObservable(student_id , )
+
   }
 
   getTermCoursesObservable(): Observable<any> {
@@ -199,5 +216,21 @@ export class DataService {
   
     return this.http.post(this.baseUrl + methodUrl, { student_id:student_id, course_id: course_id })
   }
+
+  getStudentByIDObservable(student_id : number): Observable<any>{
+    let methodUrl ='/get-student-by-id'
+    return this.http.get(this.baseUrl+methodUrl+`/${student_id}`)
+  }
+
+  getStudentByUsernameObservable(username : string): Observable<any>{
+    let methodUrl ='/get-student-by-username'
+    return this.http.get(this.baseUrl+methodUrl+`/${username}`)
+  }
+
+  getCourseIDObservable(code:string , section : string): Observable<any>{
+    let methodUrl ='/get-course-by-code-section'
+    return this.http.get(this.baseUrl+methodUrl+`/${code}/${section}`)
+  }
+
 }
 

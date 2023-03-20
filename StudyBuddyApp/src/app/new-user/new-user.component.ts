@@ -15,14 +15,18 @@ import { TimeStartEnd } from '../time-start-end';
 })
 export class NewUserComponent implements OnInit{
   public allCourses:Course[]
+  public availableCourses : Course[]
   public allSections: Section[][]
   public courseCount : number
+  private firstCourse : boolean
 
   public hoursOfDay : String[]
 
   public weekDays = ['Sun' , 'Mon' , 'Tue' , 'Wed' , 'Thur' , 'Fri' , 'Sat']
   form : FormGroup
   constructor(private DS : DataService , private FB : FormBuilder){
+    this.firstCourse = false;
+    this.availableCourses=[]
     this.form = this.FB.group({
       uName: ['' , Validators.required],
       fName: ['' , Validators.required],
@@ -70,6 +74,7 @@ export class NewUserComponent implements OnInit{
     this.allCourses.forEach(e => {
       this.allSections.push(e.getSections());
     });
+    this.availableCourses = this.allCourses
   }
 
   get courses() : FormArray{
@@ -79,6 +84,7 @@ export class NewUserComponent implements OnInit{
   get studyTime() : FormArray{
     return this.form.get('studyTime') as FormArray
   }
+
 
 
   checkPasswords: ValidatorFn = (group: AbstractControl):  ValidationErrors | null => { 
@@ -100,7 +106,6 @@ export class NewUserComponent implements OnInit{
     const hours2 = parseInt(timeParts2[0], 10); 
     const minutes2 = parseInt(timeParts2[1], 10); 
     const timeInMinutes2 = (hours2 * 60) + minutes2; 
-    console.log(this.form)
 
     if(timeInMinutes2 - timeInMinutes1 <= 0){
       return { overlap_error: true }
@@ -163,8 +168,21 @@ export class NewUserComponent implements OnInit{
     return this.allCourses.find((e)=> e.getCode() == curCourse)?.getSections()
 
   }
+  isSelected(course : Course){
+    //console.log(course)
+    for(let i = 0 ; i< this.courseCount ; i++){
+      let code = this.courses.at(i)!.get('code')!.value
+      if(code  == course.getCode()){
+        return true;
+      }
+    }
+ 
+    return false;
+  }
+
+
   submit(){
-    console.log(this.form.value)
+    //console.log(this.form.value)
 
     let form = this.form.value
     var userSections : Section[]
