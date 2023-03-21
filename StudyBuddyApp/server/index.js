@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 const { Pool } = require('pg');
 var md5 = require('md5');
+const axios = require("axios");
 
 const pool = new Pool({
     user: "postgres",
@@ -301,4 +302,45 @@ app.post('/add-availability', async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+})
+
+
+app.get('/fill-database-courses' , (req, res)=>{
+    let allCourses =[];
+    axios.get("http://www.sfu.ca/bin/wcm/course-outlines?current/current").then(data=>{
+        let departments = data.data
+        departments = departments.filter( elm => elm.text == "CMPT" || elm.text == "MACM"
+                                                || elm.text =="STAT" || elm.text == "MATH"
+                                                 )
+        //console.log(departments)
+        //res.json(departments)
+
+        departments.forEach(department => {
+            //console.log(department.text)
+            axios.get(`http://www.sfu.ca/bin/wcm/course-outlines?current/current/${department.text}`)
+            .then(data =>{
+                let courses = data.data
+                //console.log(courses)
+                courses.forEach(course=>{
+                    axios.get(`http://www.sfu.ca/bin/wcm/course-outlines?current/current/${department.text}/${course.text}`)
+                    .then(data=>{
+                        let sections = data.data
+                        //console.log(sections)
+                        sections.forEach(section =>{
+                            allCourses.push({code:department.text+course.text , term:'Spring 2023' , section:section.text , name:section.title})
+                        })
+                        console.log(allCourses)
+                    }).catch(error=>{
+                        console.log('error at ' ,department.text, course.text ,":" , error)
+                    })
+                })
+            }).catch(error=>{
+                console.log("error at " , department.text )
+            })
+        });
+        console.log(allCourses)
+        res.end()
+    }).catch(error=>{
+        console.log(error)
+    })
 })
