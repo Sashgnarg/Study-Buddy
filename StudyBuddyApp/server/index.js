@@ -262,34 +262,6 @@ app.post('/add-enrollment', async (req, res) => {
     }
 })
 
-app.post('/add-enrollment', async (req, res) => {
-    var query = `
-    INSERT INTO availability_block
-    (student_id , day_of_week, start_time, end_time, is_available)
-    VALUES
-
-    `;
-    var student_id = 4
-    // Add values to query
-    for (let day = 0; day < 7; day++) {
-        for (let hour = 0; hour < 24; hour++) {
-            is_available = Math.random() < 0.5
-            value =
-                `
-                (${student_id}, ${day}, ${hour}, ${hour + 1}, ${is_available}),
-                `
-            query += value
-        }
-    }
-
-    console.log(query)
-
-    try {
-        res.end()
-    } catch (error) {
-        console.log(error)
-    }
-})
 
 app.post('/add-availability', async (req, res) => {
     // Create base query

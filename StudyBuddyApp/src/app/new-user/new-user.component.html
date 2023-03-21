@@ -98,7 +98,7 @@
     <button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
     <br><br><br>
     <h3>Study Time</h3>
-
+<!-- 
     <ng-container formArrayName="studyTime">
         <ng-container *ngFor="let studyTimeForm of studyTime.controls ; let i = index">
             <h4><button id="xButton" type="button" (click)="removeStudyTime(i)"><i class="fa fa-times"></i></button>
@@ -132,7 +132,7 @@
         </ng-container>
     </ng-container>
     <button id='addStudyTimeButton' class="btn btn-warning" (click)="incrStudyTime()" type="button">add study
-        time</button> <br><br>
+        time</button> <br><br> -->
 
     <div class="legend">
         <span class="available"></span>
@@ -157,8 +157,8 @@
             </tr>
         </tbody>
     </table>
-    <button (click)="submit()">schedule</button>
-
+    <!-- <button (click)="submit()">schedule</button> -->
+<br><br>
     <button [disabled]="!form.valid" class="btn btn-primary " (click)="submit()" type="button">test submit</button>
 </form>
 

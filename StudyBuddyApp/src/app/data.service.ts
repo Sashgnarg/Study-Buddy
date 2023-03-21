@@ -67,13 +67,12 @@ export class DataService {
             this.getCourseIDObservable(code, section).subscribe(data => {
               let temp = data[0]
               this.addEnrollmentObservable(student_id, temp.course_id).subscribe()
-              this.addAvailabilityObservable(student_id, U.availabilityBlock).subscribe()
             })
           }
         }
+        this.addAvailabilityObservable(student_id, U.availabilityBlock).subscribe()
       })
     })
-
 
     //this.addEnrollmentObservable(student_id , )
 
