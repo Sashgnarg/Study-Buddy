@@ -105,35 +105,35 @@ export class DataService {
           }//end if 
         } //end for 
 
-        let availability = this.fillAvailability(U)
-        for(let j = 0; j<7 ; j++){ 
-          let body = []
-          for(let i = 0 ; i<14 ; i++){
-            let start = 8+i;
-            let strStart = `${start}:00`
-            if(start < 10){
-              strStart = `0${start}:00`
-            }
-            let timeEnd = start+1
-            let strEnd = `${timeEnd}:00`
-            if(timeEnd<10){
-              let strEnd = `0${timeEnd}:00`
-            }
-            if(availability.some(element =>{ return element.day ==this.weekDays[j] &&
-                                                    element.time.start == strStart &&
-                                                    element.time.end == strEnd
-            })){
-              console.log("we found an hour of availability for user:" , student_id)
-                //this.addAvailabilityBlocksObservable(student_id , j ,strStart , strEnd , true).subscribe()
-                body.push({student_id:student_id, day_of_week:j , start_time:strStart , end_time:strEnd , is_available:true })
-            }else{
-                //this.addAvailabilityBlocksObservable(student_id , j ,strStart , strEnd , false).subscribe()
-                body.push({student_id:student_id, day_of_week:j ,start_time:strStart , end_time:strEnd , is_available:false })
-            }
-            //console.log(strStart ,strEnd )
-          }
-        this.addAvailabilityBlocksObservable(body).subscribe()
-        }
+        // let availability = this.fillAvailability(U)
+        // for(let j = 0; j<7 ; j++){ 
+        //   let body = []
+        //   for(let i = 0 ; i<14 ; i++){
+        //     let start = 8+i;
+        //     let strStart = `${start}:00`
+        //     if(start < 10){
+        //       strStart = `0${start}:00`
+        //     }
+        //     let timeEnd = start+1
+        //     let strEnd = `${timeEnd}:00`
+        //     if(timeEnd<10){
+        //       let strEnd = `0${timeEnd}:00`
+        //     }
+        //     if(availability.some(element =>{ return element.day ==this.weekDays[j] &&
+        //                                             element.time.start == strStart &&
+        //                                             element.time.end == strEnd
+        //     })){
+        //       console.log("we found an hour of availability for user:" , student_id)
+        //         //this.addAvailabilityBlocksObservable(student_id , j ,strStart , strEnd , true).subscribe()
+        //         body.push({student_id:student_id, day_of_week:j , start_time:strStart , end_time:strEnd , is_available:true })
+        //     }else{
+        //         //this.addAvailabilityBlocksObservable(student_id , j ,strStart , strEnd , false).subscribe()
+        //         body.push({student_id:student_id, day_of_week:j ,start_time:strStart , end_time:strEnd , is_available:false })
+        //     }
+        //     //console.log(strStart ,strEnd )
+        //   }
+        // this.addAvailabilityBlocksObservable(body).subscribe()
+        // }
     });
 
 

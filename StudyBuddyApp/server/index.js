@@ -35,10 +35,11 @@ app.use('/', function (req, res, next) {
 //         console.log(error.message)
 //     }
 // })
-// app.get('/', (req, res) => {
-//     console.log('hi')
-//     res.send('hi')
-// })
+
+app.get('/', (req, res) => {
+    console.log('hi')
+    res.send('hi')
+})
 
 app.listen(PORT, () => {
     console.log(`app is listening on ${PORT}`);
