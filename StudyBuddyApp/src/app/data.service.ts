@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { User } from './user';
 import { HttpClient } from '@angular/common/http'
 import { Course } from './course';
-import { last, Observable } from 'rxjs';
+import { flatMap, last, mergeMap, Observable, timestamp } from 'rxjs';
 import { BlockScrollStrategy } from '@angular/cdk/overlay';
+import { AvailabilityBlock } from './availability-block';
+import { TimeStartEnd } from './time-start-end';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+  public weekDays = ['Sun' , 'Mon' , 'Tue' , 'Wed' , 'Thur' , 'Fri' , 'Sat']
 
 
   constructor(private http: HttpClient) {
@@ -17,6 +20,35 @@ export class DataService {
 
   baseUrl = 'http://localhost:8081'
 
+  fillAvailability(U : User){
+    let availability : AvailabilityBlock[]= []
+      U.availabilityBlock.forEach(e=>{
+        let start = parseInt( e.time.start.slice(0 , 2))
+        let end = parseInt(e.time.end.slice(0,2)); 
+        //console.log(start , end)
+        while(start < end  ){
+          let strStart = `${start}:00`
+
+          if(start < 10){
+            strStart = `0${start}:00`
+          }
+          let timeEnd = start+1
+          let strEnd = `${timeEnd}:00`
+          if(timeEnd<10){
+            let strEnd = `0${timeEnd}:00`
+          }
+          availability.push(new AvailabilityBlock( new TimeStartEnd(strStart,strEnd),e.day))
+          start++
+        }
+      })
+      console.log(availability)
+      if(availability.some(element => { return element.day == 'Sun' && 
+                                        element.time.start == '09:00'&&
+                                        element.time.end == '10:00'})) {
+        console.log("the includes statement should work");
+      }
+      return availability;
+  }
   getFacultyID(s : string){
     switch(s){
       case 'Applied Science':
@@ -39,7 +71,7 @@ export class DataService {
     return -1
   }
 
-  async createUser(U: User) {
+  createUser(U: User) {
     var addStudentUrl =this.baseUrl + '/add-student'
     let username = U.uName;
     let first_name = U.fName;
@@ -51,26 +83,64 @@ export class DataService {
     let is_admin = false;
     let body = {username:username , first_name:first_name , last_name:last_name , password:password , 
                 faculty_id:faculty_id, bio:bio , is_admin:is_admin  }
-    let student_id : number
-    await this.http.post(addStudentUrl,body).subscribe(e=>{
-      this.getStudentByUsernameObservable(username).subscribe(data=>{
-        console.log(data)
-        let temp = data[0]
-        student_id = temp.student_id;
+    let student_id : any
+
+    //this.submitStudent(body)
+    this.http.post(addStudentUrl,body).subscribe((id)=>{
+      console.log(id);
+      student_id = id;
+      console.log("student id is: " , student_id)
+
+
         for(let i = 0 ; i<U.courseCount ; i++){
           let code = U.courses.at(i)?.getCode();
           let section = U.sections.at(i)?.name
+          console.log(code , section)
           if(code && section){
-            this.getCourseIDObservable(code , section).subscribe(data=>{
-              let temp = data[0]
-              this.addEnrollmentObservable(student_id , temp.course_id).subscribe()
-            })
+            this.getCourseIDObservable(code , section).subscribe(course_id=>{
+              let temp = course_id
+              console.log(temp)
+              this.addEnrollmentObservable(student_id , temp).subscribe()
+            })//end course id subcribe
+          }//end if 
+        } //end for 
+
+        let availability = this.fillAvailability(U)
+        for(let j = 0; j<7 ; j++){ 
+          let body = []
+          for(let i = 0 ; i<14 ; i++){
+            let start = 8+i;
+            let strStart = `${start}:00`
+            if(start < 10){
+              strStart = `0${start}:00`
+            }
+            let timeEnd = start+1
+            let strEnd = `${timeEnd}:00`
+            if(timeEnd<10){
+              let strEnd = `0${timeEnd}:00`
+            }
+            if(availability.some(element =>{ return element.day ==this.weekDays[j] &&
+                                                    element.time.start == strStart &&
+                                                    element.time.end == strEnd
+            })){
+              console.log("we found an hour of availability for user:" , student_id)
+                //this.addAvailabilityBlocksObservable(student_id , j ,strStart , strEnd , true).subscribe()
+                body.push({student_id:student_id, day_of_week:j , start_time:strStart , end_time:strEnd , is_available:true })
+            }else{
+                //this.addAvailabilityBlocksObservable(student_id , j ,strStart , strEnd , false).subscribe()
+                body.push({student_id:student_id, day_of_week:j ,start_time:strStart , end_time:strEnd , is_available:false })
+            }
+            //console.log(strStart ,strEnd )
           }
+        this.addAvailabilityBlocksObservable(body).subscribe()
         }
-      })
-    })
+    });
 
 
+
+  
+
+  
     //this.addEnrollmentObservable(student_id , )
 
   }
@@ -232,5 +302,10 @@ export class DataService {
     return this.http.get(this.baseUrl+methodUrl+`/${code}/${section}`)
   }
 
+  addAvailabilityBlocksObservable(body:  any): Observable<any>{
+    let methodUrl = '/add-availability-block'
+    console.log(body)
+    return this.http.post(this.baseUrl+methodUrl , body)
+  }
 }
 

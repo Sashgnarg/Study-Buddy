@@ -22,23 +22,23 @@ app.use('/', function (req, res, next) {
     next()
 })
 
-app.post('/signUp', (req, res) => {
-    try {
-        const { uName, fName, lName, faculty, courseCount, password } = req.body
-        const courses = req.body.courses
-        const sections = req.body.sections
-        // should use md5 on the password at this stage
-        console.log(uName, fName, lName, faculty, password, courseCount, courses, sections)
-        res.json(req.body)
-        // all parts of user are saved above ^^ just needs to be sent into database
-    } catch (error) {
-        console.log(error.message)
-    }
-})
-app.get('/', (req, res) => {
-    console.log('hi')
-    res.send('hi')
-})
+// app.post('/signUp', (req, res) => {
+//     try {
+//         const { uName, fName, lName, faculty, courseCount, password } = req.body
+//         const courses = req.body.courses
+//         const sections = req.body.sections
+//         // should use md5 on the password at this stage
+//         console.log(uName, fName, lName, faculty, password, courseCount, courses, sections)
+//         res.json(req.body)
+//         // all parts of user are saved above ^^ just needs to be sent into database
+//     } catch (error) {
+//         console.log(error.message)
+//     }
+// })
+// app.get('/', (req, res) => {
+//     console.log('hi')
+//     res.send('hi')
+// })
 
 app.listen(PORT, () => {
     console.log(`app is listening on ${PORT}`);
@@ -143,8 +143,8 @@ app.get('/get-student-by-username/:username' , async(req , res)=>{
 
     try {
         let result = await pool.query(query , [username])
-        console.log(result)
-        res.send(result.rows)
+        console.log(result.rows)
+            res.send(result.rows)
     } catch (error) {
         console.log(error)
     }
@@ -193,7 +193,10 @@ app.post('/add-student', async (req, res) => {
                     req.body.is_admin
                 ]
             )
-            res.end()
+            const result = await pool.query('select * from student where username = $1' , [req.body.username])
+            rows = result.rows
+            console.log("this is the ID returned: " , rows[0].student_id)
+            res.json(rows[0].student_id)
         }
         catch (e) {
             console.log(e)
@@ -226,7 +229,6 @@ app.get('/get-courses', async (req, res) => {
         var result = await pool.query(query)
         console.log(`sending back:`, result.rows)
         res.send(result.rows)
-        res.end()
     } catch (e) {
         console.log(e)
     }
@@ -241,7 +243,8 @@ app.get('/get-course-by-code-section/:code/:section' , async(req , res)=>{
 
     try {
         let result = await pool.query(query , [code , section])
-        res.send(result.rows)
+        console.log("sending back this course : " + result.rows[0].course_id)
+        res.json(result.rows[0].course_id)
     } catch (error) {
         console.log(error)
     }
@@ -260,4 +263,23 @@ app.post('/add-enrollment' , async(req , res) =>{
         console.log(error)
         
     }
+
+    app.post('/add-availability-block' , async(req , res)=>{
+        console.log('weve made it to adding availbilities!')
+        const query = `INSERT INTO availability_block (student_id , day_of_week,  start_time , end_time , 
+            is_available) VALUES ($1 , $2 , TO_TIMESTAMP($3 , 'HH24:MI') , TO_TIMESTAMP($4 , 'HH24:MI')
+            , $5)`;
+            console.log(req.body)
+            let body = req.body;
+            try {
+                const {student_id , day_of_week , start_time , end_time , is_available} = req.body
+                // pool.query(query , [student_id , day_of_week , start_time , end_time , is_available])
+                pool.query(query , body.map(item=>[item.student_id , item.day_of_week , item.start_time, 
+                    item.end_time, item.is_available ])
+                )
+            } catch (error) {
+                console.log(error)
+            }
+    })
 })
+// pool.end() will need to use this periodically if we use up all the connections to the database 

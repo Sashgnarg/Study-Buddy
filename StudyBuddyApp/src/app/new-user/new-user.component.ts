@@ -6,6 +6,7 @@ import { Course } from '../course';
 import { Section } from '../section';
 import { AvailabilityBlock } from '../availability-block';
 import { TimeStartEnd } from '../time-start-end';
+import { timeInterval } from 'rxjs';
 
 
 @Component({
@@ -44,8 +45,11 @@ export class NewUserComponent implements OnInit{
 
     for(let i = 0 ; i < 14 ;i++){
       let hour = 8+i
+      if(hour < 10){
+        this.hoursOfDay.push(`0${hour}:00`)
+      }else
       this.hoursOfDay.push(`${hour}:00`)
-      this.hoursOfDay.push(`${hour}:30`)
+      //this.hoursOfDay.push(`${hour}:30`)
     }
   }
 
@@ -61,7 +65,7 @@ export class NewUserComponent implements OnInit{
           courses.push(temp);
           temp = new Course();
         }
-        temp.addSection(e.section , 'not needed' , 'not needed');
+        temp.addSection(e.section , '00:00' , "01:00");
         prevCode = e.code
       })
       temp.setCode(prevCode)
@@ -183,7 +187,6 @@ export class NewUserComponent implements OnInit{
 
   submit(){
     //console.log(this.form.value)
-
     let form = this.form.value
     var userSections : Section[]
     userSections =[]
@@ -202,12 +205,27 @@ export class NewUserComponent implements OnInit{
     for(let i =0; i < this.studyTime.length ; i++){
       this.weekDays.forEach(e =>{
         if(this.studyTime.at(i).get(e)?.value == true){
-          availability.push(new AvailabilityBlock(new TimeStartEnd(this.studyTime.at(i).get('startTime')?.value , this.studyTime.at(i).get('endTime')?.value) , e ))
+          availability.push(new AvailabilityBlock(new TimeStartEnd(this.studyTime.at(i).get('startTime')?.value ,
+           this.studyTime.at(i).get('endTime')?.value) , e ))
         } 
       }) 
     }
-    var user = new User( form.uName ,form.fName , form.lName , form.faculty, form.password , this.courseCount , userCourses ,userSections , availability);
+    var user = new User( form.uName ,form.fName , form.lName , form.faculty, form.password ,
+      this.courseCount , userCourses ,userSections , availability);
     this.DS.createUser(user);
+  }
+
+  test(){
+    let uName = 'nimaAvailable14'
+    let fName ='bob'
+    let lName = 'doi'
+    let faculty = 'Science'
+    let password = '123456'
+    let courseCount = 1;
+    let userCourses = [this.allCourses[1]];
+    let userSections = [new Section('D100' , new TimeStartEnd('10:00' , '11:00'))]
+    let availability = [new AvailabilityBlock(new TimeStartEnd("09:00" , "10:00") ,'Sun') , new AvailabilityBlock(new TimeStartEnd("10:00" , "11:00") ,'Sun')]
+    this.DS.createUser(new User(uName, fName , lName, faculty , password , courseCount , userCourses , userSections ,availability))
   }
 
 }
