@@ -7,7 +7,7 @@ import { NewUserComponent } from './new-user/new-user.component';
 const routes: Routes = [
   { path: '', component: NewUserComponent },
   { path: 'admin', component: AdminMainComponent },
-  { path: 'login', component:LoginComponent}
+  { path: 'login', component: LoginComponent },
 ];
 
 @NgModule({

@@ -121,28 +121,28 @@ app.get('/get-students', async (req, res) => {
     }
 })
 
-app.get('/get-student-by-id/:id' , async(req , res)=>{
+app.get('/get-student-by-id/:id', async (req, res) => {
     let id = req.params.id
     console.log(`you requested student with id : ${id}`)
 
-    const query =`SELECT * FROM student WHERE student_id = $1`
+    const query = `SELECT * FROM student WHERE student_id = $1`
 
     try {
-        let res = (await pool.query(query , [id]))
+        let res = (await pool.query(query, [id]))
         req.send(res.rows)
     } catch (error) {
         console.log(error)
     }
 })
 
-app.get('/get-student-by-username/:username' , async(req , res)=>{
+app.get('/get-student-by-username/:username', async (req, res) => {
     let username = req.params.username
     console.log(`you requested student with username: ${username}`)
 
-    const query =`SELECT * FROM student WHERE username = $1`
+    const query = `SELECT * FROM student WHERE username = $1`
 
     try {
-        let result = await pool.query(query , [username])
+        let result = await pool.query(query, [username])
         console.log(result)
         res.send(result.rows)
     } catch (error) {
@@ -171,7 +171,7 @@ app.post('/add-student', async (req, res) => {
                     req.body.faculty_id,
                     req.body.bio,
                     req.body.is_admin
-                ]                                                      
+                ]
             )
             console.log(res)
             res.end()
@@ -232,15 +232,15 @@ app.get('/get-courses', async (req, res) => {
     }
 })
 
-app.get('/get-course-by-code-section/:code/:section' , async(req , res)=>{
+app.get('/get-course-by-code-section/:code/:section', async (req, res) => {
     let code = req.params.code
     let section = req.params.section
     console.log(`you requested course with code:${code} and section: ${section}`)
 
-    const query =`SELECT * FROM course WHERE code = $1 AND section =$2`
+    const query = `SELECT * FROM course WHERE code = $1 AND section =$2`
 
     try {
-        let result = await pool.query(query , [code , section])
+        let result = await pool.query(query, [code, section])
         res.send(result.rows)
     } catch (error) {
         console.log(error)
@@ -248,16 +248,85 @@ app.get('/get-course-by-code-section/:code/:section' , async(req , res)=>{
 })
 
 
-app.post('/add-enrollment' , async(req , res) =>{
+app.post('/add-enrollment', async (req, res) => {
     const query = `INSERT INTO enrollment (student_id , course_id) VALUES ($1 , $2)`;
 
     try {
-        const {student_id , course_id} = req.body
-        console.log(student_id , course_id)
-        pool.query(query , [student_id , course_id] );
+        const { student_id, course_id } = req.body
+        console.log(student_id, course_id)
+        pool.query(query, [student_id, course_id]);
         res.end()
     } catch (error) {
         console.log(error)
-        
+
+    }
+})
+
+app.post('/add-enrollment', async (req, res) => {
+    var query = `
+    INSERT INTO availability_block
+    (student_id , day_of_week, start_time, end_time, is_available)
+    VALUES
+
+    `;
+    var student_id = 4
+    // Add values to query
+    for (let day = 0; day < 7; day++) {
+        for (let hour = 0; hour < 24; hour++) {
+            is_available = Math.random() < 0.5
+            value =
+                `
+                (${student_id}, ${day}, ${hour}, ${hour + 1}, ${is_available}),
+                `
+            query += value
+        }
+    }
+
+    console.log(query)
+
+    try {
+        res.end()
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+app.post('/add-availability', async (req, res) => {
+    // Create base query
+    var query = `
+    INSERT INTO availability_block
+    (student_id , day_of_week, start_time, end_time, is_available)
+    VALUES
+    `
+
+    // TODO: Get student_id from body
+    var student_id = req.body.student_id
+    var availability = req.body.availability
+    // Add values to query
+    for (let day = 0; day < availability.length; day++) {
+        for (let hour = 0; hour < availability[0].length; hour++) {
+            let is_available = availability[day][hour].is_available
+            let start_time = availability[day][hour].start_time
+            value =
+                `
+            (${student_id}, ${day}, to_timestamp('${start_time}:00', 'HH24:MI'), to_timestamp('${start_time + 1}:00', 'HH24:MI'), ${is_available}),
+            `
+
+            query += value
+        }
+    }
+
+    // Remove last comma from the query
+    var lastCommaIndex = query.lastIndexOf(",");
+    query = query.slice(0, lastCommaIndex) + query.slice(lastCommaIndex + 1);
+
+    // Add semicolon to the end of the query
+    query += `;`
+    // console.log(query)
+    try {
+        await pool.query(query);
+        res.end()
+    } catch (error) {
+        console.log(error)
     }
 })

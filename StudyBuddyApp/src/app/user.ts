@@ -4,24 +4,24 @@ import { Section } from "./section"
 
 export class User {
 
-    uID?:number
+    uID?: number
     uName: string
     fName: string
-    lName : string
-    faculty : string
+    lName: string
+    faculty: string
     password: string
     courseCount: number
 
     // order of courses array corresponds to order of sections array
     // ie :  if enrolled courses[j] , user is in section section[j]  
-    courses : Course[]
-    sections : Section[]
-    availabilityBlock : AvailabilityBlock[]
+    courses: Course[]
+    sections: Section[]
+    availabilityBlock: AvailabilityBlock[][]
 
     // add more later 
     // ie friends messages etc
 
-    constructor( un:string,   fn : string , ln :string, f : string ,  p : string , cCount : number , courses:Course[] , sections:Section[] , ab : AvailabilityBlock[]){
+    constructor(un: string, fn: string, ln: string, f: string, p: string, cCount: number, courses: Course[], sections: Section[], ab: AvailabilityBlock[][]) {
         this.uName = un
         this.fName = fn
         this.lName = ln

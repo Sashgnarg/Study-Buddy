@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http'
 import { Course } from './course';
 import { last, Observable } from 'rxjs';
 import { BlockScrollStrategy } from '@angular/cdk/overlay';
+import { AvailabilityBlock } from './availability-block';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,8 @@ export class DataService {
 
   baseUrl = 'http://localhost:8081'
 
-  getFacultyID(s : string){
-    switch(s){
+  getFacultyID(s: string) {
+    switch (s) {
       case 'Applied Science':
         return 1
       case 'Arts and Social Science':
@@ -40,7 +41,7 @@ export class DataService {
   }
 
   async createUser(U: User) {
-    var addStudentUrl =this.baseUrl + '/add-student'
+    var addStudentUrl = this.baseUrl + '/add-student'
     let username = U.uName;
     let first_name = U.fName;
     let last_name = U.lName;
@@ -49,21 +50,24 @@ export class DataService {
     let faculty_id = this.getFacultyID(faculty)
     let bio = ""
     let is_admin = false;
-    let body = {username:username , first_name:first_name , last_name:last_name , password:password , 
-                faculty_id:faculty_id, bio:bio , is_admin:is_admin  }
-    let student_id : number
-    await this.http.post(addStudentUrl,body).subscribe(e=>{
-      this.getStudentByUsernameObservable(username).subscribe(data=>{
+    let body = {
+      username: username, first_name: first_name, last_name: last_name, password: password,
+      faculty_id: faculty_id, bio: bio, is_admin: is_admin
+    }
+    let student_id: number
+    await this.http.post(addStudentUrl, body).subscribe(e => {
+      this.getStudentByUsernameObservable(username).subscribe(data => {
         console.log(data)
         let temp = data[0]
         student_id = temp.student_id;
-        for(let i = 0 ; i<U.courseCount ; i++){
+        for (let i = 0; i < U.courseCount; i++) {
           let code = U.courses.at(i)?.getCode();
           let section = U.sections.at(i)?.name
-          if(code && section){
-            this.getCourseIDObservable(code , section).subscribe(data=>{
+          if (code && section) {
+            this.getCourseIDObservable(code, section).subscribe(data => {
               let temp = data[0]
-              this.addEnrollmentObservable(student_id , temp.course_id).subscribe()
+              this.addEnrollmentObservable(student_id, temp.course_id).subscribe()
+              this.addAvailabilityObservable(student_id, U.availabilityBlock).subscribe()
             })
           }
         }
@@ -77,7 +81,7 @@ export class DataService {
 
   getTermCoursesObservable(): Observable<any> {
     const methodUrl = '/get-courses'
-    let courses : Course[]= [];
+    let courses: Course[] = [];
     return this.http.get<any[]>(this.baseUrl + methodUrl)
   }
 
@@ -211,25 +215,30 @@ export class DataService {
     return this.http.request('delete', this.baseUrl + methodUrl, { body: { student_id: student_id } })
   }
 
-  addEnrollmentObservable(student_id : number, course_id : number): Observable<any> {
+  addEnrollmentObservable(student_id: number, course_id: number): Observable<any> {
     var methodUrl = '/add-enrollment'
-  
-    return this.http.post(this.baseUrl + methodUrl, { student_id:student_id, course_id: course_id })
+
+    return this.http.post(this.baseUrl + methodUrl, { student_id: student_id, course_id: course_id })
   }
 
-  getStudentByIDObservable(student_id : number): Observable<any>{
-    let methodUrl ='/get-student-by-id'
-    return this.http.get(this.baseUrl+methodUrl+`/${student_id}`)
+  getStudentByIDObservable(student_id: number): Observable<any> {
+    let methodUrl = '/get-student-by-id'
+    return this.http.get(this.baseUrl + methodUrl + `/${student_id}`)
   }
 
-  getStudentByUsernameObservable(username : string): Observable<any>{
-    let methodUrl ='/get-student-by-username'
-    return this.http.get(this.baseUrl+methodUrl+`/${username}`)
+  getStudentByUsernameObservable(username: string): Observable<any> {
+    let methodUrl = '/get-student-by-username'
+    return this.http.get(this.baseUrl + methodUrl + `/${username}`)
   }
 
-  getCourseIDObservable(code:string , section : string): Observable<any>{
-    let methodUrl ='/get-course-by-code-section'
-    return this.http.get(this.baseUrl+methodUrl+`/${code}/${section}`)
+  getCourseIDObservable(code: string, section: string): Observable<any> {
+    let methodUrl = '/get-course-by-code-section'
+    return this.http.get(this.baseUrl + methodUrl + `/${code}/${section}`)
+  }
+
+  addAvailabilityObservable(student_id: number, availability: AvailabilityBlock[][]): Observable<any> {
+    let methodUrl = '/add-availability'
+    return this.http.post(this.baseUrl + methodUrl, { student_id: student_id, availability: availability })
   }
 
 }
