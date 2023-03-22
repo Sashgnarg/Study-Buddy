@@ -24,6 +24,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+
 import { FacultyNamePipe } from './faculty-name.pipe';
 import { AdminDeleteDepartmentComponent } from './admin-departments/admin-delete-department/admin-delete-department.component';
 import { AdminEditDepartmentComponent } from './admin-departments/admin-edit-department/admin-edit-department.component';
@@ -34,6 +36,7 @@ import { AdminDeleteCourseComponent } from './admin-courses/admin-delete-course/
 import { DepartmentNamePipe } from './department-name.pipe';
 import { UserMainComponent } from './user-main/user-main.component';
 import { UserMainBuddiesComponent } from './user-main-buddies/user-main-buddies.component';
+import { LoginUserComponent } from './login-user/login-user.component';
 
 
 @NgModule({
@@ -57,6 +60,7 @@ import { UserMainBuddiesComponent } from './user-main-buddies/user-main-buddies.
     DepartmentNamePipe,
     UserMainComponent,
     UserMainBuddiesComponent,
+    LoginUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +78,7 @@ import { UserMainBuddiesComponent } from './user-main-buddies/user-main-buddies.
     MatSortModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,34 @@
+<div class="container">
+    <mat-card class="centered">
+        <mat-card-title>Welcome to Study Buddy</mat-card-title>
+        <mat-card-content>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Email"
+                formControlName="email"
+                type="email"
+              />
+              <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+                Email is required.
+              </mat-error>
+            </mat-form-field><br>
+    
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Password"
+                formControlName="password"
+                type="password"
+              />
+              <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+                Password is required.
+              </mat-error>
+            </mat-form-field><br>
+            <button mat-raised-button color="primary">Login</button>
+            <a routerLink="./new" class="btn btn-link">Register</a>
+          </form>
+        </mat-card-content>
+      </mat-card>
+</div>
