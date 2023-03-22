@@ -306,15 +306,11 @@ app.post('/add-availability', async (req, res) => {
 
 
 app.get('/fill-database-courses' , (req, res)=>{
-    let allCourses =[];
     axios.get("http://www.sfu.ca/bin/wcm/course-outlines?current/current").then(data=>{
         let departments = data.data
         departments = departments.filter( elm => elm.text == "CMPT" || elm.text == "MACM"
                                                 || elm.text =="STAT" || elm.text == "MATH"
                                                  )
-        //console.log(departments)
-        //res.json(departments)
-
         departments.forEach(department => {
             //console.log(department.text)
             axios.get(`http://www.sfu.ca/bin/wcm/course-outlines?current/current/${department.text}`)
@@ -325,11 +321,12 @@ app.get('/fill-database-courses' , (req, res)=>{
                     axios.get(`http://www.sfu.ca/bin/wcm/course-outlines?current/current/${department.text}/${course.text}`)
                     .then(data=>{
                         let sections = data.data
+                        let allCourses =[];
                         //console.log(sections)
                         sections.forEach(section =>{
                             allCourses.push({code:department.text+course.text , term:'Spring 2023' , section:section.text , name:section.title})
                         })
-                        console.log(allCourses)
+                        console.log("here are all the sections of this course" , allCourses)
                     }).catch(error=>{
                         console.log('error at ' ,department.text, course.text ,":" , error)
                     })
@@ -338,7 +335,7 @@ app.get('/fill-database-courses' , (req, res)=>{
                 console.log("error at " , department.text )
             })
         });
-        console.log(allCourses)
+        //console.log(allCourses)
         res.end()
     }).catch(error=>{
         console.log(error)
