@@ -325,9 +325,14 @@ app.get('/fill-database-courses' , (req, res)=>{
                         let allCourses =[];
                         //console.log(sections)
                         sections.forEach(section =>{
-                            allCourses.push({code:department.text+course.text , term:'Spring 2023' , section:section.text , name:section.title})
-                        })
+                            allCourses.push({code:department.text+course.text , term:'Spring 2023' , section:section.text , name:section.title
+                                            ,faculty_id:getFacultyID(department.text) , department_id:getDepartmentID(department.text)})
+                        }) // end forEach for sections
                         console.log("here are all the sections of this course" , allCourses)
+                        // at this point, allCourses holds each course that share a course code
+                        // push to database , prob similar method as availability
+                        pushCoursesToDB(allCourses)
+
                     }).catch(error=>{
                         console.log('error at ' ,department.text, course.text ,":" , error)
                     })
@@ -355,16 +360,46 @@ function getFacultyID(departmentName){
             return 8;
     }
 }
-
 function getDepartmentID(departmentName){
     switch(departmentName){
         case "CMPT":
             return 1;
-        case "MACM": // could go into science or applied science faculty
-            return 8;
+        case "MACM": // could go into science or applied science faculty || currently in science
+            return 12;
         case "STAT":
-            return 8;
+            return 11;
         case "MATH":
-            return 8;
+            return 10;
     }
+}
+
+function pushCoursesToDB(sameCodeCourses){
+        // base query
+        var query = `
+        INSERT INTO course
+        (code , term, section, name, faculty_id , department_id)
+        VALUES
+        `
+        sameCodeCourses.forEach(course => {
+            let value =
+            `
+        (${course.code}, ${course.term}, ${course.section}, ${course.name}, ${course.faculty_id} , ${course.department_id}),
+        `
+            query+=value
+        })
+
+    // Remove last comma from the query
+    let lastCommaIndex = query.lastIndexOf(",");
+    query = query.slice(0, lastCommaIndex) + query.slice(lastCommaIndex + 1);
+
+    // Add semicolon to the end of the query
+    query += `;`
+
+    console.log(query)
+
+    // try {
+    //     pool.query(query)
+    // } catch (error) {
+    //     console.log(error)
+    // }
 }
