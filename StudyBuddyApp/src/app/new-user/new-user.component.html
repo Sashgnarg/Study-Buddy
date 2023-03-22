@@ -2,43 +2,58 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
 
-<form class="form-group center container" [formGroup]="form" action="http://localhost:8080/signUp">
+<form class="form-group center container" [formGroup]="form" action="http://localhost:8080/new-student">
     <h1>New User</h1>
     <ng-container class="row">
         <h2>Personal Info</h2>
         <label for="uName">Username</label><br>
-        <input [ngClass]="{'is-invalid': form.get('uName')?.invalid && (form.get('uName')?.touched || form.get('uName')?.dirty)}" type="text" class="form-control" name="uName" placeholder="username" formControlName="uName">
+        <input
+            [ngClass]="{'is-invalid': form.get('uName')?.invalid && (form.get('uName')?.touched || form.get('uName')?.dirty)}"
+            type="text" class="form-control" name="uName" placeholder="username" formControlName="uName">
         <div *ngIf="form.get('uName')?.invalid && (form.get('uName')?.touched || form.get('uName')?.dirty)">
             <div class='error-message'>Enter A Username</div><br>
         </div>
 
         <label for="fName">First Name</label><br>
-        <input [ngClass]="{'is-invalid': form.get('fName')?.invalid && (form.get('fName')?.touched || form.get('fName')?.dirty)}" class="form-control" type="text" name="fName" placeholder="first name" formControlName="fName">
+        <input
+            [ngClass]="{'is-invalid': form.get('fName')?.invalid && (form.get('fName')?.touched || form.get('fName')?.dirty)}"
+            class="form-control" type="text" name="fName" placeholder="first name" formControlName="fName">
         <div *ngIf="form.get('fName')?.invalid && (form.get('fName')?.touched || form.get('fName')?.dirty)">
             <div class='error-message'>Enter A First Name</div><br>
         </div>
         <label for="lName">Last Name</label><br>
-        <input [ngClass]="{'is-invalid': form.get('lName')?.invalid && (form.get('lName')?.touched || form.get('lName')?.dirty)}"class="form-control" type="text" name="lName" placeholder="last name" formControlName="lName">
+        <input
+            [ngClass]="{'is-invalid': form.get('lName')?.invalid && (form.get('lName')?.touched || form.get('lName')?.dirty)}"
+            class="form-control" type="text" name="lName" placeholder="last name" formControlName="lName">
         <div *ngIf="form.get('lName')?.invalid && (form.get('lName')?.touched || form.get('lName')?.dirty)">
             <div class='error-message'>Enter A Last Name</div><br>
         </div>
     </ng-container>
     <label for="password">Password</label><br>
-    <input minlength="6" [ngClass]="{'is-invalid': form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)}" class="form-control" type="password" name="password" placeholder="password" formControlName="password">
+    <input minlength="6"
+        [ngClass]="{'is-invalid': form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)}"
+        class="form-control" type="password" name="password" placeholder="password" formControlName="password">
     <div *ngIf="form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)">
-        <div *ngIf="form.get('password')?.errors['required']" class='error-message'>Enter A Password</div><br>
-        <div *ngIf="form.get('password')?.errors['minlength']" class='error-message'>Password Be At Least 6 Characters Long</div><br>
+        <div *ngIf="form.get('password')?.errors['required']" class='error-message'>Enter A Password</div>
+        <div *ngIf="form.get('password')?.errors['minlength']" class='error-message'>Password Be At Least 6 Characters
+            Long</div><br>
     </div>
     <label for="repeatPassword">Confirm Password</label><br>
-    <input [ngClass]="{'is-invalid': (form.get('repeatPassword')?.invalid || form.getError('match_error')) && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)}" class="form-control" type="password" name="repeatPassword" placeholder="confirm password" formControlName="repeatPassword">
-    <div *ngIf="(form.get('repeatPassword')?.invalid || form.hasError('match_error')) && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)">
-        <div *ngIf="form.get('repeatPassword')?.hasError('required')" class='error-message'>Confirm Your Password</div><br>
+    <input
+        [ngClass]="{'is-invalid': (form.get('repeatPassword')?.invalid || form.getError('match_error')) && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)}"
+        class="form-control" type="password" name="repeatPassword" placeholder="confirm password"
+        formControlName="repeatPassword">
+    <div
+        *ngIf="(form.get('repeatPassword')?.invalid || form.hasError('match_error')) && (form.get('repeatPassword')?.touched || form.get('repeatPassword')?.dirty)">
+        <div *ngIf="form.get('repeatPassword')?.hasError('required')" class='error-message'>Confirm Your Password</div>
         <div *ngIf="form.hasError('match_error')" class='error-message'>Passwords Dont Match</div><br>
     </div>
     <br>
     <h2>School Info</h2><br>
     <label for="faculty">Faculty</label><br>
-    <select [ngClass]="{'is-invalid': form.get('faculty')?.invalid && (form.get('faculty')?.touched || form.get('faculty')?.dirty)}" class="form-control" name="faculty" id="faculty" formControlName="faculty">
+    <select
+        [ngClass]="{'is-invalid': form.get('faculty')?.invalid && (form.get('faculty')?.touched || form.get('faculty')?.dirty)}"
+        class="form-select" name="faculty" id="faculty" formControlName="faculty">
         <option value="Applied Science">Applied Science</option>
         <option value="Arts and Social Science">Arts and Social Science</option>
         <option value="Communication Art and Technology">Communication Art and Technology</option>
@@ -58,22 +73,93 @@
         <ng-container *ngFor="let courseForm of courses.controls ; let i = index">
             <h4><button id="xButton" type="button" (click)="removeCourse(i)"><i class="fa fa-times"></i></button>
                 Course {{i+1}}</h4>
-            <div class="container selectRow row" [formGroupName]="i">   
-                        <label for="course">Course</label>
-                        <select [ngClass]="{'is-invalid': courses.at(i).get('code')?.invalid && (courses.at(i).get('code')?.touched || courses.at(i).get('code')?.dirty)}" class="form-control" (change)="setSections(i)" name="course" formControlName="code">
-                            <option value="">Select a course</option>
-                            <option *ngFor="let course of allCourses" [value]='course.getCode()'>{{course.getCode()}}</option>
-                        </select>
+            <div class="container selectRow row" [formGroupName]="i">
+                <label for="course">Course</label>
+                <select
+                    [ngClass]="{'is-invalid': courses.at(i).get('code')?.invalid && (courses.at(i).get('code')?.touched || courses.at(i).get('code')?.dirty)}"
+                    class="form-control" (change)="setSections(i)" name="course" formControlName="code">
+                    <option value="">Select a course</option>
+                    <option *ngFor="let course of allCourses" [value]='course.getCode()'
+                        [disabled]="isSelected(course)">{{course.getCode()}}</option>
+                </select>
 
-                        <label for="section">Section</label>
-                        <select [ngClass]="{'is-invalid': courses.at(i).get('section')?.invalid && (courses.at(i).get('section')?.touched || courses.at(i).get('section')?.dirty)}" class="form-control" name="section" formControlName="section">
-                            <option value="">Select a section</option>
-                            <option  *ngFor="let section of setSections(i)">{{section.name}}</option>
-                        </select>
-                </div>
+                <label for="section">Section</label>
+                <select
+                    [ngClass]="{'is-invalid': courses.at(i).get('section')?.invalid && (courses.at(i).get('section')?.touched || courses.at(i).get('section')?.dirty)}"
+                    class="form-control" name="section" formControlName="section">
+                    <option value="">Select a section</option>
+                    <option *ngFor="let section of setSections(i)">{{section.name}}</option>
+                </select>
+                <br><br>
+            </div>
         </ng-container>
     </ng-container>
-    <br>
+    <br><br>
     <button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
+    <br><br><br>
+    <h3>Study Time</h3>
+<!-- 
+    <ng-container formArrayName="studyTime">
+        <ng-container *ngFor="let studyTimeForm of studyTime.controls ; let i = index">
+            <h4><button id="xButton" type="button" (click)="removeStudyTime(i)"><i class="fa fa-times"></i></button>
+                Study Time {{i+1}}</h4>
+            <div class="selectRow" [formGroupName]="i">
+                <div *ngFor="let day of weekDays; let j=index" class="col-md-1">
+                    <label [ngClass]="">{{day}}</label>
+                    <input type="checkbox" [value]="day" [formControlName]="day"><br><br><br>
+                </div>
+                <br><br>
+            </div>
+            <div [formGroupName]="i">
+                <div class="selectRow">
+                    <label [ngClass]="{'error-message' : studyTime.at(i).hasError('overlap_error')}"
+                        for="startTime">Start Time</label>
+                    <select class="times form-selects" name="startTime" formControlName="startTime">
+                        <option value="">Select Start</option>
+                        <option *ngFor="let time of hoursOfDay" [value]="time">{{time}}</option>
+                    </select>
+                    <label [ngClass]="{'error-message' : studyTime.at(i).hasError('overlap_error')}" for="startTime">End
+                        Time</label>
+                    <select class="form-select" name="endTime" formControlName="endTime">
+                        <option value="">Select End</option>
+                        <option *ngFor="let time of hoursOfDay" [value]="time">{{time}}</option>
+                    </select>
+                </div>
+                <div class="error-message" *ngIf="studyTime.at(i).hasError('overlap_error')">End Time Must Be Before
+                    Start Time</div>
+                <br><br>
+            </div>
+        </ng-container>
+    </ng-container>
+    <button id='addStudyTimeButton' class="btn btn-warning" (click)="incrStudyTime()" type="button">add study
+        time</button> <br><br> -->
+
+    <div class="legend">
+        <span class="available"></span>
+        <span>Available</span>
+        <span class="unavailable"></span>
+        <span>Unavailable</span>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th *ngFor="let day of days">{{ day }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let hour of hours">
+                <td class="hour-display">{{ formatHour(hour) }}-{{formatHour(hour + 1)}}</td>
+                <td *ngFor="let day of days" (click)="toggleAvailability(hour, day)" [ngClass]="{
+                      'available': isAvailable(hour, day),
+                      'unavailable': !isAvailable(hour, day)
+                    }"></td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- <button (click)="submit()">schedule</button> -->
+<br><br>
     <button [disabled]="!form.valid" class="btn btn-primary " (click)="submit()" type="button">test submit</button>
 </form>
+
+<br><br><br><br><br><br><br>

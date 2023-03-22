@@ -37,6 +37,7 @@ import { DepartmentNamePipe } from './department-name.pipe';
 import { UserMainComponent } from './user-main/user-main.component';
 import { UserMainBuddiesComponent } from './user-main-buddies/user-main-buddies.component';
 import { LoginUserComponent } from './login-user/login-user.component';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { LoginUserComponent } from './login-user/login-user.component';
     UserMainComponent,
     UserMainBuddiesComponent,
     LoginUserComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
