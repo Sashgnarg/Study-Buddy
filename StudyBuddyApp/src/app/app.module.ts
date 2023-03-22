@@ -32,6 +32,8 @@ import { AdminDeleteStudentComponent } from './admin-users/admin-delete-student/
 import { AdminEditCourseComponent } from './admin-courses/admin-edit-course/admin-edit-course.component';
 import { AdminDeleteCourseComponent } from './admin-courses/admin-delete-course/admin-delete-course.component';
 import { DepartmentNamePipe } from './department-name.pipe';
+import { UserMainComponent } from './user-main/user-main.component';
+import { UserMainBuddiesComponent } from './user-main-buddies/user-main-buddies.component';
 
 
 @NgModule({
@@ -53,6 +55,8 @@ import { DepartmentNamePipe } from './department-name.pipe';
     AdminEditCourseComponent,
     AdminDeleteCourseComponent,
     DepartmentNamePipe,
+    UserMainComponent,
+    UserMainBuddiesComponent,
   ],
   imports: [
     BrowserModule,
