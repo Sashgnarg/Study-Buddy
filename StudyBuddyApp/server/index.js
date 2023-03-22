@@ -305,6 +305,7 @@ app.post('/add-availability', async (req, res) => {
 })
 
 
+
 app.get('/fill-database-courses' , (req, res)=>{
     axios.get("http://www.sfu.ca/bin/wcm/course-outlines?current/current").then(data=>{
         let departments = data.data
@@ -341,3 +342,29 @@ app.get('/fill-database-courses' , (req, res)=>{
         console.log(error)
     })
 })
+
+function getFacultyID(departmentName){
+    switch(departmentName){
+        case "CMPT":
+            return 1;
+        case "MACM": // could go into science or applied science faculty
+            return 8;
+        case "STAT":
+            return 8;
+        case "MATH":
+            return 8;
+    }
+}
+
+function getDepartmentID(departmentName){
+    switch(departmentName){
+        case "CMPT":
+            return 1;
+        case "MACM": // could go into science or applied science faculty
+            return 8;
+        case "STAT":
+            return 8;
+        case "MATH":
+            return 8;
+    }
+}
