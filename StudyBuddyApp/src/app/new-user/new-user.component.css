@@ -84,3 +84,7 @@ td {
 .hour-display {
   width: fit-content
 }
+
+#cancelBtn{
+  margin-left: 10px;
+}

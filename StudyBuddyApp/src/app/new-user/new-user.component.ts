@@ -6,6 +6,8 @@ import { Course } from '../course';
 import { Section } from '../section';
 import { AvailabilityBlock } from '../availability-block';
 import { TimeStartEnd } from '../time-start-end';
+import { Router } from '@angular/router';
+
 
 
 @Component({
@@ -24,7 +26,7 @@ export class NewUserComponent implements OnInit {
 
   public weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
   form: FormGroup
-  constructor(private DS: DataService, private FB: FormBuilder) {
+  constructor(private DS: DataService, private FB: FormBuilder , private router : Router) {
     this.firstCourse = false;
     this.availableCourses = []
     this.form = this.FB.group({
@@ -209,6 +211,10 @@ export class NewUserComponent implements OnInit {
     } else {
       return `${hour}AM`;
     }
+  }
+
+  returnMain(){
+    this.router.navigate(["/"]);
   }
 
 

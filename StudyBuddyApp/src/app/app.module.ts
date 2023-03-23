@@ -38,6 +38,7 @@ import { UserMainComponent } from './user-main/user-main.component';
 import { UserMainBuddiesComponent } from './user-main-buddies/user-main-buddies.component';
 import { LoginUserComponent } from './login-user/login-user.component';
 import { LoginComponent } from './login/login.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 
 @NgModule({
@@ -82,7 +83,7 @@ import { LoginComponent } from './login/login.component';
     MatSelectModule,
     MatCardModule
   ],
-  providers: [],
+  providers: [{provide: LocationStrategy , useClass:HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

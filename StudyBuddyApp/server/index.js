@@ -4,6 +4,7 @@ const cors = require('cors')
 const { Pool } = require('pg');
 var md5 = require('md5');
 const axios = require("axios");
+const path = require('path');
 
 const pool = new Pool({
     user: "postgres",
@@ -14,6 +15,7 @@ const pool = new Pool({
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static(__dirname+"study-buddy-app"))
 
 const PORT = 8081
 
@@ -37,9 +39,31 @@ app.post('/signUp', (req, res) => {
     }
 })
 app.get('/', (req, res) => {
-    console.log('hi')
-    res.send('hi')
+    console.log(__dirname+ "/study-buddy-app/index.html")
+    res.sendFile( path.join( __dirname, "/study-buddy-app/index.html"))
 })
+app.get('/runtime.7ca07cb080bd9ab7.js', (req, res) => {
+
+    res.sendFile( path.join( __dirname, "/study-buddy-app/runtime.7ca07cb080bd9ab7.js"))
+})
+
+app.get('/polyfills.e73cf954a4397259.js', (req, res) => {
+
+    res.sendFile( path.join( __dirname, "/study-buddy-app/polyfills.e73cf954a4397259.js"))
+})
+
+app.get('/main.b68a9d15b36edcdc.js', (req, res) => {
+
+    res.sendFile( path.join( __dirname, "/study-buddy-app/main.b68a9d15b36edcdc.js"))
+})
+
+
+app.get('/styles.eea3ccb45d1dca3a.css', (req, res) => {
+
+    res.sendFile( path.join( __dirname, "/study-buddy-app/styles.eea3ccb45d1dca3a.css"))
+})
+
+
 
 app.listen(PORT, () => {
     console.log(`app is listening on ${PORT}`);
