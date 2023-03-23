@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: '', component: LoginUserComponent },
   { path: 'admin', component: AdminMainComponent },
   { path: 'login', component:LoginComponent},
-  {path: 'messaging', component:MessagingComponent}
+  {path: 'messaging', component:MessagingComponent},
   { path: 'main', component: UserMainComponent },
   { path: 'new', component: NewUserComponent }
 ];
