@@ -1,10 +1,10 @@
 const express = require('express')
-const app = express()
 const cors = require('cors')
 const { Pool } = require('pg');
 var md5 = require('md5');
 const axios = require("axios");
 const path = require('path');
+const app = express().use('*', cors());
 
 const pool = new Pool({
     user: "postgres",
@@ -15,9 +15,17 @@ const pool = new Pool({
 
 app.use(express.json())
 app.use(cors())
-app.use(express.static(__dirname+"study-buddy-app"))
+app.use(express.static(__dirname + "/study-buddy-app"))
 
 const PORT = 8081
+
+app.use(function (req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Access-Control-Allow-Headers, Content-Type, Authorization, Origin, Accept");
+    res.setHeader('Access-Control-Allow-Credentials', true)
+    next();
+});
 
 // For logging incoming requests
 app.use('/', function (req, res, next) {
@@ -38,32 +46,6 @@ app.post('/signUp', (req, res) => {
         console.log(error.message)
     }
 })
-app.get('/', (req, res) => {
-    console.log(__dirname+ "/study-buddy-app/index.html")
-    res.sendFile( path.join( __dirname, "/study-buddy-app/index.html"))
-})
-app.get('/runtime.7ca07cb080bd9ab7.js', (req, res) => {
-
-    res.sendFile( path.join( __dirname, "/study-buddy-app/runtime.7ca07cb080bd9ab7.js"))
-})
-
-app.get('/polyfills.e73cf954a4397259.js', (req, res) => {
-
-    res.sendFile( path.join( __dirname, "/study-buddy-app/polyfills.e73cf954a4397259.js"))
-})
-
-app.get('/main.b68a9d15b36edcdc.js', (req, res) => {
-
-    res.sendFile( path.join( __dirname, "/study-buddy-app/main.b68a9d15b36edcdc.js"))
-})
-
-
-app.get('/styles.eea3ccb45d1dca3a.css', (req, res) => {
-
-    res.sendFile( path.join( __dirname, "/study-buddy-app/styles.eea3ccb45d1dca3a.css"))
-})
-
-
 
 app.listen(PORT, () => {
     console.log(`app is listening on ${PORT}`);

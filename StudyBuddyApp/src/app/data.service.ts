@@ -16,7 +16,7 @@ export class DataService {
 
   }
 
-  baseUrl = 'http://localhost:8081'
+  baseUrl = 'http://34.135.187.184:8081'
 
   getFacultyID(s: string) {
     switch (s) {
