@@ -1,0 +1,70 @@
+<div class="messaging-app" id ="messaging-app" >
+  <div class="sidebar">
+    <div class="contacts-header">
+      <div class="search-container">
+        <input type="text" placeholder="Search...">
+        <i class="material-icons">search</i>
+      </div>
+    </div>
+    <ul class="contacts-list">
+      <li>
+        <div class="contact">
+          <img src="https://via.placeholder.com/50x50" alt="Profile Picture">
+          <div class="contact-details">
+            <h4>Alice</h4>
+            <p>Last message received</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="contact">
+          <img src="https://via.placeholder.com/50x50" alt="Profile Picture">
+          <div class="contact-details">
+            <h4>Bob</h4>
+            <p>Last message received</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="contact">
+          <img src="https://via.placeholder.com/50x50" alt="Profile Picture">
+          <div class="contact-details">
+            <h4>Charlie</h4>
+            <p>Last message received</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="messages" id="messages">
+    <div class="message received">
+      <p class="sender-name">Alice</p>
+      <p>Hi there!</p>
+      <p class="timestamp">10:30 AM</p>
+    </div>
+    <div class="message sent">
+      <p class="sender-name">You</p>
+      <p>Hello!</p>
+      <p class="timestamp">10:31 AM</p>
+      <span class="status">Sent</span>
+    </div>
+    
+
+
+  </div>
+
+  <form class="send-message-form">
+    <input type="text" placeholder="Type your message here...">
+    <button type="submit">
+      <i class="material-icons">send</i>
+    </button>
+  </form>
+</div>
+
+<script type="text/javascript">
+const scrollToBottom = (id) => {
+  const element = document.getElementById(id);
+  element.scrollIntoView({behavior: "smooth"});
+}
+scrollToBottom('messages');
+</script>

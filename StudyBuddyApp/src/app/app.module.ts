@@ -26,6 +26,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { FacultyNamePipe } from './faculty-name.pipe';
 import { LoginComponent } from './login/login.component';
+import { MessagingComponent } from './messaging/messaging.component';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { LoginComponent } from './login/login.component';
     AdminDeleteFacultyComponent,
     FacultyNamePipe,
     LoginComponent,
+    MessagingComponent,
   ],
   imports: [
     BrowserModule,
