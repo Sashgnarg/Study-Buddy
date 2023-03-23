@@ -39,6 +39,7 @@ import { UserMainBuddiesComponent } from './user-main-buddies/user-main-buddies.
 import { LoginUserComponent } from './login-user/login-user.component';
 import { LoginComponent } from './login/login.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { MessagingComponent } from './messaging/messaging.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     UserMainBuddiesComponent,
     LoginUserComponent,
     LoginComponent,
+    MessagingComponent,
   ],
   imports: [
     BrowserModule,
