@@ -16,7 +16,7 @@ export class DataService {
 
   }
 
-  baseUrl = 'http://34.135.187.184:8081'
+  baseUrl = 'http://localhost:8081'
 
   getFacultyID(s: string) {
     switch (s) {
@@ -452,6 +452,12 @@ export class DataService {
     let methodUrl = '/add-availability'
     return this.http.post(this.baseUrl + methodUrl, { student_id: student_id, availability: availability })
   }
+
+    loginObservable(username: string , password : string): Observable<any> {
+    let methodUrl = '/login'
+    return this.http.post(this.baseUrl + methodUrl , {username:username , password:password})
+  }
+
 
 }
 

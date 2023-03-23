@@ -346,8 +346,22 @@ app.post('/add-availability', async (req, res) => {
         console.log(error)
     }
 })
-
-
+app.post('/login' , async(req,res)=>{
+    let {username , password} = req.body
+    password = md5(password)
+    result =await pool.query("select * from student where username = $1 and password = $2" , [username,password])
+    if(result.rows.length>0){
+        if(result.rows[0].is_admin == true){
+            res.json({is_admin:true})
+        }
+        else{
+        console.log("returning true my brother")
+        res.json({is_admin:false})}
+    }else{
+        console.log(result.rows[0])
+        res.send(false)
+    }
+})
 
 app.get('/fill-database-courses', (req, res) => {
     axios.get("http://www.sfu.ca/bin/wcm/course-outlines?current/current").then(data => {
@@ -417,6 +431,8 @@ function getDepartmentID(departmentName) {
             return 10;
     }
 }
+
+
 
 function pushCoursesToDB(sameCodeCourses) {
     // base query

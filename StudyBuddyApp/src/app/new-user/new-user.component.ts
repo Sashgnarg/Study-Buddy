@@ -20,14 +20,12 @@ export class NewUserComponent implements OnInit {
   public availableCourses: Course[]
   public allSections: Section[][]
   public courseCount: number
-  private firstCourse: boolean
 
   public hoursOfDay: String[]
 
   public weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
   form: FormGroup
   constructor(private DS: DataService, private FB: FormBuilder , private router : Router) {
-    this.firstCourse = false;
     this.availableCourses = []
     this.form = this.FB.group({
       uName: ['', Validators.required],
@@ -241,5 +239,6 @@ export class NewUserComponent implements OnInit {
     console.log(availability)
     var user = new User(form.uName, form.fName, form.lName, form.faculty, form.password, this.courseCount, userCourses, userSections, availability);
     this.DS.createUser(user);
+    this.router.navigate(['/'])
   }
 }
