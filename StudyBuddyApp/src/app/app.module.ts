@@ -24,8 +24,21 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+
 import { FacultyNamePipe } from './faculty-name.pipe';
+import { AdminDeleteDepartmentComponent } from './admin-departments/admin-delete-department/admin-delete-department.component';
+import { AdminEditDepartmentComponent } from './admin-departments/admin-edit-department/admin-edit-department.component';
+import { AdminEditStudentComponent } from './admin-users/admin-edit-student/admin-edit-student.component';
+import { AdminDeleteStudentComponent } from './admin-users/admin-delete-student/admin-delete-student.component';
+import { AdminEditCourseComponent } from './admin-courses/admin-edit-course/admin-edit-course.component';
+import { AdminDeleteCourseComponent } from './admin-courses/admin-delete-course/admin-delete-course.component';
+import { DepartmentNamePipe } from './department-name.pipe';
+import { UserMainComponent } from './user-main/user-main.component';
+import { UserMainBuddiesComponent } from './user-main-buddies/user-main-buddies.component';
+import { LoginUserComponent } from './login-user/login-user.component';
 import { LoginComponent } from './login/login.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { MessagingComponent } from './messaging/messaging.component';
 
 
@@ -41,6 +54,16 @@ import { MessagingComponent } from './messaging/messaging.component';
     AdminEditFacultyComponent,
     AdminDeleteFacultyComponent,
     FacultyNamePipe,
+    AdminDeleteDepartmentComponent,
+    AdminEditDepartmentComponent,
+    AdminEditStudentComponent,
+    AdminDeleteStudentComponent,
+    AdminEditCourseComponent,
+    AdminDeleteCourseComponent,
+    DepartmentNamePipe,
+    UserMainComponent,
+    UserMainBuddiesComponent,
+    LoginUserComponent,
     LoginComponent,
     MessagingComponent,
   ],
@@ -60,8 +83,9 @@ import { MessagingComponent } from './messaging/messaging.component';
     MatSortModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatCardModule
   ],
-  providers: [],
+  providers: [{provide: LocationStrategy , useClass:HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

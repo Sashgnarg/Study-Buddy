@@ -5,6 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { DataService } from '../data.service';
+import { AdminDeleteStudentComponent } from './admin-delete-student/admin-delete-student.component';
+import { AdminEditStudentComponent } from './admin-edit-student/admin-edit-student.component';
 
 @Component({
   selector: 'app-admin-users',
@@ -71,14 +73,34 @@ export class AdminUsersComponent {
   }
 
   async openDeleteDialog(element: any): Promise<void> {
-    console.log(element.student_id)
-    this.ds.deleteStudentObservable(element.student_id).subscribe((res) => {
-      this.refreshStudentTable()
+    const dialogRef = this.dialog.open(AdminDeleteStudentComponent, {
+      height: '200px',
+      width: '300px',
+      data: { element: element }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == true) {
+        this.ds.deleteStudentObservable(element.student_id).subscribe(() => {
+          this.refreshStudentTable()
+        })
+      }
     })
   }
 
   async openEditDialog(element: any): Promise<void> {
-    console.log(element.student_id)
+
+    const dialogRef = this.dialog.open(AdminEditStudentComponent, {
+      height: '200px',
+      width: '300px',
+      data: { element: element, faculties: this.faculties }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this.ds.editStudentObservable(element.student_id, result.new_username, result.new_first_name, result.new_last_name, result.new_password, result.new_faculty_id, result.new_bio, result.new_is_admin).subscribe(() => {
+          this.refreshStudentTable()
+        })
+      }
+    })
   }
 
   refreshStudentTable() {

@@ -1,11 +1,9 @@
-import { TimeStartEnd } from "./time-start-end";
-
 export class AvailabilityBlock {
-    time : TimeStartEnd 
-    day : string
+    start_time: number
+    is_available: boolean
 
-    constructor(t :TimeStartEnd , day : string){
-        this.time = t;
-        this.day=day
+    constructor(start_time: number, is_available: boolean) {
+        this.start_time = start_time;
+        this.is_available = is_available
     }
 }

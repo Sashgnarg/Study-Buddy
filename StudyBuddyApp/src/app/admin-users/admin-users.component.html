@@ -1,6 +1,3 @@
-<p>admin-users works!</p>
-
-<!-- Form for adding a new faculty -->
 <form [formGroup]="studentForm" (ngSubmit)="addStudent()">
     <mat-form-field>
         <mat-label>Student ID</mat-label>
@@ -41,7 +38,7 @@
         <textarea matInput name="bio-input" formControlName="bioControl" required></textarea>
     </mat-form-field>
 
-    <mat-checkbox name="admin-input" formControlName="isAdminControl">Admin</mat-checkbox>
+    <mat-checkbox name="admin-input" formControlName="isAdminControl" color="primary">Admin</mat-checkbox>
 
     <br>
 

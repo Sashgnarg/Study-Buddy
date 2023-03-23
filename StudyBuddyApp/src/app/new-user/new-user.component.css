@@ -1,37 +1,90 @@
-
 #xButton {
-    background: transparent;
-    border: none;
-  }
-  
-  button i {
-    font-size: 1.5rem;
-  }
+  background: transparent;
+  border: none;
+}
 
-  select{
-    margin-left: 10px;
-    margin-right: 10px;
-    /* display: inline-block; */
-    
-  }
-  .center {
-    width: 30%;
-  }
+button i {
+  font-size: 1.5rem;
+}
 
-  .selectRow{
-    display: flex;
-    justify-content: space-between;
-  }
-  label{
-    font-weight: bold;
-  }
+select {
+  margin-left: 10px;
+  margin-right: 10px;
+  /* display: inline-block; */
 
-.error-message{
+}
+
+.center {
+  width: 30%;
+}
+
+.selectRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+label {
+  font-weight: bold;
+}
+
+.error-message {
   color: rgb(192, 27, 27);
 }
-#addCourseButton{
+
+#addCourseButton {
   margin-right: 30px;
 }
-h1 , h3{
+
+h1,
+h3 {
   font-weight: bold;
+}
+
+
+td {
+  width: 80px;
+  height: 50px;
+  border: 1px solid black;
+}
+
+.available {
+  background-color: #9dff9d;
+}
+
+.unavailable {
+  background-color: #f2f2f2;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.legend span {
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.legend .available {
+  width: 20px;
+  height: 20px;
+  background-color: #9dff9d;
+  margin-right: 10px;
+}
+
+.legend .unavailable {
+  width: 20px;
+  height: 20px;
+  background-color: #f2f2f2;
+  margin-right: 10px;
+}
+
+.hour-display {
+  width: fit-content
+}
+
+#cancelBtn{
+  margin-left: 10px;
 }

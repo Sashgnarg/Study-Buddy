@@ -5,11 +5,13 @@
 /tmp
 /out-tsc
 /bazel-out
+/server/study-buddy-app
 
 # Node
 /node_modules
 npm-debug.log
 yarn-error.log
+/server/node_modules
 
 # IDEs and editors
 .idea/

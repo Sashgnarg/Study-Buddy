@@ -1,0 +1,9 @@
+<header>
+    <h1>{{ title }}</h1>
+</header>
+<h2>{{ title_head2 }}</h2>
+
+<ng-container *ngFor="let m of members">
+    <app-user-main-buddies [member]="m"></app-user-main-buddies>
+    <span>&nbsp;</span>
+</ng-container>
