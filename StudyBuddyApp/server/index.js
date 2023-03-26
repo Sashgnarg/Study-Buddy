@@ -15,7 +15,7 @@ const pool = new Pool({
 
 app.use(express.json())
 app.use(cors())
-app.use(express.static(__dirname + "/study-buddy-app"))
+//app.use(express.static(__dirname + "/study-buddy-app"))
 
 const PORT = 8081
 
@@ -346,6 +346,7 @@ app.post('/add-availability', async (req, res) => {
         console.log(error)
     }
 })
+
 app.post('/login' , async(req,res)=>{
     let {username , password} = req.body
     password = md5(password)
@@ -463,4 +464,31 @@ function pushCoursesToDB(sameCodeCourses) {
     // } catch (error) {
     //     console.log(error)
     // }
+}
+// pool.end(()=>{
+//     console.log('ending pool')
+// })
+
+
+
+app.get('/most-compatible/:student_id' , async(req,res)=>{
+    let student_id = req.params.student_id;
+
+    try {
+        let student = await (await pool.query('select * from student where student_id = ($1)' ,[student_id])).rows[0]
+        let mostCompatible = await getCompatible(student);
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+async function getCompatible(student){
+    let allStudents =  await pool.query('select student_id , faculty_id from student where student_id <> $1' [student.student_id]).rows
+    let student_enrollments = await pool.query('select course_id from enrollment where student_id = $1' , [student.id]).rows
+    allStudents.forEach(otherStudent => {
+        let compatibilityScore = 0;
+        if(student.faculty_id == otherStudent.faculty_id){
+            compatibilityScore += 5
+        } 
+    })
 }

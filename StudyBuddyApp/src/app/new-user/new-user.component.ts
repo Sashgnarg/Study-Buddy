@@ -239,6 +239,6 @@ export class NewUserComponent implements OnInit {
     console.log(availability)
     var user = new User(form.uName, form.fName, form.lName, form.faculty, form.password, this.courseCount, userCourses, userSections, availability);
     this.DS.createUser(user);
-    this.router.navigate(['/'])
+    this.returnMain()
   }
 }
