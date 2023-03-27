@@ -465,30 +465,94 @@ function pushCoursesToDB(sameCodeCourses) {
     //     console.log(error)
     // }
 }
-// pool.end(()=>{
-//     console.log('ending pool')
-// })
+
 
 
 
 app.get('/most-compatible/:student_id' , async(req,res)=>{
     let student_id = req.params.student_id;
-
+    console.log('attempting to find most compatible')
     try {
-        let student = await (await pool.query('select * from student where student_id = ($1)' ,[student_id])).rows[0]
-        let mostCompatible = await getCompatible(student);
+        let student = await ( await pool.query('select * from student where student_id = ($1)' ,[student_id])).rows[0]
+        console.log('here is the current student :', student)
+        getCompatible(student , res);
     } catch (error) {
         console.log(error)
     }
 })
 
-async function getCompatible(student){
-    let allStudents =  await pool.query('select student_id , faculty_id from student where student_id <> $1' [student.student_id]).rows
-    let student_enrollments = await pool.query('select course_id from enrollment where student_id = $1' , [student.id]).rows
-    allStudents.forEach(otherStudent => {
-        let compatibilityScore = 0;
-        if(student.faculty_id == otherStudent.faculty_id){
-            compatibilityScore += 5
-        } 
+async function getCompatible(student , res){
+    const getCourseCodeQuery = `SELECT course.code
+    FROM course
+    INNER JOIN enrollment ON course.course_id = enrollment.course_id
+    WHERE enrollment.student_id = $1;`
+
+    //const getAvailabilityQuery =`SELECT start_time , day_of_week FROM availability_block WHERE student_id = $1 AND is_available = true`
+    const getAvailabilityCountQuery = `SELECT COUNT(*)
+    FROM availability_block ab1 
+    JOIN availability_block ab2 
+    ON ab1.start_time = ab2.start_time 
+       AND ab1.day_of_week = ab2.day_of_week 
+       AND ab1.is_available = ab2.is_available 
+    WHERE ab1.student_id = ${student.student_id} 
+       AND ab2.student_id = $1
+       AND ab1.is_available = true;
+    `
+
+    let myArray =[]
+    try {
+    let allOtherStudents =  ( await pool.query('select student_id , faculty_id from student where student_id <> $1' , [student.student_id])).rows
+    let my_student_enrollments = (await pool.query(getCourseCodeQuery , [student.student_id])).rows
+
+    
+    compatibleArray(allOtherStudents , student , my_student_enrollments).then((array)=>{
+        array.sort((a,b)=>b.compatibilityScore - a.compatibilityScore)
+        res.json(array)
+    })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// pool.end(()=>{
+//     console.log('ending pool')
+// // })
+
+async function compatibleArray(allOtherStudents , student , my_student_enrollments){
+    const getCourseCodeQuery = `SELECT course.code
+    FROM course
+    INNER JOIN enrollment ON course.course_id = enrollment.course_id
+    WHERE enrollment.student_id = $1;`
+
+    const getAvailabilityCountQuery = `SELECT COUNT(*)
+    FROM availability_block ab1 
+    JOIN availability_block ab2 
+    ON ab1.start_time = ab2.start_time 
+       AND ab1.day_of_week = ab2.day_of_week 
+       AND ab1.is_available = ab2.is_available 
+    WHERE ab1.student_id = ${student.student_id} 
+       AND ab2.student_id = $1
+       AND ab1.is_available = true;
+    `
+    return new Promise((resolve,reject)=>{
+        let array=[]
+        allOtherStudents.forEach( async (otherStudent) => {
+            let compatibilityScore = 0;
+            if(student.faculty_id == otherStudent.faculty_id){
+                compatibilityScore += 5 // can change this scalar
+            }
+            let cur_student_enrollments = (await pool.query(getCourseCodeQuery , [otherStudent.student_id])).rows
+            let overLappingCourseCount = my_student_enrollments.filter(myCourse => cur_student_enrollments.some(otherCourse => otherCourse.code === myCourse.code)).length;
+            compatibilityScore += 7*overLappingCourseCount // can change this scalar
+    
+            let overLappingAvailbilityCount = (await pool.query(getAvailabilityCountQuery , [otherStudent.student_id])).rows[0]
+            compatibilityScore += overLappingAvailbilityCount.count*0.1 // can change the scalars
+    
+            array.push({student_id : otherStudent.student_id , compatibilityScore : compatibilityScore})
+            if(array.length == allOtherStudents.length){
+                resolve(array)
+            }
+        })
+        console.log(array)
     })
 }

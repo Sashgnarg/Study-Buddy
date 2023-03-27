@@ -37,6 +37,7 @@ export class LoginUserComponent {
           this.AS.isAuthenticated = true
           sessionStorage.setItem('is_admin' , JSON.stringify(true))
           sessionStorage.setItem('is_authenticated' , JSON.stringify(true))
+          sessionStorage.setItem('username', this.username)
           console.log({ is_admin : this.AS.isAdmin , is_authenticated:this.AS.isAuthenticated})
           this.router.navigate(['/admin'])
           }
@@ -45,6 +46,7 @@ export class LoginUserComponent {
           this.AS.isAdmin = false
           sessionStorage.setItem('is_admin' , JSON.stringify(false))
           sessionStorage.setItem('is_authenticated' , JSON.stringify(true))
+          sessionStorage.setItem('username', this.username)
           console.log({ is_admin : this.AS.isAdmin , is_authenticated:this.AS.isAuthenticated})
                   this.router.navigate(['/main'])
         }else{
