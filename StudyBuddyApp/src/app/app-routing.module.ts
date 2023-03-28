@@ -8,13 +8,15 @@ import { LoginUserComponent } from './login-user/login-user.component';
 import { AuthGuard } from './authGuard';
 import { AuthGuardAdmin } from './authGuardAdmin';
 import { AuthGuardLoggedIn } from './authGuardLoggedIn';
+import { EditUserComponent } from './edit-user/edit-user.component';
 
 const routes: Routes = [
-  { path: '', component: LoginUserComponent  , canActivate:[AuthGuardLoggedIn]},
-  { path: 'admin', component: AdminMainComponent , canActivate:[AuthGuardAdmin]},
-  {path: 'messaging', component:MessagingComponent , canActivate:[AuthGuard]},
-  { path: 'main', component: UserMainComponent , canActivate:[AuthGuard]},
-  { path: 'new', component: NewUserComponent }
+  { path: '', component: LoginUserComponent, canActivate: [AuthGuardLoggedIn] },
+  { path: 'admin', component: AdminMainComponent, canActivate: [AuthGuardAdmin] },
+  { path: 'messaging', component: MessagingComponent, canActivate: [AuthGuard] },
+  { path: 'main', component: UserMainComponent, canActivate: [AuthGuard] },
+  { path: 'new', component: NewUserComponent },
+  { path: 'edit', component: EditUserComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
