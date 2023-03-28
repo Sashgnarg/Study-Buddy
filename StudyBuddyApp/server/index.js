@@ -504,7 +504,6 @@ async function getCompatible(student , res){
     let allOtherStudents =  ( await pool.query('select student_id , faculty_id from student where student_id <> $1' , [student.student_id])).rows
     let my_student_enrollments = (await pool.query(getCourseCodeQuery , [student.student_id])).rows
 
-    
     compatibleArray(allOtherStudents , student , my_student_enrollments).then((array)=>{
         array.sort((a,b)=>b.compatibilityScore - a.compatibilityScore)
         res.json(array)

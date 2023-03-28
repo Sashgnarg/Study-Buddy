@@ -1,7 +1,13 @@
 <header>
     <h1>{{ title }}</h1>
+    <br><br>
+    <button (click)="logout()">logout</button>
 </header>
 <h2>{{ title_head2 }}</h2>
+
+<p> current user : {{username}}</p>
+
+
 
 <ng-container *ngFor="let m of members">
     <app-user-main-buddies [member]="m"></app-user-main-buddies>
