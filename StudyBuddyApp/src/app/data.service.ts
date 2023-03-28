@@ -458,6 +458,9 @@ export class DataService {
     return this.http.post(this.baseUrl + methodUrl , {username:username , password:password})
   }
 
-
+  mostCompatibleObservable(username : string) : Observable<any>{
+    let methodUrl = `/most-compatible`
+    return this.http.get(this.baseUrl+methodUrl+`/${username}`)
+  }
 }
 

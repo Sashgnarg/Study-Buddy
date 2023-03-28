@@ -5,6 +5,7 @@ import { Section } from "./section"
 export class User {
 
     uID?: number
+    combatibilityPosition?:number
     uName: string
     fName: string
     lName: string
@@ -31,6 +32,12 @@ export class User {
         this.courses = courses
         this.sections = sections
         this.availabilityBlock = ab
+    }
+    setId(num : number){
+        this.uID = num
+    }
+    setCombatibility(num : number){
+        this.combatibilityPosition= num
     }
 
 }

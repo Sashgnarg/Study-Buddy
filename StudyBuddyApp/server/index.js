@@ -469,11 +469,12 @@ function pushCoursesToDB(sameCodeCourses) {
 
 
 
-app.get('/most-compatible/:student_id' , async(req,res)=>{
-    let student_id = req.params.student_id;
+app.get('/most-compatible/:username' , async(req,res)=>{
+    //let student_id = req.params.student_id;
+    let username = req.params.username
     console.log('attempting to find most compatible')
     try {
-        let student = await ( await pool.query('select * from student where student_id = ($1)' ,[student_id])).rows[0]
+        let student = await ( await pool.query('select * from student where username = ($1)' ,[username])).rows[0]
         console.log('here is the current student :', student)
         getCompatible(student , res);
     } catch (error) {
@@ -506,7 +507,8 @@ async function getCompatible(student , res){
 
     compatibleArray(allOtherStudents , student , my_student_enrollments).then((array)=>{
         array.sort((a,b)=>b.compatibilityScore - a.compatibilityScore)
-        res.json(array)
+        getStudentFromArray(array , res)
+        //res.json(array)
     })
     } catch (error) {
         console.log(error)
@@ -552,6 +554,25 @@ async function compatibleArray(allOtherStudents , student , my_student_enrollmen
                 resolve(array)
             }
         })
-        console.log(array)
+        //console.log(array)
     })
 }
+
+async function getStudentFromArray(array , res){
+    studentArray=[]
+    await array.forEach(async (student ,index )  => {
+        try {
+            let result = (await pool.query('select * from student where student_id = $1' , [student.student_id])).rows[0]
+            //console.log(result)
+            result['compatibilityPosition'] = index
+            studentArray.push(result)
+        } catch (error) {
+            console.log(error)
+        }
+        if(studentArray.length == array.length){
+            studentArray.sort((a, b) => a.compatibilityPosition - b.compatibilityPosition);
+            //console.log(studentArray)
+            res.json(studentArray)
+        }
+    })
+}   
