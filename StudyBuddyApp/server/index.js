@@ -260,6 +260,14 @@ app.get('/get-departments', async (req, res) => {
     query = `
     SELECT * FROM department ORDER BY faculty_id, department_id
     `
+    try {
+        var result = await pool.query(query)
+        console.log(`sending back:`, result.rows)
+        res.send(result.rows)
+        res.end()
+    } catch (e) {
+        console.log(e)
+    }
 })
 
 app.get('/get-courses', async (req, res) => {
@@ -439,13 +447,13 @@ function pushCoursesToDB(sameCodeCourses) {
     // base query
     var query = `
         INSERT INTO course
-        (code , term, section, name, faculty_id , department_id)
+        (code, term, section, name, faculty_id, department_id)
         VALUES
         `
     sameCodeCourses.forEach(course => {
         let value =
             `
-        (${course.code}, ${course.term}, ${course.section}, ${course.name}, ${course.faculty_id} , ${course.department_id}),
+        ('${course.code}', '${course.term}', '${course.section}', '${course.name}', '${course.faculty_id}', '${course.department_id}'),
         `
         query += value
     })

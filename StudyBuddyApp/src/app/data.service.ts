@@ -462,5 +462,11 @@ export class DataService {
     let methodUrl = `/most-compatible`
     return this.http.get(this.baseUrl+methodUrl+`/${username}`)
   }
+
+  massAddCourses(): void {
+    let methodUrl = `/fill-database-courses`
+    this.http.get(this.baseUrl + methodUrl).subscribe()
+  }
+
 }
 

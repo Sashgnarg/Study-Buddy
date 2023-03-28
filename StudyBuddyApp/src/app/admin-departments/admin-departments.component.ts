@@ -33,6 +33,7 @@ export class AdminDepartmentsComponent {
       this.faculties = res
     })
     this.departmentsObservable = this.ds.getDepartmentsObservable()
+    this.refreshDepartmentTable()
   }
 
   departmentForm = new FormGroup({
@@ -94,6 +95,7 @@ export class AdminDepartmentsComponent {
 
   refreshDepartmentTable() {
     this.departmentsObservable.subscribe((res) => {
+      console.log("res", res)
       this.departments = res
       this.dataSource.data = this.departments
       this.dataSource.sort = this.sort
