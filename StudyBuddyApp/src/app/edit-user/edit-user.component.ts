@@ -11,8 +11,19 @@ import { DataService } from '../data.service';
   styleUrls: ['./edit-user.component.css']
 })
 export class EditUserComponent {
-  username: string
+  username: any
+  student: any
+  isLoaded: boolean = false
+  faculties: any[] = []
   constructor(private cookieService: CookieService, private fb: FormBuilder, private router: Router, private DS: DataService, private AS: AuthService) {
     this.username = this.cookieService.get('username')
+    console.log(this.username)
+    this.DS.getFacultiesObservable().subscribe((res) => {
+      this.faculties = res
+    })
+    this.DS.getStudentByUsernameObservable(this.username).subscribe((res) => {
+      console.log(res)
+      this.student = res[0]
+    })
   }
 }
