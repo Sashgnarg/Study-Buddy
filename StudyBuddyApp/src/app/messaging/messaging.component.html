@@ -60,7 +60,7 @@
     </button>
   </form>
 
-  <form (submit)="onSendMessage()">
+  <form (submit)="onSendMessage(1, 2, '')">
     <input type="text" [(ngModel)]="message.content">
     <button type="submit">Send</button>
   </form>

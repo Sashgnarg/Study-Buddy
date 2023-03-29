@@ -143,7 +143,7 @@ app.get('/get-student-by-id/:id', async (req, res) => {
 })
 
 app.get('/get-student-by-username/:username', async (req, res) => {
-    let username = req.params.username
+    let username = req.params.userngname
     console.log(`you requested student with username: ${username}`)
 
     const query = `SELECT * FROM student WHERE username = $1`
