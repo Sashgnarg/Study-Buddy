@@ -20,15 +20,18 @@ export class NewUserComponent implements OnInit {
   public availableCourses: Course[]
   public allSections: Section[][]
   public courseCount: number
+  public existingUsers : String[]
 
   public hoursOfDay: String[]
 
   public weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
   form: FormGroup
   constructor(private DS: DataService, private FB: FormBuilder , private router : Router) {
+    this.existingUsers =[];
+
     this.availableCourses = []
     this.form = this.FB.group({
-      uName: ['', Validators.required],
+      uName: ['', [Validators.required , this.uniqueUsername]],
       fName: ['', Validators.required],
       lName: ['', Validators.required],
       faculty: ['', Validators.required],
@@ -69,14 +72,21 @@ export class NewUserComponent implements OnInit {
       temp.setCode(prevCode)
       courses.push(temp);
       courses.splice(0, 1)
-      console.log(courses)
+      //console.log(courses)
     });
     this.allCourses = courses
-    console.log(this.allCourses)
+    //console.log(this.allCourses)
     this.allCourses.forEach(e => {
       this.allSections.push(e.getSections());
     });
     this.availableCourses = this.allCourses
+
+
+    this.DS.getAllUsernamesObservable().subscribe((data)=>{
+      data.forEach((element: { username: String; }) => {
+        this.existingUsers.push(element.username.toLowerCase())
+      });
+    })
   }
 
   get courses(): FormArray {
@@ -87,6 +97,17 @@ export class NewUserComponent implements OnInit {
     return this.form.get('studyTime') as FormArray
   }
 
+  uniqueUsername: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    let curName : String = control.value
+    //console.log(this.existingUsers)
+    // let names : String[]= ['lbb' , 'otheradmin' ]
+    let bool = this.existingUsers.includes(curName.toLowerCase())
+    console.log(bool)
+    if(bool){
+      return {username_error:true}
+    }
+    return null
+  }
 
 
   checkPasswords: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {

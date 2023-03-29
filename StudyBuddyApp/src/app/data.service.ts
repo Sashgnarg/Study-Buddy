@@ -462,5 +462,10 @@ export class DataService {
     let methodUrl = `/most-compatible`
     return this.http.get(this.baseUrl+methodUrl+`/${username}`)
   }
+
+  getAllUsernamesObservable():Observable<any>{
+    let methodUrl=`/get-usernames`
+    return this.http.get(this.baseUrl+methodUrl);
+  }
 }
 
