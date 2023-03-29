@@ -157,6 +157,18 @@ app.get('/get-student-by-username/:username', async (req, res) => {
     }
 })
 
+
+app.get(`/get-usernames` , async(req,res)=>{
+    let query = `select username from student`
+
+    try {
+        let result = (await pool.query(query)).rows
+        res.json(result)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 app.post('/add-student', async (req, res) => {
     queryWithId = `
     INSERT INTO student (student_id, username, first_name, last_name, password, faculty_id, bio, is_admin)
@@ -392,7 +404,7 @@ app.get('/fill-database-courses', (req, res) => {
                                 // at this point, allCourses holds each course that share a course code
                                 // push to database , prob similar method as availability
                                 pushCoursesToDB(allCourses)
-
+                                console.log(allCourses)
                             }).catch(error => {
                                 console.log('error at ', department.text, course.text, ":", error)
                             })
@@ -445,7 +457,7 @@ function pushCoursesToDB(sameCodeCourses) {
     sameCodeCourses.forEach(course => {
         let value =
             `
-        (${course.code}, ${course.term}, ${course.section}, ${course.name}, ${course.faculty_id} , ${course.department_id}),
+        ('${course.code}', '${course.term}', '${course.section}', '${course.name}', '${course.faculty_id}' , '${course.department_id}'),
         `
         query += value
     })
@@ -458,12 +470,12 @@ function pushCoursesToDB(sameCodeCourses) {
     query += `;`
 
     console.log(query)
-
-    // try {
-    //     pool.query(query)
-    // } catch (error) {
-    //     console.log(error)
-    // }
+ // !!!!!!!!! Havent tested this just yet !!!!!!!!!!!
+    try {
+        pool.query(query)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 app.get('/messages', async (req, res) => {
@@ -514,7 +526,7 @@ app.get('/most-compatible/:username' , async(req,res)=>{
     console.log('attempting to find most compatible')
     try {
         let student = await ( await pool.query('select * from student where username = ($1)' ,[username])).rows[0]
-        console.log('here is the current student :', student)
+        //console.log('here is the current student :', student)
         getCompatible(student , res);
     } catch (error) {
         console.log(error)

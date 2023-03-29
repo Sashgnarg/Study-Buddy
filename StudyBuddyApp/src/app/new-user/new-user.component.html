@@ -11,7 +11,8 @@
             [ngClass]="{'is-invalid': form.get('uName')?.invalid && (form.get('uName')?.touched || form.get('uName')?.dirty)}"
             type="text" class="form-control" name="uName" placeholder="username" formControlName="uName">
         <div *ngIf="form.get('uName')?.invalid && (form.get('uName')?.touched || form.get('uName')?.dirty)">
-            <div class='error-message'>Enter A Username</div><br>
+            <div *ngIf="form.get('uName')?.errors['required']" class='error-message'>Enter A Username</div><br>
+            <div *ngIf="form.get('uName')?.errors['username_error']" class='error-message'>Username Exists</div><br>
         </div>
 
         <label for="fName">First Name</label><br>
