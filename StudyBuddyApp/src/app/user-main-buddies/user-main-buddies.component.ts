@@ -9,6 +9,6 @@ export class UserMainBuddiesComponent {
   @Input() member: any;
   
   constructor() {
-    console.log(this.member);
+    //console.log(this.member);
   }
 }
