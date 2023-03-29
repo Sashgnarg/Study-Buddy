@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import * as io from 'socket.io-client';
-
+import { MessagingService } from './messaging.service';
+import {Message} from './messaging_model'
 
 @Component({
   selector: 'app-messaging',
@@ -8,29 +8,36 @@ import * as io from 'socket.io-client';
   styleUrls: ['./messaging.component.css']
 })
 export class MessagingComponent {
-  private socket: io.Socket;
-  private messages: any[] = [];
-  public message: string = '';
+  message: Message = {
+    id: null,
+    senderId: null,
+    receiverId: null,
+    content: '',
+    timestamp: null
+  };
+  messages: Message[] = [];
 
-  constructor() {
-    this.socket = io.io('http://localhost:3000');
-    this.socket.on('message', (data) => {
-      this.messages.push(data);
+  constructor(private messageService: MessagingService) {
+    this.messageService.getMessages().subscribe((message: Message) => {
+      this.messages.push(message);
     });
-    // More socket event listeners would be set up here
   }
 
-  public sendMessage() {
-    this.socket.emit('message', this.message);
-    this.messages.push({ text: this.message, status: 'pending' });
-    this.message = '';
+  sendMessageToUser() {
+    this.messageService.sendMessage(this.message);
+    this.message.content;
   }
 
-  public sendVoiceMessage() {
-    // Record voice message and send it via socket
-  }
-
-  public sendPicture() {
-    // Select picture file and send it via socket
+  onSendMessage(senderId: number, receiverId: number, content: string) {
+    this.messageService.uploadMessageToDatabase(senderId, receiverId, content).subscribe(() => {
+      this.message.senderId = senderId
+      this.message.receiverId = receiverId
+      this.message.content = content
+      this.message.timestamp = new Date()
+      this.sendMessageToUser()
+    }, (error) => {
+      alert("Error uploading message to the database")
+      console.log("Error uploading message to database")
+    });
   }
 }

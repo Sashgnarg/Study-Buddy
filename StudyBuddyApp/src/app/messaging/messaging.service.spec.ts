@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MessagingService } from './messaging-service.service';
+import { MessagingService } from './messaging.service';
 
 describe('MessagingService', () => {
   let service: MessagingService;

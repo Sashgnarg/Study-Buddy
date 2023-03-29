@@ -59,6 +59,11 @@
       <i class="material-icons">send</i>
     </button>
   </form>
+
+  <form (submit)="onSendMessage()">
+    <input type="text" [(ngModel)]="message.content">
+    <button type="submit">Send</button>
+  </form>
 </div>
 
 <script type="text/javascript">

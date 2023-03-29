@@ -448,3 +448,43 @@ function pushCoursesToDB(sameCodeCourses) {
     //     console.log(error)
     // }
 }
+
+app.get('/messages', async (req, res) => {
+    const senderId = req.query.senderId;
+    const receiverId = req.query.receiverId;
+  
+    if (!senderId || !receiverId) {
+      res.status(400).send('senderId and receiverId are required');
+      return;
+    }
+  
+    const query = `
+      SELECT * FROM "message"
+      WHERE "sender_id" = $1 AND "receiver_id" = $2
+      ORDER BY "timestamp" ASC
+    `;
+    const dbRes = await db.query(query, [senderId, receiverId]);
+    const messages = dbRes.rows;
+  
+    res.json(messages);
+  });
+
+  app.post('/messages', async (req, res) => {
+    const senderId = req.body.senderId;
+    const receiverId = req.body.receiverId;
+    const content = req.body.content;
+    const timestamp = new Date();
+  
+    if (!senderId || !receiverId || !content) {
+      res.status(400).send('senderId, receiverId, and content are required');
+      return;
+    }
+  
+    const query = `
+      INSERT INTO "message" ("sender_id", "receiver_id", "content", "timestamp")
+      VALUES ($1, $2, $3, $4)
+    `;
+    await db.query(query, [senderId, receiverId, content, timestamp]);
+  
+    res.status(201).send('Message created');
+  });
