@@ -490,6 +490,25 @@ app.get('/most-compatible/:username' , async(req,res)=>{
     }
 })
 
+app.get('/get-student-schedule/:student_id', async(req, res) => {
+    let student_id = req.params.student_id
+    query = `
+    SELECT *
+    FROM availability_block
+    WHERE student_id = $1
+    ORDER BY day_of_week, start_time
+    `
+    try {
+        var result = await pool.query(query ,[student_id])
+        res.send(result.rows)
+        res.end()
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+        res.end()
+    }
+})
+
 async function getCompatible(student , res){
     const getCourseCodeQuery = `SELECT course.code
     FROM course

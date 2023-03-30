@@ -443,6 +443,11 @@ export class DataService {
     return this.http.get(this.baseUrl + methodUrl + `/${username}`)
   }
 
+  getScheduleByIdObservable(student_id: number): Observable<any> {
+    let methodUrl = '/get-student-schedule'
+    return this.http.get(this.baseUrl + methodUrl + `/${student_id}`)
+  }
+
   getCourseIDObservable(code: string, section: string): Observable<any> {
     let methodUrl = '/get-course-by-code-section'
     return this.http.get(this.baseUrl + methodUrl + `/${code}/${section}`)
