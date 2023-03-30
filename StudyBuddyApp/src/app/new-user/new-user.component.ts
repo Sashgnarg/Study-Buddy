@@ -37,6 +37,7 @@ export class NewUserComponent implements OnInit {
       faculty: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       repeatPassword: ['', [Validators.required, Validators.minLength(6)]],
+      bio:[''] ,
       courses: this.FB.array([]),
       studyTime: this.FB.array([])
     }, { validators: [this.checkPasswords] })
@@ -259,6 +260,7 @@ export class NewUserComponent implements OnInit {
     var availability: AvailabilityBlock[][] = this.schedule[0].map((_, colIndex) => this.schedule.map(row => row[colIndex]));
     console.log(availability)
     var user = new User(form.uName, form.fName, form.lName, form.faculty, form.password, this.courseCount, userCourses, userSections, availability);
+    user.setBio(form.bio)
     this.DS.createUser(user);
     this.returnMain()
   }

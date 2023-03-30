@@ -49,6 +49,13 @@
         <div *ngIf="form.get('repeatPassword')?.hasError('required')" class='error-message'>Confirm Your Password</div>
         <div *ngIf="form.hasError('match_error')" class='error-message'>Passwords Dont Match</div><br>
     </div>
+
+    <div>
+        <label for="bio">Bio:</label>
+        <input type="textarea" class="form-control" formControlName="bio" placeholder="bio">
+    </div>
+
+
     <br>
     <h2>School Info</h2><br>
     <label for="faculty">Faculty</label><br>

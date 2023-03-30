@@ -49,7 +49,7 @@ export class DataService {
     let password = U.password;
     let faculty = U.faculty // need to turn this to an ID
     let faculty_id = this.getFacultyID(faculty)
-    let bio = ""
+    let bio = U.bio
     let is_admin = false;
     let body = {
       username: username, first_name: first_name, last_name: last_name, password: password,
