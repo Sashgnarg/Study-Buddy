@@ -376,6 +376,28 @@ app.post('/login' , async(req,res)=>{
     }
 })
 
+app.get('/get-common-courses/:username1/:username2' , async(req, res)=>{
+
+    const query =  `SELECT c.code
+    FROM enrollment e1
+    INNER JOIN enrollment e2 ON e1.course_id = e2.course_id
+    INNER JOIN course c ON e1.course_id = c.course_id
+    INNER JOIN student u1 ON e1.student_id = u1.student_id
+    INNER JOIN student u2 ON e2.student_id = u2.student_id
+    WHERE u1.username = $1 AND u2.username = $2
+    `
+    const username1 = req.params.username1
+    const username2 = req.params.username2
+
+    try {
+       let result = (await pool.query(query , [username1 , username2])).rows
+    //    console.log(result)
+       res.json(result)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 app.get('/fill-database-courses', (req, res) => {
     axios.get("http://www.sfu.ca/bin/wcm/course-outlines?current/current").then(data => {
         let departments = data.data
@@ -404,7 +426,7 @@ app.get('/fill-database-courses', (req, res) => {
                                 // at this point, allCourses holds each course that share a course code
                                 // push to database , prob similar method as availability
                                 pushCoursesToDB(allCourses)
-                                console.log(allCourses)
+                                //console.log(allCourses)
                             }).catch(error => {
                                 console.log('error at ', department.text, course.text, ":", error)
                             })

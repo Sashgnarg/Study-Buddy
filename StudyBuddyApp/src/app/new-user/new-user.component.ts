@@ -102,7 +102,7 @@ export class NewUserComponent implements OnInit {
     //console.log(this.existingUsers)
     // let names : String[]= ['lbb' , 'otheradmin' ]
     let bool = this.existingUsers.includes(curName.toLowerCase())
-    console.log(bool)
+    //console.log(bool)
     if(bool){
       return {username_error:true}
     }

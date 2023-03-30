@@ -5,6 +5,7 @@ import { Course } from './course';
 import { last, Observable } from 'rxjs';
 import { BlockScrollStrategy } from '@angular/cdk/overlay';
 import { AvailabilityBlock } from './availability-block';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 @Injectable({
   providedIn: 'root'
@@ -466,6 +467,11 @@ export class DataService {
   getAllUsernamesObservable():Observable<any>{
     let methodUrl=`/get-usernames`
     return this.http.get(this.baseUrl+methodUrl);
+  }
+
+  getCommonCourses(uName1 : string , uName2 : string):Observable<any>{
+    let methodUrl='/get-common-courses'
+    return this.http.get(this.baseUrl+methodUrl+`/${uName1}/${uName2}`)
   }
 }
 
