@@ -30,4 +30,31 @@
     <textarea matInput type="text" name="bio-input" [(ngModel)]=student.bio required></textarea>
 </mat-form-field>
 
+<div class="legend">
+    <span class="available"></span>
+    <span>Available</span>
+    <span class="unavailable"></span>
+    <span>Unavailable</span>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th *ngFor="let day of days">{{ day }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let hour of hours">
+            <td class="hour-display">{{ formatHour(hour) }}-{{formatHour(hour + 1)}}</td>
+            <td *ngFor="let day of days" (click)="toggleAvailability(hour, day)" [ngClass]="{
+                  'available': isAvailable(hour, day),
+                  'unavailable': !isAvailable(hour, day)
+                }">
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+
 <button mat-flat-button color="primary">SAVE CHANGES</button>

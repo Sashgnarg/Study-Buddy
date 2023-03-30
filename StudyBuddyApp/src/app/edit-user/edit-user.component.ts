@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from '../auth.service';
+import { AvailabilityBlock } from '../availability-block';
 import { DataService } from '../data.service';
 
 @Component({
@@ -25,5 +26,34 @@ export class EditUserComponent {
       console.log(res)
       this.student = res[0]
     })
+    this.schedule = this.hours.map(start_time => this.days.map(day => ({ start_time, is_available: false })));
+  }
+
+
+  // Schedule
+  hours = Array.from({ length: 15 }, (_, i) => i + 8); // [8, 9, ..., 22, 23]
+  days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  schedule: AvailabilityBlock[][] = [];
+
+  toggleAvailability(hour: number, day: string) {
+    const rowIndex = this.hours.indexOf(hour);
+    const colIndex = this.days.indexOf(day);
+    this.schedule[rowIndex][colIndex].is_available = !this.schedule[rowIndex][colIndex].is_available;
+  }
+
+  isAvailable(hour: number, day: string) {
+    const rowIndex = this.hours.indexOf(hour);
+    const colIndex = this.days.indexOf(day);
+    return this.schedule[rowIndex][colIndex].is_available;
+  }
+
+  formatHour(hour: number): string {
+    if (hour === 12) {
+      return '12PM';
+    } else if (hour > 12) {
+      return `${hour - 12}PM`;
+    } else {
+      return `${hour}AM`;
+    }
   }
 }
