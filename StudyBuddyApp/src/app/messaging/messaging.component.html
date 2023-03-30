@@ -2,34 +2,16 @@
   <div class="sidebar">
     <div class="contacts-header">
       <div class="search-container">
-        <input type="text" placeholder="Search...">
+        <input type="text" placeholder="Search..." id ="searchInput" onkeyup="filterContacts()">
         <i class="material-icons">search</i>
       </div>
     </div>
-    <ul class="contacts-list">
-      <li>
+    <ul class="contacts-list" id="conversationList">
+      <li *ngFor="let username of contactsList" (click)="loadMessages(username)">
         <div class="contact">
           <img src="https://via.placeholder.com/50x50" alt="Profile Picture">
           <div class="contact-details">
-            <h4>Alice</h4>
-            <p>Last message received</p>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="contact">
-          <img src="https://via.placeholder.com/50x50" alt="Profile Picture">
-          <div class="contact-details">
-            <h4>Bob</h4>
-            <p>Last message received</p>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="contact">
-          <img src="https://via.placeholder.com/50x50" alt="Profile Picture">
-          <div class="contact-details">
-            <h4>Charlie</h4>
+            <h4>{{username}}</h4>
             <p>Last message received</p>
           </div>
         </div>
@@ -37,35 +19,21 @@
     </ul>
   </div>
   <div class="messages" id="messages">
-    <div class="message received">
-      <p class="sender-name">Alice</p>
-      <p>Hi there!</p>
-      <p class="timestamp">10:30 AM</p>
+    <div *ngFor="let message of displayedMessages" [class.received]="message.senderUsername !== username" [class.sent]="message.senderUsername === username">
+      <p class="sender-name">{{message.senderUsername === username ? 'You' : message.senderUsername}}</p>
+      <p>{{message.content}}</p>
+      <p class="timestamp">{{message.timestamp | date:'shortTime'}}</p>
+      <span *ngIf="message.senderUsername === username" class="status">Sent</span>
     </div>
-    <div class="message sent">
-      <p class="sender-name">You</p>
-      <p>Hello!</p>
-      <p class="timestamp">10:31 AM</p>
-      <span class="status">Sent</span>
-    </div>
-    
-
-
   </div>
 
-  <form class="send-message-form">
-    <input type="text" placeholder="Type your message here...">
+  <form class="send-message-form" (submit)="onSendMessage('', '')">
+    <input type="text" placeholder="Type your message here..." [(ngModel)]="message.content" name="messageContent">
     <button type="submit">
       <i class="material-icons">send</i>
     </button>
   </form>
-
-  <form (submit)="onSendMessage(1, 2, '')">
-    <input type="text" [(ngModel)]="message.content">
-    <button type="submit">Send</button>
-  </form>
 </div>
-
 <script type="text/javascript">
 const scrollToBottom = (id) => {
   const element = document.getElementById(id);

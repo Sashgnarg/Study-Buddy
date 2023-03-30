@@ -40,7 +40,9 @@ import { LoginUserComponent } from './login-user/login-user.component';
 import { LoginComponent } from './login/login.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { MessagingComponent } from './messaging/messaging.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
+const config: SocketIoConfig = { url: 'http://localhost:8081', options: {} };
 
 @NgModule({
   declarations: [
@@ -83,7 +85,8 @@ import { MessagingComponent } from './messaging/messaging.component';
     MatSortModule,
     MatCheckboxModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [{provide: LocationStrategy , useClass:HashLocationStrategy}],
   bootstrap: [AppComponent]

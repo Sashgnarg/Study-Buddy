@@ -5,6 +5,7 @@
     border-radius: 20px;
 }
 
+
 .sender-name {
     font-weight: bold;
 }
@@ -37,6 +38,10 @@
     overflow-y: auto;
     height: 85%;
 }
+
+.messages .sent + .sent {
+    margin-top: 10px;
+  }
 
 .sidebar {
     width: 350px;

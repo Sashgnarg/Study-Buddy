@@ -28,11 +28,11 @@ export class MessagingService {
     });
   }
 
-  public getPreviousMessages(senderId: number, receiverId: number): Observable<Message[]> {
-    return this.http.get<Message[]>(`${this.url}/messages?senderId=${senderId}&receiverId=${receiverId}`);
+  public getPreviousMessages(senderUsername: string): Observable<Message[]> {
+    return this.http.get<Message[]>(`${this.url}/messages?senderUsername=${senderUsername}`);
   }
 
-  public uploadMessageToDatabase(senderId: number, receiverId: number, content: string): Observable<void> {
-    return this.http.post<void>(`${this.url}/messages`, { senderId, receiverId, content });
+  public uploadMessageToDatabase(senderUsername: string, receiverUsername: string, content: string): Observable<void> {
+    return this.http.post<void>(`${this.url}/messages`, { senderUsername, receiverUsername, content });
   }
 }

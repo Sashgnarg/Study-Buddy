@@ -1,7 +1,7 @@
 export interface Message {
     id: number | null;
-    senderId: number | null;
-    receiverId: number | null;
+    senderUsername: string | null;
+    receiverUsername: string | null;
     content: string | null;
     timestamp: Date | null;
   }

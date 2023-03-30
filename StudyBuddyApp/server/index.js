@@ -5,6 +5,8 @@ var md5 = require('md5');
 const axios = require("axios");
 const path = require('path');
 const app = express().use('*', cors());
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 const pool = new Pool({
     user: "postgres",
@@ -18,6 +20,15 @@ app.use(cors())
 //app.use(express.static(__dirname + "/study-buddy-app"))
 
 const PORT = 8081
+
+//code for messaging 
+io.on('connection', (socket) => {
+    console.log('a user connected');
+  });
+
+server.listen(PORT, () => {
+console.log(`listening on *:${PORT}`);
+}); 
 
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -479,41 +490,40 @@ function pushCoursesToDB(sameCodeCourses) {
 }
 
 app.get('/messages', async (req, res) => {
-    const senderId = req.query.senderId;
-    const receiverId = req.query.receiverId;
+    const senderUsername = req.query.senderUsername;
   
-    if (!senderId || !receiverId) {
-      res.status(400).send('senderId and receiverId are required');
+    if (!senderUsername) {
+      res.status(400).send('senderUsername is required');
       return;
     }
   
     const query = `
       SELECT * FROM "message"
-      WHERE "sender_id" = $1 AND "receiver_id" = $2
+      WHERE "sender_username" = $1
       ORDER BY "timestamp" ASC
     `;
-    const dbRes = await db.query(query, [senderId, receiverId]);
+    const dbRes = await db.query(query, [senderUsername]);
     const messages = dbRes.rows;
   
     res.json(messages);
   });
 
   app.post('/messages', async (req, res) => {
-    const senderId = req.body.senderId;
-    const receiverId = req.body.receiverId;
+    const senderUsername = req.body.senderUsername;
+    const receiverUsername = req.body.receiverUsername;
     const content = req.body.content;
     const timestamp = new Date();
   
-    if (!senderId || !receiverId || !content) {
-      res.status(400).send('senderId, receiverId, and content are required');
+    if (!senderUsername || !receiverUsername || !content) {
+      res.status(400).send('senderUsername, receiverUsername, and content are required');
       return;
     }
   
     const query = `
-      INSERT INTO "message" ("sender_id", "receiver_id", "content", "timestamp")
+      INSERT INTO "message" ("sender_username", "receiver_username", "content", "timestamp")
       VALUES ($1, $2, $3, $4)
     `;
-    await db.query(query, [senderId, receiverId, content, timestamp]);
+    await db.query(query, [senderUsername, receiverUsername, content, timestamp]);
   
     res.status(201).send('Message created');
   });
