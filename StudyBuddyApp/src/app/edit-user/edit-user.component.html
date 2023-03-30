@@ -1,34 +1,33 @@
 <p>Edit Profile: {{username}}</p>
 
-<form>
-    <mat-form-field>
-        <mat-label>Username:</mat-label>
-        <input matInput type="text" name="username-input" value={{student.username}} required>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>First Name:</mat-label>
-        <input matInput type="text" name="first-name-input" value={{student.first_name}} required>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Last Name:</mat-label>
-        <input matInput type="text" name="last-name-input" value={{student.last_name}} required>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>New password:</mat-label>
-        <input matInput type="password" name="password-input" value={{student.password}}>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Faculty</mat-label>
-        <mat-select [(ngModel)]=student.faculty_id>
-            <mat-option *ngFor="let faculty of faculties" [value]="faculty.faculty_id">
-                {{faculty.faculty_name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Bio:</mat-label>
-        <textarea matInput type="text" name="bio-input" value={{student.bio}} required></textarea>
-    </mat-form-field>
 
-    <button mat-flat-button color="primary">SAVE CHANGES</button>
-</form>
+<mat-form-field>
+    <mat-label>Username:</mat-label>
+    <input matInput type="text" name="username-input" [(ngModel)]=student.username required>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>First Name:</mat-label>
+    <input matInput type="text" name="first-name-input" [(ngModel)]=student.first_name required>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Last Name:</mat-label>
+    <input matInput type="text" name="last-name-input" [(ngModel)]=student.last_name required>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>New password:</mat-label>
+    <input matInput type="password" name="password-input" [(ngModel)]=student.new_password>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Faculty</mat-label>
+    <mat-select [(ngModel)]=student.faculty_id>
+        <mat-option *ngFor="let faculty of faculties" [value]="faculty.faculty_id">
+            {{faculty.faculty_name}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Bio:</mat-label>
+    <textarea matInput type="text" name="bio-input" [(ngModel)]=student.bio required></textarea>
+</mat-form-field>
+
+<button mat-flat-button color="primary">SAVE CHANGES</button>

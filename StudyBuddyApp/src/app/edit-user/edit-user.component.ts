@@ -11,7 +11,7 @@ import { DataService } from '../data.service';
   styleUrls: ['./edit-user.component.css']
 })
 export class EditUserComponent {
-  username: any
+  username: string = ''
   student: any
   isLoaded: boolean = false
   faculties: any[] = []
