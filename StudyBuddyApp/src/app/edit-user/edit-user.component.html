@@ -36,6 +36,40 @@
     <span class="unavailable"></span>
     <span>Unavailable</span>
 </div>
+    <ng-container [formGroup]="form">
+    <ng-container formArrayName="courses">
+
+        <ng-container *ngFor="let courseForm of courses.controls ; let i = index">
+            <h4><button id="xButton" type="button" (click)="removeCourse(i)"><i class="fa fa-times"></i></button>
+                Course {{i+1}}</h4>
+            <div class="container selectRow row" [formGroupName]="i">
+                <label for="course">Course</label>
+                <select
+                    [ngClass]="{'is-invalid': courses.at(i).get('code')?.invalid && (courses.at(i).get('code')?.touched || courses.at(i).get('code')?.dirty)}"
+                    class="form-control" (change)="setSections(i)" name="course" formControlName="code">
+                    <option value="">Select a course</option>
+                    <option *ngFor="let course of allCourses" [value]='course.getCode()'
+                        [disabled]="isSelected(course)">{{course.getCode()}}</option>
+                </select>
+
+                <label for="section">Section</label>
+                <select
+                    [ngClass]="{'is-invalid': courses.at(i).get('section')?.invalid && (courses.at(i).get('section')?.touched || courses.at(i).get('section')?.dirty)}"
+                    class="form-control" name="section" formControlName="section">
+                    <option value="">Select a section</option>
+                    <option *ngFor="let section of setSections(i)">{{section.name}}</option>
+                </select>
+                <br><br>
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-container>
+<br><br>
+<button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
+
+
+
+
 <table>
     <thead>
         <tr>

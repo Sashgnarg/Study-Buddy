@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from '../auth.service';
 import { AvailabilityBlock } from '../availability-block';
+import { Course } from '../course';
 import { DataService } from '../data.service';
+import { Section } from '../section';
 
 @Component({
   selector: 'app-edit-user',
@@ -16,7 +18,16 @@ export class EditUserComponent {
   student: any
   isLoaded: boolean = false
   faculties: any[] = []
+  form : FormGroup
+  allCourses: Course[] = [];
+  allSections: Section[][] =[]
+  availableCourses: Course[] = [];
+  courseCount: number = 0
+  
   constructor(private cookieService: CookieService, private fb: FormBuilder, private router: Router, private DS: DataService, private AS: AuthService) {
+    this.form = this.fb.group({
+      courses: this.fb.array([]),
+  })
     this.username = this.cookieService.get('username')
     console.log(this.username)
     this.DS.getFacultiesObservable().subscribe((res) => {
@@ -34,6 +45,65 @@ export class EditUserComponent {
         }
       })
     })
+  }
+
+  ngOnInit() {
+    let courses: Course[] = []
+    this.DS.getTermCoursesObservable().subscribe(data => {
+      let temp = new Course();
+      let prevCode = ''
+      data.forEach((e: { code: string; section: string; }) => {
+        if (prevCode != e.code) {
+          temp.setCode(prevCode)
+          courses.push(temp);
+          temp = new Course();
+        }
+        temp.addSection(e.section, 'not needed', 'not needed');
+        prevCode = e.code
+      })
+      temp.setCode(prevCode)
+      courses.push(temp);
+      courses.splice(0, 1)
+      console.log(courses)
+    });
+    this.allCourses = courses
+    console.log(this.allCourses)
+    this.allCourses.forEach(e => {
+      this.allSections.push(e.getSections());
+    });
+    this.availableCourses = this.allCourses
+  }
+
+  get courses(): FormArray {
+    return this.form.get('courses') as FormArray
+  }
+  incrCount() {
+    this.courseCount++;
+    const courseForm = this.fb.group({
+      code: ['', Validators.required],
+      section: ['', Validators.required]
+    })
+    this.courses.push(courseForm);
+  }
+  removeCourse(data: any) {
+    this.courseCount--;
+    this.courses.removeAt(data)
+  }
+
+
+  setSections(courseIndex: number) {
+    var curCourse = this.courses.at(courseIndex).get('code')!.value
+    return this.allCourses.find((e) => e.getCode() == curCourse)?.getSections()
+  }
+  isSelected(course: Course) {
+    //console.log(course)
+    for (let i = 0; i < this.courseCount; i++) {
+      let code = this.courses.at(i)!.get('code')!.value
+      if (code == course.getCode()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // Schedule
