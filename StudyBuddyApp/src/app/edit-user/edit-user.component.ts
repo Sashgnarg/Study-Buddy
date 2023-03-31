@@ -25,15 +25,22 @@ export class EditUserComponent {
     this.DS.getStudentByUsernameObservable(this.username).subscribe((res) => {
       console.log(res)
       this.student = res[0]
+      this.DS.getScheduleByIdObservable(this.student.student_id).subscribe((res) => {
+        this.schedule_unformatted = res
+        for (let day = 0; day < this.days.length; day++) {
+          for (let hour = 0; hour < this.hours.length; hour++) {
+            this.schedule[hour][day].is_available = this.schedule_unformatted[this.hours.length * day + hour].is_available
+          }
+        }
+      })
     })
-    this.schedule = this.hours.map(start_time => this.days.map(day => ({ start_time, is_available: false })));
   }
-
 
   // Schedule
   hours = Array.from({ length: 15 }, (_, i) => i + 8); // [8, 9, ..., 22, 23]
   days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  schedule: AvailabilityBlock[][] = [];
+  schedule: AvailabilityBlock[][] = this.hours.map(start_time => this.days.map(day => ({ start_time, is_available: false })));
+  schedule_unformatted: any[] = [];
 
   toggleAvailability(hour: number, day: string) {
     const rowIndex = this.hours.indexOf(hour);

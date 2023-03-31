@@ -493,7 +493,7 @@ app.get('/most-compatible/:username' , async(req,res)=>{
 app.get('/get-student-schedule/:student_id', async(req, res) => {
     let student_id = req.params.student_id
     query = `
-    SELECT *
+    SELECT student_id, day_of_week, EXTRACT(HOUR FROM start_time) as start_hour, is_available
     FROM availability_block
     WHERE student_id = $1
     ORDER BY day_of_week, start_time
