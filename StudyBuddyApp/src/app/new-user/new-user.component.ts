@@ -259,7 +259,7 @@ export class NewUserComponent implements OnInit {
     // Transpose schedule array
     var availability: AvailabilityBlock[][] = this.schedule[0].map((_, colIndex) => this.schedule.map(row => row[colIndex]));
     console.log(availability)
-    var user = new User(form.uName, form.fName, form.lName, form.faculty, form.password, this.courseCount, userCourses, userSections, availability);
+    var user = new User(form.uName.trim(), form.fName.trim(), form.lName.trim(), form.faculty, form.password.trim(), this.courseCount, userCourses, userSections, availability);
     user.setBio(form.bio)
     this.DS.createUser(user);
     this.returnMain()

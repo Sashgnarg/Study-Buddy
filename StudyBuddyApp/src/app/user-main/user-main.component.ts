@@ -22,7 +22,7 @@ export class UserMainComponent implements OnInit {
    };
    ngOnInit(): void {
       this.username = this.cookieService.get('username')
-      this.DS.getStudentByUsernameObservable(this.cookieService.get('username')!)
+      //this.DS.getStudentByUsernameObservable(this.cookieService.get('username')!)
       this.DS.mostCompatibleObservable(this.username).subscribe(data=>{
         data.forEach((student :any) => {
           let temp = new User(student.username , student.first_name , student.last_name ,this.getFacultyName(student.faculty_id) ,'no for security', 0 , [] , [] , [] )

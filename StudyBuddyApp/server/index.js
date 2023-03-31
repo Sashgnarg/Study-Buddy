@@ -150,7 +150,7 @@ app.get('/get-student-by-username/:username', async (req, res) => {
 
     try {
         let result = await pool.query(query, [username])
-        console.log(result)
+        //console.log(result)
         res.send(result.rows)
     } catch (error) {
         console.log(error)
@@ -378,14 +378,20 @@ app.post('/login' , async(req,res)=>{
 
 app.get('/get-common-courses/:username1/:username2' , async(req, res)=>{
 
-    const query =  `SELECT c.code
-    FROM enrollment e1
-    INNER JOIN enrollment e2 ON e1.course_id = e2.course_id
-    INNER JOIN course c ON e1.course_id = c.course_id
-    INNER JOIN student u1 ON e1.student_id = u1.student_id
-    INNER JOIN student u2 ON e2.student_id = u2.student_id
-    WHERE u1.username = $1 AND u2.username = $2
-    `
+const query =`SELECT c.code
+FROM course c
+JOIN enrollment e ON c.course_id = e.course_id
+JOIN student s ON e.student_id = s.student_id
+WHERE s.username = $1
+
+INTERSECT
+
+SELECT c.code
+FROM course c
+JOIN enrollment e ON c.course_id = e.course_id
+JOIN student s ON e.student_id = s.student_id
+WHERE s.username = $2;
+`
     const username1 = req.params.username1
     const username2 = req.params.username2
 
@@ -585,6 +591,7 @@ async function compatibleArray(allOtherStudents , student , my_student_enrollmen
     
             array.push({student_id : otherStudent.student_id , compatibilityScore : compatibilityScore})
             if(array.length == allOtherStudents.length){
+                // console.log(array)
                 resolve(array)
             }
         })
@@ -607,6 +614,7 @@ async function getStudentFromArray(array , res){
             studentArray.sort((a, b) => a.compatibilityPosition - b.compatibilityPosition);
             //console.log(studentArray)
             res.json(studentArray)
+
         }
     })
 }   
