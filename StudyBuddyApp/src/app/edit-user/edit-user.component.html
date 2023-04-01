@@ -1,91 +1,101 @@
 <p>Edit Profile: {{username}}</p>
 
+<mat-tab-group animationDuration="0ms">
+    <mat-tab label="General">
+        <mat-form-field>
+            <mat-label>Username:</mat-label>
+            <input matInput type="text" name="username-input" [(ngModel)]=student.username required>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>First Name:</mat-label>
+            <input matInput type="text" name="first-name-input" [(ngModel)]=student.first_name required>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Last Name:</mat-label>
+            <input matInput type="text" name="last-name-input" [(ngModel)]=student.last_name required>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>New password:</mat-label>
+            <input matInput type="password" name="password-input" [(ngModel)]=student.new_password>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Faculty</mat-label>
+            <mat-select [(ngModel)]=student.faculty_id>
+                <mat-option *ngFor="let faculty of faculties" [value]="faculty.faculty_id">
+                    {{faculty.faculty_name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Bio:</mat-label>
+            <textarea matInput type="text" name="bio-input" [(ngModel)]=student.bio required></textarea>
+        </mat-form-field>
+        <br><br>
+        <button mat-flat-button color="primary">SAVE CHANGES</button>
+    </mat-tab>
+    <mat-tab label="Courses">
+        <ng-container [formGroup]="form">
+            <ng-container formArrayName="courses">
+                <ng-container *ngFor="let courseForm of courses.controls ; let i = index">
+                    <h4>
+                        <button id="xButton" type="button" (click)="removeCourse(i)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                        Course {{i+1}}
+                    </h4>
+                    <div class="container selectRow row" [formGroupName]="i">
+                        <label for="course">Course</label>
+                        <select
+                            [ngClass]="{'is-invalid': courses.at(i).get('code')?.invalid && (courses.at(i).get('code')?.touched || courses.at(i).get('code')?.dirty)}"
+                            class="form-control" (change)="setSections(i)" name="course" formControlName="code">
+                            <option value="">Select a course</option>
+                            <option *ngFor="let course of allCourses" [value]='course.getCode()'
+                                [disabled]="isSelected(course)">{{course.getCode()}}</option>
+                        </select>
 
-<mat-form-field>
-    <mat-label>Username:</mat-label>
-    <input matInput type="text" name="username-input" [(ngModel)]=student.username required>
-</mat-form-field>
-<mat-form-field>
-    <mat-label>First Name:</mat-label>
-    <input matInput type="text" name="first-name-input" [(ngModel)]=student.first_name required>
-</mat-form-field>
-<mat-form-field>
-    <mat-label>Last Name:</mat-label>
-    <input matInput type="text" name="last-name-input" [(ngModel)]=student.last_name required>
-</mat-form-field>
-<mat-form-field>
-    <mat-label>New password:</mat-label>
-    <input matInput type="password" name="password-input" [(ngModel)]=student.new_password>
-</mat-form-field>
-<mat-form-field>
-    <mat-label>Faculty</mat-label>
-    <mat-select [(ngModel)]=student.faculty_id>
-        <mat-option *ngFor="let faculty of faculties" [value]="faculty.faculty_id">
-            {{faculty.faculty_name}}
-        </mat-option>
-    </mat-select>
-</mat-form-field>
-<mat-form-field>
-    <mat-label>Bio:</mat-label>
-    <textarea matInput type="text" name="bio-input" [(ngModel)]=student.bio required></textarea>
-</mat-form-field>
-
-<ng-container [formGroup]="form">
-    <ng-container formArrayName="courses">
-
-        <ng-container *ngFor="let courseForm of courses.controls ; let i = index">
-            <h4><button id="xButton" type="button" (click)="removeCourse(i)"><i class="fa fa-times"></i></button>
-                Course {{i+1}}</h4>
-            <div class="container selectRow row" [formGroupName]="i">
-                <label for="course">Course</label>
-                <select
-                    [ngClass]="{'is-invalid': courses.at(i).get('code')?.invalid && (courses.at(i).get('code')?.touched || courses.at(i).get('code')?.dirty)}"
-                    class="form-control" (change)="setSections(i)" name="course" formControlName="code">
-                    <option value="">Select a course</option>
-                    <option *ngFor="let course of allCourses" [value]='course.getCode()'
-                        [disabled]="isSelected(course)">{{course.getCode()}}</option>
-                </select>
-
-                <label for="section">Section</label>
-                <select
-                    [ngClass]="{'is-invalid': courses.at(i).get('section')?.invalid && (courses.at(i).get('section')?.touched || courses.at(i).get('section')?.dirty)}"
-                    class="form-control" name="section" formControlName="section">
-                    <option value="">Select a section</option>
-                    <option *ngFor="let section of setSections(i)" [value]='section.name'>{{section.name}}</option>
-                </select>
-                <br><br>
-            </div>
+                        <label for="section">Section</label>
+                        <select
+                            [ngClass]="{'is-invalid': courses.at(i).get('section')?.invalid && (courses.at(i).get('section')?.touched || courses.at(i).get('section')?.dirty)}"
+                            class="form-control" name="section" formControlName="section">
+                            <option value="">Select a section</option>
+                            <option *ngFor="let section of setSections(i)" [value]='section.name'>{{section.name}}
+                            </option>
+                        </select>
+                    </div>
+                </ng-container>
+            </ng-container>
         </ng-container>
-    </ng-container>
-</ng-container>
-<br><br>
-<button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
-<br><br>
-<div class="legend">
-    <span class="available"></span>
-    <span>Available</span>
-    <span class="unavailable"></span>
-    <span>Unavailable</span>
-</div>
-<table>
-    <thead>
-        <tr>
-            <th></th>
-            <th *ngFor="let day of days">{{ day }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let hour of hours">
-            <td class="hour-display">{{ formatHour(hour) }}-{{formatHour(hour + 1)}}</td>
-            <td *ngFor="let day of days" (click)="toggleAvailability(hour, day)" [ngClass]="{
-                  'available': isAvailable(hour, day),
-                  'unavailable': !isAvailable(hour, day)
-                }">
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-
-
-<button mat-flat-button color="primary">SAVE CHANGES</button>
+        <br><br>
+        <button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
+        <br><br>
+        <button mat-flat-button color="primary">SAVE COURSES</button>
+    </mat-tab>
+    <mat-tab label="Availability Schedule">
+        <div class="legend">
+            <span class="available"></span>
+            <span>Available</span>
+            <span class="unavailable"></span>
+            <span>Unavailable</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th *ngFor="let day of days">{{ day }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let hour of hours">
+                    <td class="hour-display">{{ formatHour(hour) }}-{{formatHour(hour + 1)}}</td>
+                    <td *ngFor="let day of days" (click)="toggleAvailability(hour, day)" [ngClass]="{
+                          'available': isAvailable(hour, day),
+                          'unavailable': !isAvailable(hour, day)
+                        }">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br><br>
+        <button mat-flat-button color="primary">SAVE SCHEDULE</button>
+    </mat-tab>
+</mat-tab-group>
