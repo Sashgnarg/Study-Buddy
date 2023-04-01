@@ -10,7 +10,7 @@ import { User } from '../user';
   styleUrls: ['./user-main.component.css']
 })
 export class UserMainComponent implements OnInit {
-  title = 'Study Buddy';
+  title = 'SFU Study Buddy';
   title_head2 = 'Who is available?';
   members:any[]
   curUser : any

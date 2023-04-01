@@ -1,13 +1,16 @@
 <header>
     <h1>{{ title }}</h1>
     <br><br>
-    <button (click)="logout()">logout</button>
 </header>
-<h2>{{ title_head2 }}</h2>
+<div class="header-bottom">
+    <nav class="flex-container">
+        <div class="flex-item user"> Welcome! {{username}}</div>
+        <button class="flex-item" (click)="logout()">logout</button>
+    </nav>
+</div>
 
-<p> current user : {{username}}</p>
 
-
+<h2 class="fade-in">{{ title_head2 }}</h2>
 <ng-container *ngFor="let m of members">
     <app-user-main-buddies [member]="m"></app-user-main-buddies>
     <span>&nbsp;</span>
