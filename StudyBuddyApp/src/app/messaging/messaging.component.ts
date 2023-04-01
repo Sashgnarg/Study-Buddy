@@ -41,47 +41,47 @@ export class MessagingComponent implements OnInit {
       this.contactsList = [...new Set(this.messages.map(message => message.receiverUsername))]
       .filter(contact => contact !== this.username);
     });
-    const testMessages: Message[] = [
-      {
-        id: 1,
-        senderUsername: 'Alice',
-        receiverUsername: 'Bob',
-        content: 'Hi Bob!',
-        timestamp: new Date('2022-01-01T10:00:00')
-      },
-      {
-        id: 2,
-        senderUsername: 'Bob',
-        receiverUsername: 'Alice',
-        content: 'Hello Alice!',
-        timestamp: new Date('2022-01-01T10:01:00')
-      },
-      {
-        id: 3,
-        senderUsername: 'Charlie',
-        receiverUsername: 'Bob',
-        content: 'Hey Bob!',
-        timestamp: new Date('2022-01-01T10:02:00')
-      },
-      {
-        id: 4,
-        senderUsername: 'Bob',
-        receiverUsername: 'Charlie',
-        content: 'Hi Charlie!',
-        timestamp: new Date('2022-01-01T10:03:00')
-      }
-      ,
-      {
-        id: 5,
-        senderUsername: 'Bob',
-        receiverUsername: 'Alice',
-        content: 'you suck!',
-        timestamp: new Date('2022-01-01T10:01:00')
-      }
-    ];
-    this.messages = testMessages
-    this.contactsList = [...new Set(this.messages.map(message => message.receiverUsername))]
-    .filter(contact => contact !== this.username);
+    // const testMessages: Message[] = [
+    //   {
+    //     id: 1,
+    //     senderUsername: 'Alice',
+    //     receiverUsername: 'Bob',
+    //     content: 'Hi Bob!',
+    //     timestamp: new Date('2022-01-01T10:00:00')
+    //   },
+    //   {
+    //     id: 2,
+    //     senderUsername: 'Bob',
+    //     receiverUsername: 'Alice',
+    //     content: 'Hello Alice!',
+    //     timestamp: new Date('2022-01-01T10:01:00')
+    //   },
+    //   {
+    //     id: 3,
+    //     senderUsername: 'Charlie',
+    //     receiverUsername: 'Bob',
+    //     content: 'Hey Bob!',
+    //     timestamp: new Date('2022-01-01T10:02:00')
+    //   },
+    //   {
+    //     id: 4,
+    //     senderUsername: 'Bob',
+    //     receiverUsername: 'Charlie',
+    //     content: 'Hi Charlie!',
+    //     timestamp: new Date('2022-01-01T10:03:00')
+    //   }
+    //   ,
+    //   {
+    //     id: 5,
+    //     senderUsername: 'Bob',
+    //     receiverUsername: 'Alice',
+    //     content: 'you suck!',
+    //     timestamp: new Date('2022-01-01T10:01:00')
+    //   }
+    // ];
+    // this.messages = testMessages
+    // this.contactsList = [...new Set(this.messages.map(message => message.receiverUsername))]
+    // .filter(contact => contact !== this.username);
     
     this.messageService.getMessages().subscribe((message: Message) => {
       if (message.senderUsername !== this.username) {
@@ -93,7 +93,6 @@ export class MessagingComponent implements OnInit {
         }
       }
     });
-
   }
 
   ngOnInit(): void {
@@ -141,3 +140,4 @@ export class MessagingComponent implements OnInit {
     }
   }
 }
+

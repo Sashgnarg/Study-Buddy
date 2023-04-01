@@ -5,7 +5,7 @@ var md5 = require('md5');
 const axios = require("axios");
 const path = require('path');
 const app = express().use('*', cors());
-const server = require('http').Server(app);
+const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 const pool = new Pool({
@@ -20,15 +20,26 @@ app.use(cors())
 //app.use(express.static(__dirname + "/study-buddy-app"))
 
 const PORT = 8081
+const SOCKET_PORT = 3000
 
-//code for messaging 
+
+
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('User connected');
+  
+    socket.on('message', (message) => {
+      console.log(`Received message: ${message}`);
+      io.emit('message', message);
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('User disconnected');
+    });
   });
 
-server.listen(PORT, () => {
-console.log(`listening on *:${PORT}`);
-}); 
+  io.listen(SOCKET_PORT, () => {
+    console.log(`Socket running on port ${SOCKET_PORT}`);
+  });
 
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");

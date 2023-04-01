@@ -10,9 +10,9 @@ import { AuthGuardAdmin } from './authGuardAdmin';
 import { AuthGuardLoggedIn } from './authGuardLoggedIn';
 
 const routes: Routes = [
-  { path: 'l', component: LoginUserComponent  , canActivate:[AuthGuardLoggedIn]},
+  { path: '', component: LoginUserComponent  , canActivate:[AuthGuardLoggedIn]},
   { path: 'admin', component: AdminMainComponent , canActivate:[AuthGuardAdmin]},
-  {path: '', component:MessagingComponent},
+  {path: 'messaging', component:MessagingComponent},
   { path: 'main', component: UserMainComponent , canActivate:[AuthGuard]},
   { path: 'new', component: NewUserComponent }
 ];

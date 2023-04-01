@@ -75,8 +75,8 @@ async function createAllTables() {
             "message_id" serial PRIMARY KEY,
             "content" text NOT NULL,
             "timestamp" timestamp NOT NULL,
-            FOREIGN KEY ("sender_username") REFERENCES "student" ("username"),
-            FOREIGN KEY ("receiver_username") REFERENCES "student" ("username")
+            FOREIGN KEY ("username") REFERENCES "student" ("sender_username"),
+            FOREIGN KEY ("username") REFERENCES "student" ("receiver_username")
         );
 
         CREATE INDEX ON "student" ("username");
