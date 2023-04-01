@@ -448,6 +448,11 @@ export class DataService {
     return this.http.get(this.baseUrl + methodUrl + `/${student_id}`)
   }
 
+  getStudentsCoursesByIdObservable(student_id: number): Observable<any> {
+    let methodUrl = '/get-student-courses'
+    return this.http.get(this.baseUrl + methodUrl + `/${student_id}`)
+  }
+
   getCourseIDObservable(code: string, section: string): Observable<any> {
     let methodUrl = '/get-course-by-code-section'
     return this.http.get(this.baseUrl + methodUrl + `/${code}/${section}`)
@@ -458,14 +463,14 @@ export class DataService {
     return this.http.post(this.baseUrl + methodUrl, { student_id: student_id, availability: availability })
   }
 
-    loginObservable(username: string , password : string): Observable<any> {
+  loginObservable(username: string, password: string): Observable<any> {
     let methodUrl = '/login'
-    return this.http.post(this.baseUrl + methodUrl , {username:username , password:password})
+    return this.http.post(this.baseUrl + methodUrl, { username: username, password: password })
   }
 
-  mostCompatibleObservable(username : string) : Observable<any>{
+  mostCompatibleObservable(username: string): Observable<any> {
     let methodUrl = `/most-compatible`
-    return this.http.get(this.baseUrl+methodUrl+`/${username}`)
+    return this.http.get(this.baseUrl + methodUrl + `/${username}`)
   }
 
   massAddCourses(): void {

@@ -30,13 +30,7 @@
     <textarea matInput type="text" name="bio-input" [(ngModel)]=student.bio required></textarea>
 </mat-form-field>
 
-<div class="legend">
-    <span class="available"></span>
-    <span>Available</span>
-    <span class="unavailable"></span>
-    <span>Unavailable</span>
-</div>
-    <ng-container [formGroup]="form">
+<ng-container [formGroup]="form">
     <ng-container formArrayName="courses">
 
         <ng-container *ngFor="let courseForm of courses.controls ; let i = index">
@@ -57,7 +51,7 @@
                     [ngClass]="{'is-invalid': courses.at(i).get('section')?.invalid && (courses.at(i).get('section')?.touched || courses.at(i).get('section')?.dirty)}"
                     class="form-control" name="section" formControlName="section">
                     <option value="">Select a section</option>
-                    <option *ngFor="let section of setSections(i)">{{section.name}}</option>
+                    <option *ngFor="let section of setSections(i)" [value]='section.name'>{{section.name}}</option>
                 </select>
                 <br><br>
             </div>
@@ -66,10 +60,13 @@
 </ng-container>
 <br><br>
 <button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
-
-
-
-
+<br><br>
+<div class="legend">
+    <span class="available"></span>
+    <span>Available</span>
+    <span class="unavailable"></span>
+    <span>Unavailable</span>
+</div>
 <table>
     <thead>
         <tr>

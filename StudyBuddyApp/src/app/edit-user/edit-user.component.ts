@@ -18,24 +18,32 @@ export class EditUserComponent {
   student: any
   isLoaded: boolean = false
   faculties: any[] = []
-  form : FormGroup
+  form: FormGroup
   allCourses: Course[] = [];
-  allSections: Section[][] =[]
+  allSections: Section[][] = []
   availableCourses: Course[] = [];
   courseCount: number = 0
-  
+
   constructor(private cookieService: CookieService, private fb: FormBuilder, private router: Router, private DS: DataService, private AS: AuthService) {
     this.form = this.fb.group({
       courses: this.fb.array([]),
-  })
+    })
     this.username = this.cookieService.get('username')
     console.log(this.username)
     this.DS.getFacultiesObservable().subscribe((res) => {
       this.faculties = res
     })
     this.DS.getStudentByUsernameObservable(this.username).subscribe((res) => {
-      console.log(res)
       this.student = res[0]
+
+      // Load courses
+      this.DS.getStudentsCoursesByIdObservable(this.student.student_id).subscribe((res) => {
+        res.forEach((val: any) => {
+          this.incrCountWithCodeSection(val.code, val.section)
+        })
+      })
+
+      // Load schedule
       this.DS.getScheduleByIdObservable(this.student.student_id).subscribe((res) => {
         this.schedule_unformatted = res
         for (let day = 0; day < this.days.length; day++) {
@@ -77,6 +85,7 @@ export class EditUserComponent {
   get courses(): FormArray {
     return this.form.get('courses') as FormArray
   }
+
   incrCount() {
     this.courseCount++;
     const courseForm = this.fb.group({
@@ -85,16 +94,26 @@ export class EditUserComponent {
     })
     this.courses.push(courseForm);
   }
+
+  incrCountWithCodeSection(code: string, section: string) {
+    this.courseCount++;
+    const courseForm = this.fb.group({
+      code: [code, Validators.required],
+      section: [section, Validators.required]
+    })
+    this.courses.push(courseForm);
+  }
+
   removeCourse(data: any) {
     this.courseCount--;
     this.courses.removeAt(data)
   }
 
-
   setSections(courseIndex: number) {
     var curCourse = this.courses.at(courseIndex).get('code')!.value
     return this.allCourses.find((e) => e.getCode() == curCourse)?.getSections()
   }
+
   isSelected(course: Course) {
     //console.log(course)
     for (let i = 0; i < this.courseCount; i++) {

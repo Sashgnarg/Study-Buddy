@@ -509,6 +509,25 @@ app.get('/get-student-schedule/:student_id', async(req, res) => {
     }
 })
 
+app.get('/get-student-courses/:student_id', async(req, res) => {
+    let student_id = req.params.student_id
+    query = `
+    SELECT student_id, enrollment.course_id, course.code, course.section
+    FROM enrollment, course
+    WHERE student_id = $1 AND enrollment.course_id = course.course_id
+    ORDER BY course_id
+    `
+    try {
+        var result = await pool.query(query ,[student_id])
+        res.send(result.rows)
+        res.end()
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+        res.end()
+    }
+})
+
 async function getCompatible(student , res){
     const getCourseCodeQuery = `SELECT course.code
     FROM course
