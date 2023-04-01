@@ -37,6 +37,7 @@ export class NewUserComponent implements OnInit {
       faculty: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       repeatPassword: ['', [Validators.required, Validators.minLength(6)]],
+      bio:[''] ,
       courses: this.FB.array([]),
       studyTime: this.FB.array([])
     }, { validators: [this.checkPasswords] })
@@ -102,7 +103,7 @@ export class NewUserComponent implements OnInit {
     //console.log(this.existingUsers)
     // let names : String[]= ['lbb' , 'otheradmin' ]
     let bool = this.existingUsers.includes(curName.toLowerCase())
-    console.log(bool)
+    //console.log(bool)
     if(bool){
       return {username_error:true}
     }
@@ -258,7 +259,8 @@ export class NewUserComponent implements OnInit {
     // Transpose schedule array
     var availability: AvailabilityBlock[][] = this.schedule[0].map((_, colIndex) => this.schedule.map(row => row[colIndex]));
     console.log(availability)
-    var user = new User(form.uName, form.fName, form.lName, form.faculty, form.password, this.courseCount, userCourses, userSections, availability);
+    var user = new User(form.uName.trim(), form.fName.trim(), form.lName.trim(), form.faculty, form.password.trim(), this.courseCount, userCourses, userSections, availability);
+    user.setBio(form.bio)
     this.DS.createUser(user);
     this.returnMain()
   }

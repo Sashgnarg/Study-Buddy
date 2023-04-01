@@ -12,6 +12,7 @@ export class User {
     faculty: string
     password: string
     courseCount: number
+    bio:string
 
     // order of courses array corresponds to order of sections array
     // ie :  if enrolled courses[j] , user is in section section[j]  
@@ -32,12 +33,16 @@ export class User {
         this.courses = courses
         this.sections = sections
         this.availabilityBlock = ab
+        this.bio =''
     }
     setId(num : number){
         this.uID = num
     }
     setCombatibility(num : number){
         this.combatibilityPosition= num
+    }
+    setBio(bio : string){
+        this.bio = bio
     }
 
 }

@@ -172,7 +172,7 @@ app.get('/get-student-by-username/:username', async (req, res) => {
 
     try {
         let result = await pool.query(query, [username])
-        console.log(result)
+        //console.log(result)
         res.send(result.rows)
     } catch (error) {
         console.log(error)
@@ -398,6 +398,34 @@ app.post('/login' , async(req,res)=>{
     }
 })
 
+app.get('/get-common-courses/:username1/:username2' , async(req, res)=>{
+
+const query =`SELECT c.code
+FROM course c
+JOIN enrollment e ON c.course_id = e.course_id
+JOIN student s ON e.student_id = s.student_id
+WHERE s.username = $1
+
+INTERSECT
+
+SELECT c.code
+FROM course c
+JOIN enrollment e ON c.course_id = e.course_id
+JOIN student s ON e.student_id = s.student_id
+WHERE s.username = $2;
+`
+    const username1 = req.params.username1
+    const username2 = req.params.username2
+
+    try {
+       let result = (await pool.query(query , [username1 , username2])).rows
+    //    console.log(result)
+       res.json(result)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 app.get('/fill-database-courses', (req, res) => {
     axios.get("http://www.sfu.ca/bin/wcm/course-outlines?current/current").then(data => {
         let departments = data.data
@@ -426,7 +454,7 @@ app.get('/fill-database-courses', (req, res) => {
                                 // at this point, allCourses holds each course that share a course code
                                 // push to database , prob similar method as availability
                                 pushCoursesToDB(allCourses)
-                                console.log(allCourses)
+                                //console.log(allCourses)
                             }).catch(error => {
                                 console.log('error at ', department.text, course.text, ":", error)
                             })
@@ -623,6 +651,7 @@ async function compatibleArray(allOtherStudents , student , my_student_enrollmen
     
             array.push({student_id : otherStudent.student_id , compatibilityScore : compatibilityScore})
             if(array.length == allOtherStudents.length){
+                // console.log(array)
                 resolve(array)
             }
         })
@@ -645,6 +674,7 @@ async function getStudentFromArray(array , res){
             studentArray.sort((a, b) => a.compatibilityPosition - b.compatibilityPosition);
             //console.log(studentArray)
             res.json(studentArray)
+
         }
     })
 }   

@@ -1,12 +1,24 @@
-<p>
+<div class="border">
     <u class="title">Buddy</u> <br>
-    Username : 
-    <span [textContent]="member.uName"></span> <br>
-    First name : 
-    <span [textContent]="member.fName"></span> <br>
-    Last name : 
-    <span [textContent]="member.lName"></span> <br>
-    Major : 
-    <span [textContent]="member.faculty"></span> <br>
-    <button class="btn btn-primary">CHAT</button>
-</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                Username : 
+                <span [textContent]="member.uName"></span> <br>
+                First name : 
+                <span [textContent]="member.fName"></span> <br>
+                Last name : 
+                <span [textContent]="member.lName"></span> <br>
+                Major : 
+                <span [textContent]="member.faculty"></span> <br>
+            </div>
+            <div class="col-md-4">
+                Common Courses : <br>
+                <span *ngFor="let course of commonCourses">{{course.code}} <br></span> <br>
+            </div>
+        </div>
+    </div>
+    <div class="d-grid gap-2">
+        <button class="btn btn-primary">CHAT</button>
+    </div>
+</div>
