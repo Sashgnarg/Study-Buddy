@@ -3,6 +3,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from '../auth.service';
 import { DataService } from '../data.service';
 import { User } from '../user';
+import { WeatherService } from '../weather.service';
 
 @Component({
   selector: 'app-user-main',
@@ -15,8 +16,10 @@ export class UserMainComponent implements OnInit {
   members:any[]
   curUser : any
   username : string
+  weather:any;
+  weatherImagePath:any;
 
-  constructor(private DS : DataService , private cookieService : CookieService , private AS : AuthService) {
+  constructor(private DS : DataService , private cookieService : CookieService , private AS : AuthService, private weatherService: WeatherService) {
     this.username =''
     this.members =[]
    };
@@ -35,6 +38,7 @@ export class UserMainComponent implements OnInit {
           }
         });
       })
+      this.getWeather();
    }
    logout(){
     this.AS.logout()
@@ -61,5 +65,13 @@ export class UserMainComponent implements OnInit {
         return 'Science';
     }
     return ''
+  }
+
+  getWeather() {
+    this.weatherService.getCurrentWeather().subscribe(data => {
+      this.weather = data;
+      this.weatherImagePath = "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@4x.png"
+      console.log(this.weather);
+    });
   }
 }

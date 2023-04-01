@@ -2,16 +2,33 @@
     <h1>{{ title }}</h1>
     <br><br>
 </header>
-<div class="header-bottom">
-    <nav class="flex-container">
-        <div class="flex-item user"> Welcome! {{username}}</div>
-        <button class="flex-item" (click)="logout()">logout</button>
-    </nav>
+<div class="sidebar">
+    <div class="header-bottom">
+        <nav class="flex-container">
+            <div class="flex-item animation-sidebar user-sidebar"> Welcome!</div>
+            <div class="flex-item animation-sidebar user-sidebar"> {{username}}</div>
+            <button class="flex-item user-sidebar">Profile</button>
+            <button class="flex-item user-sidebar" (click)="logout()">Logout</button>
+            <div class="card flex-item">
+                <h5 class="card-title p-2">Current Weather?</h5>
+                <img *ngIf="weatherImagePath" src={{weatherImagePath}} alt="Weather loading" />
+                <div *ngIf="weatherImagePath" class="card-body">
+                    <h3 class="card-title">{{weather.weather[0].main}}</h3>
+                    <p class="card-text">High Temp : {{(weather.main.temp_max - 273.15).toFixed(1)}} °C</p>
+                    <p class="card-text">Low Temp : {{(weather.main.temp_min - 273.15).toFixed(1)}} °C</p>
+                    <p class="card-text">Feels like : {{(weather.main.feels_like - 273.15).toFixed(1)}} °C</p>
+                    <p class="card-text">Humidty : {{weather.main.humidity}}%</p>
+                    <p class="card-text">Wind : {{weather.wind.speed}}m/s</p>
+                </div>
+            </div>
+        </nav>
+    </div>
 </div>
 
-
-<h2 class="fade-in">{{ title_head2 }}</h2>
-<ng-container *ngFor="let m of members">
-    <app-user-main-buddies [member]="m"></app-user-main-buddies>
-    <span>&nbsp;</span>
-</ng-container>
+<div class="body-text">
+    <h2 class="fade-in">{{ title_head2 }}</h2>
+    <ng-container *ngFor="let m of members">
+        <app-user-main-buddies [member]="m"></app-user-main-buddies>
+        <span>&nbsp;</span>
+    </ng-container>
+</div>
