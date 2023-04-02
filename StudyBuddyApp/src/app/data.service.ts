@@ -478,5 +478,9 @@ export class DataService {
     this.http.get(this.baseUrl + methodUrl).subscribe()
   }
 
+  modifyScheduleObservable(student_id: number, availability: any[][]): Observable<any> {
+    let methodUrl = `/modify-schedule`
+    return this.http.patch(this.baseUrl + methodUrl, { student_id, availability }, { responseType: "text" })
+  }
 }
 

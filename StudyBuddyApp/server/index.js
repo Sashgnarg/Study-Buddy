@@ -528,6 +528,54 @@ app.get('/get-student-courses/:student_id', async(req, res) => {
     }
 })
 
+app.patch('/modify-schedule', async(req, res) => {
+    // Create base query
+    var query = `
+    INSERT INTO availability_block
+    (student_id , day_of_week, start_time, end_time, is_available)
+    VALUES
+    `
+
+    var student_id = req.body.student_id
+    var availability = req.body.availability
+    // Add values to query
+    for (let day = 0; day < availability.length; day++) {
+        for (let hour = 0; hour < availability[0].length; hour++) {
+            let is_available = availability[day][hour].is_available
+            let start_time = availability[day][hour].start_time
+            value =
+            `
+            (${student_id}, ${day}, to_timestamp('${start_time}:00', 'HH24:MI'), to_timestamp('${start_time + 1}:00', 'HH24:MI'), ${is_available}),
+            `
+            query += value
+        }
+    }
+
+    // Remove last comma from the query
+    var lastCommaIndex = query.lastIndexOf(",");
+    query = query.slice(0, lastCommaIndex) + query.slice(lastCommaIndex + 1);
+
+    query +=
+    `
+    ON CONFLICT (student_id , day_of_week, start_time, end_time)
+    DO UPDATE SET
+    (student_id , day_of_week, start_time, end_time, is_available)
+    =
+    (EXCLUDED.student_id , EXCLUDED.day_of_week, EXCLUDED.start_time, EXCLUDED.end_time, EXCLUDED.is_available)
+    `
+
+    // Add semicolon to the end of the query
+    query += `;`
+    console.log(query)
+    try {
+        await pool.query(query);
+        res.sendStatus(200)
+        res.end()
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 async function getCompatible(student , res){
     const getCourseCodeQuery = `SELECT course.code
     FROM course

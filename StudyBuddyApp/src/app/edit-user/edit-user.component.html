@@ -31,7 +31,7 @@
             <textarea matInput type="text" name="bio-input" [(ngModel)]=student.bio required></textarea>
         </mat-form-field>
         <br><br>
-        <button mat-flat-button color="primary">SAVE CHANGES</button>
+        <button mat-flat-button color="primary" (click)="saveGeneral()">SAVE CHANGES</button>
     </mat-tab>
     <mat-tab label="Courses">
         <ng-container [formGroup]="form">
@@ -68,7 +68,7 @@
         <br><br>
         <button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
         <br><br>
-        <button mat-flat-button color="primary">SAVE COURSES</button>
+        <button mat-flat-button color="primary" (click)="saveCourses()">SAVE COURSES</button>
     </mat-tab>
     <mat-tab label="Availability Schedule">
         <div class="legend">
@@ -96,6 +96,6 @@
             </tbody>
         </table>
         <br><br>
-        <button mat-flat-button color="primary">SAVE SCHEDULE</button>
+        <button mat-flat-button color="primary" (click)="saveSchedule()">SAVE SCHEDULE</button>
     </mat-tab>
 </mat-tab-group>

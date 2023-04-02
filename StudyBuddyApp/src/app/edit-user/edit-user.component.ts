@@ -7,6 +7,8 @@ import { AvailabilityBlock } from '../availability-block';
 import { Course } from '../course';
 import { DataService } from '../data.service';
 import { Section } from '../section';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-edit-user',
@@ -24,7 +26,7 @@ export class EditUserComponent {
   availableCourses: Course[] = [];
   courseCount: number = 0
 
-  constructor(private cookieService: CookieService, private fb: FormBuilder, private router: Router, private DS: DataService, private AS: AuthService) {
+  constructor(private cookieService: CookieService, private fb: FormBuilder, private router: Router, private DS: DataService, private AS: AuthService, private _snackBar: MatSnackBar) {
     this.form = this.fb.group({
       courses: this.fb.array([]),
     })
@@ -151,5 +153,27 @@ export class EditUserComponent {
     } else {
       return `${hour}AM`;
     }
+  }
+
+  saveGeneral(): void {
+    console.log(this.student)
+  }
+
+  saveCourses(): void {
+    console.log(this.allCourses)
+  }
+
+  saveSchedule(): void {
+    // Transpose schedule array
+    var availability: AvailabilityBlock[][] = this.schedule[0].map((_, colIndex) => this.schedule.map(row => row[colIndex]));
+    this.DS.modifyScheduleObservable(this.student.student_id, availability).subscribe((res) => {
+      console.log(res)
+      if (res == 'OK') {
+        this._snackBar.open("Successfuly saved schedule!", "Ok", { duration: 3 * 1000 })
+      }
+      else {
+        this._snackBar.open("Error: Could not save schedule", "Ok", { duration: 3 * 1000 })
+      }
+    })
   }
 }
