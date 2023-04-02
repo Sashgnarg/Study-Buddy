@@ -1,0 +1,13 @@
+<div class="container mat-dialog-container">
+    <h2 class="mat-dialog-title">{{userData.uName}}'s Profile</h2>
+    <p class="mat-dialog-content">First Name: {{userData.fName}}</p>
+    <p class="mat-dialog-content">Last Name: {{userData.lName}}</p>
+    <p class="mat-dialog-content">Faculty: {{userData.faculty}}</p>
+    <p class="mat-dialog-content">Biography : {{userData.bio}}</p>
+    <p class="mat-dialog-content">Common Courses</p>
+    <p *ngFor="let course of commonCourses" class="mat-dialog-content bold">{{course.code}}</p>
+    
+</div>
+<div class="mat-dialog-actions">
+    <button mat-button mat-dialog-close>Close</button>
+</div>

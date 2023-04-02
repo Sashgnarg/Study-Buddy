@@ -7,8 +7,8 @@
         <nav class="flex-container">
             <div class="flex-item animation-sidebar user-sidebar"> Welcome!</div>
             <div class="flex-item animation-sidebar user-sidebar"> {{username}}</div>
-            <button class="flex-item user-sidebar">Profile</button>
-            <button class="flex-item user-sidebar" (click)="logout()">Logout</button>
+            <button class="flex-item user-sidebar">EDIT</button>
+            <button class="flex-item user-sidebar" (click)="logout()">LOGOUT</button>
             <div class="card flex-item">
                 <h5 class="card-title p-2">Current Weather?</h5>
                 <img *ngIf="weatherImagePath" src={{weatherImagePath}} alt="Weather loading" />
@@ -27,8 +27,8 @@
 
 <div class="body-text">
     <h2 class="fade-in">{{ title_head2 }}</h2>
-    <ng-container *ngFor="let m of members">
-        <app-user-main-buddies [member]="m"></app-user-main-buddies>
+    <ng-container *ngFor="let m of members; let i = index">
+        <app-user-main-buddies [member]="m" [index]="i + 1"></app-user-main-buddies>
         <span>&nbsp;</span>
     </ng-container>
 </div>

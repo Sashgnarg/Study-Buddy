@@ -40,6 +40,7 @@ import { LoginUserComponent } from './login-user/login-user.component';
 import { LoginComponent } from './login/login.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { MessagingComponent } from './messaging/messaging.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 
 @NgModule({
@@ -66,6 +67,7 @@ import { MessagingComponent } from './messaging/messaging.component';
     LoginUserComponent,
     LoginComponent,
     MessagingComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,

@@ -12,7 +12,7 @@ import { WeatherService } from '../weather.service';
 })
 export class UserMainComponent implements OnInit {
   title = 'SFU Study Buddy';
-  title_head2 = 'Who is available?';
+  title_head2 = 'Who is available? Look at our list of suggestions. They are arranged to fit you best';
   members:any[]
   curUser : any
   username : string
