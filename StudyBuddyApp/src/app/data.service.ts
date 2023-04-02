@@ -261,7 +261,8 @@ export class DataService {
         new_faculty_id: new_faculty_id,
         new_bio: new_bio,
         new_is_admin: new_is_admin
-      }
+      },
+      { responseType: "text" }
     )
   }
 
@@ -434,6 +435,25 @@ export class DataService {
     return this.http.post(this.baseUrl + methodUrl, { student_id: student_id, course_id: course_id })
   }
 
+  addEnrollmentsObservable(student_id: number, courses: Course[], sections: any[]): void {
+    for (let i = 0; i < courses.length; i++) {
+      let code = courses.at(i)?.getCode();
+      let section = sections.at(i)?.name
+      if (code && section) {
+        this.getCourseIDObservable(code, section).subscribe(data => {
+          let temp = data[0]
+          this.addEnrollmentObservable(student_id, temp.course_id).subscribe()
+        })
+      }
+    }
+  }
+
+  deleteEnrollmentObservable(student_id: number, course_id: number): Observable<any> {
+    var methodUrl = '/delete-enrollment'
+
+    return this.http.post(this.baseUrl + methodUrl, { student_id: student_id, course_id: course_id })
+  }
+
   getStudentByIDObservable(student_id: number): Observable<any> {
     let methodUrl = '/get-student-by-id'
     return this.http.get(this.baseUrl + methodUrl + `/${student_id}`)
@@ -449,6 +469,11 @@ export class DataService {
     return this.http.get(this.baseUrl + methodUrl + `/${student_id}`)
   }
 
+  getStudentsCoursesByIdObservable(student_id: number): Observable<any> {
+    let methodUrl = '/get-student-courses'
+    return this.http.get(this.baseUrl + methodUrl + `/${student_id}`)
+  }
+
   getCourseIDObservable(code: string, section: string): Observable<any> {
     let methodUrl = '/get-course-by-code-section'
     return this.http.get(this.baseUrl + methodUrl + `/${code}/${section}`)
@@ -459,14 +484,14 @@ export class DataService {
     return this.http.post(this.baseUrl + methodUrl, { student_id: student_id, availability: availability })
   }
 
-    loginObservable(username: string , password : string): Observable<any> {
+  loginObservable(username: string, password: string): Observable<any> {
     let methodUrl = '/login'
-    return this.http.post(this.baseUrl + methodUrl , {username:username , password:password})
+    return this.http.post(this.baseUrl + methodUrl, { username: username, password: password })
   }
 
-  mostCompatibleObservable(username : string) : Observable<any>{
+  mostCompatibleObservable(username: string): Observable<any> {
     let methodUrl = `/most-compatible`
-    return this.http.get(this.baseUrl+methodUrl+`/${username}`)
+    return this.http.get(this.baseUrl + methodUrl + `/${username}`)
   }
 
   getAllUsernamesObservable():Observable<any>{
@@ -483,5 +508,9 @@ export class DataService {
     this.http.get(this.baseUrl + methodUrl).subscribe()
   }
 
+  modifyScheduleObservable(student_id: number, availability: any[][]): Observable<any> {
+    let methodUrl = `/modify-schedule`
+    return this.http.patch(this.baseUrl + methodUrl, { student_id, availability }, { responseType: "text" })
+  }
 }
 

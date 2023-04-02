@@ -25,6 +25,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { FacultyNamePipe } from './faculty-name.pipe';
 import { AdminDeleteDepartmentComponent } from './admin-departments/admin-delete-department/admin-delete-department.component';
@@ -85,9 +87,11 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     MatSortModule,
     MatCheckboxModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatTabsModule,
+    MatSnackBarModule,
   ],
-  providers: [{provide: LocationStrategy , useClass:HashLocationStrategy}],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

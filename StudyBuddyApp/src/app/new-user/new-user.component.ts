@@ -7,6 +7,9 @@ import { Section } from '../section';
 import { AvailabilityBlock } from '../availability-block';
 import { TimeStartEnd } from '../time-start-end';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from '../auth.service';
+
 
 
 
@@ -26,7 +29,8 @@ export class NewUserComponent implements OnInit {
 
   public weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
   form: FormGroup
-  constructor(private DS: DataService, private FB: FormBuilder , private router : Router) {
+  constructor(private DS: DataService, private FB: FormBuilder , private router : Router , private cookieService:CookieService
+     , private AS : AuthService) {
     this.existingUsers =[];
 
     this.availableCourses = []
@@ -260,6 +264,16 @@ export class NewUserComponent implements OnInit {
     var user = new User(form.uName.trim(), form.fName.trim(), form.lName.trim(), form.faculty, form.password.trim(), this.courseCount, userCourses, userSections, availability);
     user.setBio(form.bio)
     this.DS.createUser(user);
-    this.returnMain()
+
+    let expiry = new Date();
+    expiry.setTime(expiry.getTime() + 30 * 60 * 1000);
+
+    this.AS.isAuthenticated = true
+    this.cookieService.set('is_authenticated' , JSON.stringify(true) , expiry)
+    this.cookieService.set('username', user.uName , expiry)
+
+
+    this.router.navigate(['/admin'])
+
   }
 }

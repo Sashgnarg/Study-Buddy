@@ -3,6 +3,9 @@ td {
     height: 50px;
     border: 1px solid black;
 }
+th {
+    text-align: center;
+}
 
 .available {
     background-color: #9dff9d;
@@ -45,9 +48,41 @@ td {
 #xButton {
     background: transparent;
     border: none;
-  }
-  
-  button i {
+    width: 70px;
+}
+
+button i {
     font-size: 1.5rem;
+    width: 70px;
+}
+
+button{
+    margin-top: 5px;
+    width: 150px;
+    padding: 7px;
+}
+
+.course-card {
+    width: 400px;
+    margin: 10px;
+    background-color: lightgrey;
+}
+
+.container {
+    display: flex;
+    /* justify-content: center; /* centers items horizontally / */
+    align-items: center; 
+    flex-direction: column;
   }
-  
+
+select{
+    width: 400px;
+}
+.packLeft{
+    display: flex; 
+    justify-content: flex-start;
+}
+
+h4{
+    width: 400px;
+}
