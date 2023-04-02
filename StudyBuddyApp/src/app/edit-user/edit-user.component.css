@@ -45,9 +45,15 @@ td {
 #xButton {
     background: transparent;
     border: none;
-  }
-  
-  button i {
+}
+
+button i {
     font-size: 1.5rem;
-  }
-  
+}
+
+
+.course-card {
+    max-width: 400px;
+    margin: 10px;
+    background-color: lightgrey;
+}

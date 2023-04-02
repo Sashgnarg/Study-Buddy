@@ -21,6 +21,7 @@ export class EditUserComponent {
   isLoaded: boolean = false
   faculties: any[] = []
   form: FormGroup
+  enrolledCourses: any[] = [];
   allCourses: Course[] = [];
   allSections: Section[][] = []
   availableCourses: Course[] = [];
@@ -42,7 +43,7 @@ export class EditUserComponent {
       // Load courses
       this.DS.getStudentsCoursesByIdObservable(this.student.student_id).subscribe((res) => {
         res.forEach((val: any) => {
-          this.incrCountWithCodeSection(val.code, val.section)
+          this.enrolledCourses.push({ code: val.code, section: val.section, name: val.name })
         })
       })
 
@@ -178,7 +179,20 @@ export class EditUserComponent {
   }
 
   saveCourses(): void {
-    console.log(this.allCourses)
+    let form = this.form.value
+    var userSections: Section[]
+    userSections = []
+    var userCourses: Course[];
+    userCourses = [];
+    for (let i = 0; i < this.courseCount; i++) {
+      let code = this.courses.at(i)!.get('code')!.value
+      let c = this.allCourses.find(e => e.getCode() == code)!
+      let s = c.getSections().find(e => e.name == this.courses.at(i).get('section')!.value)!
+      userCourses.push(c)
+      userSections.push(s)
+    }
+    console.log(userCourses)
+    console.log(userSections)
   }
 
   saveSchedule(): void {

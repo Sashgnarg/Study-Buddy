@@ -514,7 +514,7 @@ app.get('/get-student-schedule/:student_id', async(req, res) => {
 app.get('/get-student-courses/:student_id', async(req, res) => {
     let student_id = req.params.student_id
     query = `
-    SELECT student_id, enrollment.course_id, course.code, course.section
+    SELECT student_id, enrollment.course_id, course.code, course.section, course.name
     FROM enrollment, course
     WHERE student_id = $1 AND enrollment.course_id = course.course_id
     ORDER BY course_id

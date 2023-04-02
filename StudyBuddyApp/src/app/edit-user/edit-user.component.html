@@ -1,5 +1,3 @@
-<p>Edit Profile: {{username}}</p>
-
 <mat-tab-group animationDuration="0ms">
     <!-- General Tab for modifying name, password, bio, etc -->
     <mat-tab label="General">
@@ -36,6 +34,18 @@
     </mat-tab>
     <!-- Courses tab for adding/removing courses -->
     <mat-tab label="Courses">
+        <mat-card class="course-card" *ngFor="let course of enrolledCourses">
+            <mat-card-header>
+                <mat-card-title>{{course.code}}</mat-card-title>
+                <mat-card-subtitle>{{course.section}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>{{course.name}}</p>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-stroked-button color="warn">DELETE</button>
+            </mat-card-actions>
+        </mat-card>
         <ng-container [formGroup]="form">
             <ng-container formArrayName="courses">
                 <ng-container *ngFor="let courseForm of courses.controls ; let i = index">
