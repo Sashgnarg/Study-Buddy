@@ -1,12 +1,12 @@
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { MessagingService } from './messaging.service';
-import {Message} from './messaging_model'
+import { Message } from './messaging_model'
 import { CookieService } from 'ngx-cookie-service';
 
 
 
 @Component({
-  selector: 'app-messaging',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+  selector: 'app-messaging',
   templateUrl: './messaging.component.html',
   styleUrls: ['./messaging.component.css']
 })
@@ -16,17 +16,17 @@ export class MessagingComponent implements OnInit {
   @ViewChild('conversationList')
   conversationList!: ElementRef;
 
-  
+
   username: string = "";
   message: Message = {
     id: null,
-    senderUsername: null,
-    receiverUsername: null,
+    sender_username: null,
+    receiver_username: null,
     content: '',
     timestamp: null
   };
-  
-  
+
+
   displayedMessages: Message[] = [];
   messages: Message[] = [];
   contactsList: (string | null)[] = [];
@@ -34,61 +34,21 @@ export class MessagingComponent implements OnInit {
 
   constructor(private cookieService: CookieService, private messageService: MessagingService, private renderer: Renderer2) {
     this.username = this.cookieService.get('username');
-    this.username = 'Bob'
 
     this.messageService.getPreviousMessages(this.username).subscribe((messages: Message[]) => {
       this.messages = messages;
-      this.contactsList = [...new Set(this.messages.map(message => message.receiverUsername))]
+      this.contactsList = [...new Set(this.messages.flatMap(message => [message.receiver_username, message.sender_username]))]
       .filter(contact => contact !== this.username);
+
     });
-    // const testMessages: Message[] = [
-    //   {
-    //     id: 1,
-    //     senderUsername: 'Alice',
-    //     receiverUsername: 'Bob',
-    //     content: 'Hi Bob!',
-    //     timestamp: new Date('2022-01-01T10:00:00')
-    //   },
-    //   {
-    //     id: 2,
-    //     senderUsername: 'Bob',
-    //     receiverUsername: 'Alice',
-    //     content: 'Hello Alice!',
-    //     timestamp: new Date('2022-01-01T10:01:00')
-    //   },
-    //   {
-    //     id: 3,
-    //     senderUsername: 'Charlie',
-    //     receiverUsername: 'Bob',
-    //     content: 'Hey Bob!',
-    //     timestamp: new Date('2022-01-01T10:02:00')
-    //   },
-    //   {
-    //     id: 4,
-    //     senderUsername: 'Bob',
-    //     receiverUsername: 'Charlie',
-    //     content: 'Hi Charlie!',
-    //     timestamp: new Date('2022-01-01T10:03:00')
-    //   }
-    //   ,
-    //   {
-    //     id: 5,
-    //     senderUsername: 'Bob',
-    //     receiverUsername: 'Alice',
-    //     content: 'you suck!',
-    //     timestamp: new Date('2022-01-01T10:01:00')
-    //   }
-    // ];
-    // this.messages = testMessages
-    // this.contactsList = [...new Set(this.messages.map(message => message.receiverUsername))]
-    // .filter(contact => contact !== this.username);
-    
+
+
     this.messageService.getMessages().subscribe((message: Message) => {
-      if (message.senderUsername !== this.username) {
+      if (message.sender_username !== this.username) {
         this.messages.push(message);
-        this.contactsList = [...new Set(this.messages.map(message => message.receiverUsername))]
-          .filter(contact => contact !== this.username);
-        if (this.displayedMessages.some(displayedMessage => displayedMessage.senderUsername === message.senderUsername)) {
+        this.contactsList = [...new Set(this.messages.flatMap(message => [message.receiver_username, message.sender_username]))]
+        .filter(contact => contact !== this.username);
+        if (this.displayedMessages.some(displayedMessage => displayedMessage.sender_username === message.sender_username)) {
           this.displayedMessages.push(message);
         }
       }
@@ -96,8 +56,8 @@ export class MessagingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.contactsList = [...new Set(this.messages.map(message => message.receiverUsername))]
-    .filter(contact => contact !== this.username);
+    this.contactsList = [...new Set(this.messages.map(message => message.receiver_username))]
+      .filter(contact => contact !== this.username);
 
   }
 
@@ -106,21 +66,20 @@ export class MessagingComponent implements OnInit {
     this.message.content;
   }
 
-  onSendMessage(receiverUsername: string, content: string) {
-    this.messageService.uploadMessageToDatabase(this.username, "receiverUsername", content).subscribe(() => {
-      this.message.senderUsername = this.username
-      this.message.receiverUsername = receiverUsername
-      this.message.content = content
-      this.message.timestamp = new Date()
+  onSendMessage() {
+    this.messageService.uploadMessageToDatabase(this.username, this.message.receiver_username, this.message.content).subscribe(() => {
+      this.message.sender_username = this.username
+
+      this.message.timestamp = new Date().toLocaleString()
       this.sendMessageToUser()
     }, (error) => {
-      alert("Error uploading message to the database")
-      console.log("Error uploading message to database")
+      console.log("Error transfering message through socket")
     });
   }
 
   loadMessages(username: string) {
-    this.displayedMessages = this.messages.filter(message => message.senderUsername === username || message.receiverUsername === username);
+    this.displayedMessages = this.messages.filter(message => message.sender_username === username || message.receiver_username === username);
+    this.message.receiver_username = username;
   }
 
   filterContacts(): void {

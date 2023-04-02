@@ -1,11 +1,11 @@
 const express = require('express')
 const cors = require('cors')
 const { Pool } = require('pg');
-var md5 = require('md5');
-const axios = require("axios");
+const md5 = require('md5');
+const axios = require('axios');
 const path = require('path');
 const app = express().use('*', cors());
-const server = require('http').createServer(app);
+const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 const pool = new Pool({
@@ -16,30 +16,7 @@ const pool = new Pool({
 })
 
 app.use(express.json())
-app.use(cors())
-//app.use(express.static(__dirname + "/study-buddy-app"))
-
-const PORT = 8081
-const SOCKET_PORT = 3000
-
-
-
-io.on('connection', (socket) => {
-    console.log('User connected');
-  
-    socket.on('message', (message) => {
-      console.log(`Received message: ${message}`);
-      io.emit('message', message);
-    });
-  
-    socket.on('disconnect', () => {
-      console.log('User disconnected');
-    });
-  });
-
-  io.listen(SOCKET_PORT, () => {
-    console.log(`Socket running on port ${SOCKET_PORT}`);
-  });
+app.use(cors()) 
 
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -48,6 +25,25 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Credentials', true)
     next();
 });
+
+
+//app.use(express.static(__dirname + "/study-buddy-app"))
+
+const PORT = 8081
+
+
+
+io.on('connection', (socket) => {
+    console.log('User connected');
+
+    socket.on('new_message', (message) => {
+        console.log(`Received message: ${message}`);
+        io.emit('new_message', message);
+    });
+});
+
+
+
 
 // For logging incoming requests
 app.use('/', function (req, res, next) {
@@ -69,9 +65,9 @@ app.post('/signUp', (req, res) => {
     }
 })
 
-app.listen(PORT, () => {
-    console.log(`app is listening on ${PORT}`);
-})
+server.listen(PORT, () => {
+    console.log(`app and socket are listening on port ${PORT}`);
+});
 
 app.get('/get-faculties', async (req, res) => {
     try {
@@ -529,32 +525,32 @@ function pushCoursesToDB(sameCodeCourses) {
 }
 
 app.get('/messages', async (req, res) => {
-    const senderUsername = req.query.senderUsername;
+    const sender_username = req.query.sender_username;
   
-    if (!senderUsername) {
-      res.status(400).send('senderUsername is required');
+    if (!sender_username) {
+      res.status(400).send('sender_username is required');
       return;
     }
   
     const query = `
       SELECT * FROM "message"
-      WHERE "sender_username" = $1
+      WHERE"sender_username" = $1 OR "receiver_username" = $1
       ORDER BY "timestamp" ASC
     `;
-    const dbRes = await db.query(query, [senderUsername]);
+    const dbRes = await pool.query(query, [sender_username]);
     const messages = dbRes.rows;
   
     res.json(messages);
   });
 
   app.post('/messages', async (req, res) => {
-    const senderUsername = req.body.senderUsername;
-    const receiverUsername = req.body.receiverUsername;
+    const sender_username = req.body.sender_username;
+    const receiver_username = req.body.receiver_username;
     const content = req.body.content;
     const timestamp = new Date();
   
-    if (!senderUsername || !receiverUsername || !content) {
-      res.status(400).send('senderUsername, receiverUsername, and content are required');
+    if (!sender_username || !receiver_username || !content) {
+      res.status(400).send('sender_username, receiver_username, and content are required');
       return;
     }
   
@@ -562,7 +558,7 @@ app.get('/messages', async (req, res) => {
       INSERT INTO "message" ("sender_username", "receiver_username", "content", "timestamp")
       VALUES ($1, $2, $3, $4)
     `;
-    await db.query(query, [senderUsername, receiverUsername, content, timestamp]);
+    await pool.query(query, [sender_username, receiver_username, content, timestamp]);
   
     res.status(201).send('Message created');
   });

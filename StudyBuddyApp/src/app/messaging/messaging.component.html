@@ -19,15 +19,15 @@
     </ul>
   </div>
   <div class="messages" id="messages">
-    <div *ngFor="let message of displayedMessages" [class.received]="message.senderUsername !== username" [class.sent]="message.senderUsername === username">
-      <p class="sender-name">{{message.senderUsername === username ? 'You' : message.senderUsername}}</p>
+    <div *ngFor="let message of displayedMessages" [class.received]="message.sender_username !== username" [class.sent]="message.sender_username === username">
+      <p class="sender-name">{{message.sender_username === username ? 'You' : message.sender_username}}</p>
       <p>{{message.content}}</p>
       <p class="timestamp">{{message.timestamp | date:'shortTime'}}</p>
-      <span *ngIf="message.senderUsername === username" class="status">Sent</span>
+      <span *ngIf="message.sender_username === username" class="status">Sent</span>
     </div>
   </div>
 
-  <form class="send-message-form" (submit)="onSendMessage('', '')">
+  <form class="send-message-form" (submit)="onSendMessage()">
     <input type="text" placeholder="Type your message here..." [(ngModel)]="message.content" name="messageContent">
     <button type="submit">
       <i class="material-icons">send</i>
