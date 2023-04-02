@@ -272,6 +272,14 @@ app.get('/get-departments', async (req, res) => {
     query = `
     SELECT * FROM department ORDER BY faculty_id, department_id
     `
+    try {
+        var result = await pool.query(query)
+        console.log(`sending back:`, result.rows)
+        res.send(result.rows)
+        res.end()
+    } catch (e) {
+        console.log(e)
+    }
 })
 
 app.get('/get-courses', async (req, res) => {
@@ -479,13 +487,13 @@ function pushCoursesToDB(sameCodeCourses) {
     // base query
     var query = `
         INSERT INTO course
-        (code , term, section, name, faculty_id , department_id)
+        (code, term, section, name, faculty_id, department_id)
         VALUES
         `
     sameCodeCourses.forEach(course => {
         let value =
             `
-        ('${course.code}', '${course.term}', '${course.section}', '${course.name}', '${course.faculty_id}' , '${course.department_id}'),
+        ('${course.code}', '${course.term}', '${course.section}', '${course.name}', '${course.faculty_id}', '${course.department_id}'),
         `
         query += value
     })
@@ -519,6 +527,25 @@ app.get('/most-compatible/:username' , async(req,res)=>{
         getCompatible(student , res);
     } catch (error) {
         console.log(error)
+    }
+})
+
+app.get('/get-student-schedule/:student_id', async(req, res) => {
+    let student_id = req.params.student_id
+    query = `
+    SELECT student_id, day_of_week, EXTRACT(HOUR FROM start_time) as start_hour, is_available
+    FROM availability_block
+    WHERE student_id = $1
+    ORDER BY day_of_week, start_time
+    `
+    try {
+        var result = await pool.query(query ,[student_id])
+        res.send(result.rows)
+        res.end()
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+        res.end()
     }
 })
 

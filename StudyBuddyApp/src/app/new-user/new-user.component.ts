@@ -191,7 +191,6 @@ export class NewUserComponent implements OnInit {
   setSections(courseIndex: number) {
     var curCourse = this.courses.at(courseIndex).get('code')!.value
     return this.allCourses.find((e) => e.getCode() == curCourse)?.getSections()
-
   }
   isSelected(course: Course) {
     //console.log(course)
@@ -201,7 +200,6 @@ export class NewUserComponent implements OnInit {
         return true;
       }
     }
-
     return false;
   }
 
