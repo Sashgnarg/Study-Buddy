@@ -208,7 +208,9 @@ export class EditUserComponent {
       res.forEach((val: any) => {
         this.enrolledCourses.push({ course_id: val.course_id, code: val.code, section: val.section, name: val.name })
       })
+      location.reload()
     })
+
 
   }
 
