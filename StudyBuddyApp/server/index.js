@@ -316,6 +316,27 @@ app.post('/add-enrollment', async (req, res) => {
     }
 })
 
+app.post('/delete-enrollment', async (req, res) => {
+    const query = `DELETE FROM enrollment WHERE student_id = $1 AND course_id = $2`;
+    const selectquery =
+        `
+    SELECT student_id, enrollment.course_id, course.code, course.section, course.name
+    FROM enrollment, course
+    WHERE student_id = $1 AND enrollment.course_id = course.course_id
+    ORDER BY course_id
+    `
+
+    try {
+        const { student_id, course_id } = req.body
+        console.log(student_id, course_id)
+        await pool.query(query, [student_id, course_id]);
+        var selectresult = await pool.query(selectquery, [student_id])
+        res.send(selectresult.rows)
+        res.end()
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 app.post('/add-availability', async (req, res) => {
     // Create base query
@@ -357,18 +378,19 @@ app.post('/add-availability', async (req, res) => {
     }
 })
 
-app.post('/login' , async(req,res)=>{
-    let {username , password} = req.body
+app.post('/login', async (req, res) => {
+    let { username, password } = req.body
     password = md5(password)
-    result =await pool.query("select * from student where username = $1 and password = $2" , [username,password])
-    if(result.rows.length>0){
-        if(result.rows[0].is_admin == true){
-            res.json({is_admin:true})
+    result = await pool.query("select * from student where username = $1 and password = $2", [username, password])
+    if (result.rows.length > 0) {
+        if (result.rows[0].is_admin == true) {
+            res.json({ is_admin: true })
         }
-        else{
-        console.log("returning true my brother")
-        res.json({is_admin:false})}
-    }else{
+        else {
+            console.log("returning true my brother")
+            res.json({ is_admin: false })
+        }
+    } else {
         console.log(result.rows[0])
         res.send(false)
     }
@@ -479,20 +501,20 @@ function pushCoursesToDB(sameCodeCourses) {
 
 
 
-app.get('/most-compatible/:username' , async(req,res)=>{
+app.get('/most-compatible/:username', async (req, res) => {
     //let student_id = req.params.student_id;
     let username = req.params.username
     console.log('attempting to find most compatible')
     try {
-        let student = await ( await pool.query('select * from student where username = ($1)' ,[username])).rows[0]
+        let student = await (await pool.query('select * from student where username = ($1)', [username])).rows[0]
         console.log('here is the current student :', student)
-        getCompatible(student , res);
+        getCompatible(student, res);
     } catch (error) {
         console.log(error)
     }
 })
 
-app.get('/get-student-schedule/:student_id', async(req, res) => {
+app.get('/get-student-schedule/:student_id', async (req, res) => {
     let student_id = req.params.student_id
     query = `
     SELECT student_id, day_of_week, EXTRACT(HOUR FROM start_time) as start_hour, is_available
@@ -501,7 +523,7 @@ app.get('/get-student-schedule/:student_id', async(req, res) => {
     ORDER BY day_of_week, start_time
     `
     try {
-        var result = await pool.query(query ,[student_id])
+        var result = await pool.query(query, [student_id])
         res.send(result.rows)
         res.end()
     } catch (error) {
@@ -511,7 +533,7 @@ app.get('/get-student-schedule/:student_id', async(req, res) => {
     }
 })
 
-app.get('/get-student-courses/:student_id', async(req, res) => {
+app.get('/get-student-courses/:student_id', async (req, res) => {
     let student_id = req.params.student_id
     query = `
     SELECT student_id, enrollment.course_id, course.code, course.section, course.name
@@ -520,7 +542,7 @@ app.get('/get-student-courses/:student_id', async(req, res) => {
     ORDER BY course_id
     `
     try {
-        var result = await pool.query(query ,[student_id])
+        var result = await pool.query(query, [student_id])
         res.send(result.rows)
         res.end()
     } catch (error) {
@@ -530,7 +552,7 @@ app.get('/get-student-courses/:student_id', async(req, res) => {
     }
 })
 
-app.patch('/modify-schedule', async(req, res) => {
+app.patch('/modify-schedule', async (req, res) => {
     // Create base query
     var query = `
     INSERT INTO availability_block
@@ -546,7 +568,7 @@ app.patch('/modify-schedule', async(req, res) => {
             let is_available = availability[day][hour].is_available
             let start_time = availability[day][hour].start_time
             value =
-            `
+                `
             (${student_id}, ${day}, to_timestamp('${start_time}:00', 'HH24:MI'), to_timestamp('${start_time + 1}:00', 'HH24:MI'), ${is_available}),
             `
             query += value
@@ -558,7 +580,7 @@ app.patch('/modify-schedule', async(req, res) => {
     query = query.slice(0, lastCommaIndex) + query.slice(lastCommaIndex + 1);
 
     query +=
-    `
+        `
     ON CONFLICT (student_id , day_of_week, start_time, end_time)
     DO UPDATE SET
     (student_id , day_of_week, start_time, end_time, is_available)
@@ -578,7 +600,7 @@ app.patch('/modify-schedule', async(req, res) => {
     }
 })
 
-async function getCompatible(student , res){
+async function getCompatible(student, res) {
     const getCourseCodeQuery = `SELECT course.code
     FROM course
     INNER JOIN enrollment ON course.course_id = enrollment.course_id
@@ -596,16 +618,16 @@ async function getCompatible(student , res){
        AND ab1.is_available = true;
     `
 
-    let myArray =[]
+    let myArray = []
     try {
-    let allOtherStudents =  ( await pool.query('select student_id , faculty_id from student where student_id <> $1' , [student.student_id])).rows
-    let my_student_enrollments = (await pool.query(getCourseCodeQuery , [student.student_id])).rows
+        let allOtherStudents = (await pool.query('select student_id , faculty_id from student where student_id <> $1', [student.student_id])).rows
+        let my_student_enrollments = (await pool.query(getCourseCodeQuery, [student.student_id])).rows
 
-    compatibleArray(allOtherStudents , student , my_student_enrollments).then((array)=>{
-        array.sort((a,b)=>b.compatibilityScore - a.compatibilityScore)
-        getStudentFromArray(array , res)
-        //res.json(array)
-    })
+        compatibleArray(allOtherStudents, student, my_student_enrollments).then((array) => {
+            array.sort((a, b) => b.compatibilityScore - a.compatibilityScore)
+            getStudentFromArray(array, res)
+            //res.json(array)
+        })
     } catch (error) {
         console.log(error)
     }
@@ -615,7 +637,7 @@ async function getCompatible(student , res){
 //     console.log('ending pool')
 // // })
 
-async function compatibleArray(allOtherStudents , student , my_student_enrollments){
+async function compatibleArray(allOtherStudents, student, my_student_enrollments) {
     const getCourseCodeQuery = `SELECT course.code
     FROM course
     INNER JOIN enrollment ON course.course_id = enrollment.course_id
@@ -631,22 +653,22 @@ async function compatibleArray(allOtherStudents , student , my_student_enrollmen
        AND ab2.student_id = $1
        AND ab1.is_available = true;
     `
-    return new Promise((resolve,reject)=>{
-        let array=[]
-        allOtherStudents.forEach( async (otherStudent) => {
+    return new Promise((resolve, reject) => {
+        let array = []
+        allOtherStudents.forEach(async (otherStudent) => {
             let compatibilityScore = 0;
-            if(student.faculty_id == otherStudent.faculty_id){
+            if (student.faculty_id == otherStudent.faculty_id) {
                 compatibilityScore += 5 // can change this scalar
             }
-            let cur_student_enrollments = (await pool.query(getCourseCodeQuery , [otherStudent.student_id])).rows
+            let cur_student_enrollments = (await pool.query(getCourseCodeQuery, [otherStudent.student_id])).rows
             let overLappingCourseCount = my_student_enrollments.filter(myCourse => cur_student_enrollments.some(otherCourse => otherCourse.code === myCourse.code)).length;
-            compatibilityScore += 7*overLappingCourseCount // can change this scalar
-    
-            let overLappingAvailbilityCount = (await pool.query(getAvailabilityCountQuery , [otherStudent.student_id])).rows[0]
-            compatibilityScore += overLappingAvailbilityCount.count*0.1 // can change the scalars
-    
-            array.push({student_id : otherStudent.student_id , compatibilityScore : compatibilityScore})
-            if(array.length == allOtherStudents.length){
+            compatibilityScore += 7 * overLappingCourseCount // can change this scalar
+
+            let overLappingAvailbilityCount = (await pool.query(getAvailabilityCountQuery, [otherStudent.student_id])).rows[0]
+            compatibilityScore += overLappingAvailbilityCount.count * 0.1 // can change the scalars
+
+            array.push({ student_id: otherStudent.student_id, compatibilityScore: compatibilityScore })
+            if (array.length == allOtherStudents.length) {
                 resolve(array)
             }
         })
@@ -654,18 +676,18 @@ async function compatibleArray(allOtherStudents , student , my_student_enrollmen
     })
 }
 
-async function getStudentFromArray(array , res){
-    studentArray=[]
-    await array.forEach(async (student ,index )  => {
+async function getStudentFromArray(array, res) {
+    studentArray = []
+    await array.forEach(async (student, index) => {
         try {
-            let result = (await pool.query('select * from student where student_id = $1' , [student.student_id])).rows[0]
+            let result = (await pool.query('select * from student where student_id = $1', [student.student_id])).rows[0]
             //console.log(result)
             result['compatibilityPosition'] = index
             studentArray.push(result)
         } catch (error) {
             console.log(error)
         }
-        if(studentArray.length == array.length){
+        if (studentArray.length == array.length) {
             studentArray.sort((a, b) => a.compatibilityPosition - b.compatibilityPosition);
             //console.log(studentArray)
             res.json(studentArray)

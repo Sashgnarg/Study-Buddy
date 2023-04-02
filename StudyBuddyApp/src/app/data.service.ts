@@ -434,6 +434,25 @@ export class DataService {
     return this.http.post(this.baseUrl + methodUrl, { student_id: student_id, course_id: course_id })
   }
 
+  addEnrollmentsObservable(student_id: number, courses: Course[], sections: any[]): void {
+    for (let i = 0; i < courses.length; i++) {
+      let code = courses.at(i)?.getCode();
+      let section = sections.at(i)?.name
+      if (code && section) {
+        this.getCourseIDObservable(code, section).subscribe(data => {
+          let temp = data[0]
+          this.addEnrollmentObservable(student_id, temp.course_id).subscribe()
+        })
+      }
+    }
+  }
+
+  deleteEnrollmentObservable(student_id: number, course_id: number): Observable<any> {
+    var methodUrl = '/delete-enrollment'
+
+    return this.http.post(this.baseUrl + methodUrl, { student_id: student_id, course_id: course_id })
+  }
+
   getStudentByIDObservable(student_id: number): Observable<any> {
     let methodUrl = '/get-student-by-id'
     return this.http.get(this.baseUrl + methodUrl + `/${student_id}`)

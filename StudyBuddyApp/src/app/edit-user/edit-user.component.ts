@@ -43,7 +43,7 @@ export class EditUserComponent {
       // Load courses
       this.DS.getStudentsCoursesByIdObservable(this.student.student_id).subscribe((res) => {
         res.forEach((val: any) => {
-          this.enrolledCourses.push({ code: val.code, section: val.section, name: val.name })
+          this.enrolledCourses.push({ course_id: val.course_id, code: val.code, section: val.section, name: val.name })
         })
       })
 
@@ -178,7 +178,17 @@ export class EditUserComponent {
     })
   }
 
-  saveCourses(): void {
+  deleteCourse(course_id: number): void {
+    console.log(course_id)
+    this.DS.deleteEnrollmentObservable(this.student.student_id, course_id).subscribe((res) => {
+      this.enrolledCourses = []
+      res.forEach((val: any) => {
+        this.enrolledCourses.push({ course_id: val.course_id, code: val.code, section: val.section, name: val.name })
+      })
+    })
+  }
+
+  async saveCourses(): Promise<void> {
     let form = this.form.value
     var userSections: Section[]
     userSections = []
@@ -191,8 +201,15 @@ export class EditUserComponent {
       userCourses.push(c)
       userSections.push(s)
     }
-    console.log(userCourses)
-    console.log(userSections)
+    this.DS.addEnrollmentsObservable(this.student.student_id, userCourses, userSections)
+
+    this.DS.getStudentsCoursesByIdObservable(this.student.student_id).subscribe((res) => {
+      this.enrolledCourses = []
+      res.forEach((val: any) => {
+        this.enrolledCourses.push({ course_id: val.course_id, code: val.code, section: val.section, name: val.name })
+      })
+    })
+
   }
 
   saveSchedule(): void {

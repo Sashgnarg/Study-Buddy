@@ -43,7 +43,7 @@
                 <p>{{course.name}}</p>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-stroked-button color="warn">DELETE</button>
+                <button mat-stroked-button color="warn" (click)="deleteCourse(course.course_id)">DELETE</button>
             </mat-card-actions>
         </mat-card>
         <ng-container [formGroup]="form">
@@ -78,9 +78,9 @@
             </ng-container>
         </ng-container>
         <br><br>
-        <button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">add course</button>
+        <button id='addCourseButton' class="btn btn-warning" (click)="incrCount()" type="button">New Course</button>
         <br><br>
-        <button mat-flat-button color="primary" (click)="saveCourses()">SAVE COURSES</button>
+        <button mat-flat-button color="primary" (click)="saveCourses()">Add Courses</button>
     </mat-tab>
     <!-- Schedule tab for changing weekly availability hours -->
     <mat-tab label="Availability Schedule">
