@@ -158,7 +158,7 @@ app.get('/get-student-by-username/:username', async (req, res) => {
 })
 
 
-app.get(`/get-usernames` , async(req,res)=>{
+app.get(`/get-usernames`, async (req, res) => {
     let query = `select username from student`
 
     try {
@@ -359,26 +359,27 @@ app.post('/add-availability', async (req, res) => {
     }
 })
 
-app.post('/login' , async(req,res)=>{
-    let {username , password} = req.body
+app.post('/login', async (req, res) => {
+    let { username, password } = req.body
     password = md5(password)
-    result =await pool.query("select * from student where username = $1 and password = $2" , [username,password])
-    if(result.rows.length>0){
-        if(result.rows[0].is_admin == true){
-            res.json({is_admin:true})
+    result = await pool.query("select * from student where username = $1 and password = $2", [username, password])
+    if (result.rows.length > 0) {
+        if (result.rows[0].is_admin == true) {
+            res.json({ is_admin: true })
         }
-        else{
-        console.log("returning true my brother")
-        res.json({is_admin:false})}
-    }else{
+        else {
+            console.log("returning true my brother")
+            res.json({ is_admin: false })
+        }
+    } else {
         console.log(result.rows[0])
         res.send(false)
     }
 })
 
-app.get('/get-common-courses/:username1/:username2' , async(req, res)=>{
+app.get('/get-common-courses/:username1/:username2', async (req, res) => {
 
-const query =`SELECT c.code
+    const query = `SELECT c.code
 FROM course c
 JOIN enrollment e ON c.course_id = e.course_id
 JOIN student s ON e.student_id = s.student_id
@@ -396,9 +397,9 @@ WHERE s.username = $2;
     const username2 = req.params.username2
 
     try {
-       let result = (await pool.query(query , [username1 , username2])).rows
-    //    console.log(result)
-       res.json(result)
+        let result = (await pool.query(query, [username1, username2])).rows
+        //    console.log(result)
+        res.json(result)
     } catch (error) {
         console.log(error)
     }
@@ -447,6 +448,20 @@ app.get('/fill-database-courses', (req, res) => {
         console.log(error)
     })
 })
+
+app.get('/weather/', async (req, res) => {
+    const API_KEY = 'b5f4498cdc5a7ac1855ca82a6b5e6f32';
+    const city = "vancouver";
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`;
+
+    try {
+        const response = await axios.get(url);
+        res.send(response.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error getting weather data');
+    }
+});
 
 function getFacultyID(departmentName) {
     switch (departmentName) {
@@ -498,7 +513,7 @@ function pushCoursesToDB(sameCodeCourses) {
     query += `;`
 
     console.log(query)
- // !!!!!!!!! Havent tested this just yet !!!!!!!!!!!
+    // !!!!!!!!! Havent tested this just yet !!!!!!!!!!!
     try {
         pool.query(query)
     } catch (error) {
@@ -509,20 +524,20 @@ function pushCoursesToDB(sameCodeCourses) {
 
 
 
-app.get('/most-compatible/:username' , async(req,res)=>{
+app.get('/most-compatible/:username', async (req, res) => {
     //let student_id = req.params.student_id;
     let username = req.params.username
     console.log('attempting to find most compatible')
     try {
-        let student = await ( await pool.query('select * from student where username = ($1)' ,[username])).rows[0]
+        let student = await (await pool.query('select * from student where username = ($1)', [username])).rows[0]
         //console.log('here is the current student :', student)
-        getCompatible(student , res);
+        getCompatible(student, res);
     } catch (error) {
         console.log(error)
     }
 })
 
-async function getCompatible(student , res){
+async function getCompatible(student, res) {
     const getCourseCodeQuery = `SELECT course.code
     FROM course
     INNER JOIN enrollment ON course.course_id = enrollment.course_id
@@ -540,16 +555,16 @@ async function getCompatible(student , res){
        AND ab1.is_available = true;
     `
 
-    let myArray =[]
+    let myArray = []
     try {
-    let allOtherStudents =  ( await pool.query('select student_id , faculty_id from student where student_id <> $1' , [student.student_id])).rows
-    let my_student_enrollments = (await pool.query(getCourseCodeQuery , [student.student_id])).rows
+        let allOtherStudents = (await pool.query('select student_id , faculty_id from student where student_id <> $1', [student.student_id])).rows
+        let my_student_enrollments = (await pool.query(getCourseCodeQuery, [student.student_id])).rows
 
-    compatibleArray(allOtherStudents , student , my_student_enrollments).then((array)=>{
-        array.sort((a,b)=>b.compatibilityScore - a.compatibilityScore)
-        getStudentFromArray(array , res)
-        //res.json(array)
-    })
+        compatibleArray(allOtherStudents, student, my_student_enrollments).then((array) => {
+            array.sort((a, b) => b.compatibilityScore - a.compatibilityScore)
+            getStudentFromArray(array, res)
+            //res.json(array)
+        })
     } catch (error) {
         console.log(error)
     }
@@ -559,7 +574,7 @@ async function getCompatible(student , res){
 //     console.log('ending pool')
 // // })
 
-async function compatibleArray(allOtherStudents , student , my_student_enrollments){
+async function compatibleArray(allOtherStudents, student, my_student_enrollments) {
     const getCourseCodeQuery = `SELECT course.code
     FROM course
     INNER JOIN enrollment ON course.course_id = enrollment.course_id
@@ -575,22 +590,22 @@ async function compatibleArray(allOtherStudents , student , my_student_enrollmen
        AND ab2.student_id = $1
        AND ab1.is_available = true;
     `
-    return new Promise((resolve,reject)=>{
-        let array=[]
-        allOtherStudents.forEach( async (otherStudent) => {
+    return new Promise((resolve, reject) => {
+        let array = []
+        allOtherStudents.forEach(async (otherStudent) => {
             let compatibilityScore = 0;
-            if(student.faculty_id == otherStudent.faculty_id){
+            if (student.faculty_id == otherStudent.faculty_id) {
                 compatibilityScore += 5 // can change this scalar
             }
-            let cur_student_enrollments = (await pool.query(getCourseCodeQuery , [otherStudent.student_id])).rows
+            let cur_student_enrollments = (await pool.query(getCourseCodeQuery, [otherStudent.student_id])).rows
             let overLappingCourseCount = my_student_enrollments.filter(myCourse => cur_student_enrollments.some(otherCourse => otherCourse.code === myCourse.code)).length;
-            compatibilityScore += 7*overLappingCourseCount // can change this scalar
-    
-            let overLappingAvailbilityCount = (await pool.query(getAvailabilityCountQuery , [otherStudent.student_id])).rows[0]
-            compatibilityScore += overLappingAvailbilityCount.count*0.1 // can change the scalars
-    
-            array.push({student_id : otherStudent.student_id , compatibilityScore : compatibilityScore})
-            if(array.length == allOtherStudents.length){
+            compatibilityScore += 7 * overLappingCourseCount // can change this scalar
+
+            let overLappingAvailbilityCount = (await pool.query(getAvailabilityCountQuery, [otherStudent.student_id])).rows[0]
+            compatibilityScore += overLappingAvailbilityCount.count * 0.1 // can change the scalars
+
+            array.push({ student_id: otherStudent.student_id, compatibilityScore: compatibilityScore })
+            if (array.length == allOtherStudents.length) {
                 // console.log(array)
                 resolve(array)
             }
@@ -599,18 +614,18 @@ async function compatibleArray(allOtherStudents , student , my_student_enrollmen
     })
 }
 
-async function getStudentFromArray(array , res){
-    studentArray=[]
-    await array.forEach(async (student ,index )  => {
+async function getStudentFromArray(array, res) {
+    studentArray = []
+    await array.forEach(async (student, index) => {
         try {
-            let result = (await pool.query('select * from student where student_id = $1' , [student.student_id])).rows[0]
+            let result = (await pool.query('select * from student where student_id = $1', [student.student_id])).rows[0]
             //console.log(result)
             result['compatibilityPosition'] = index
             studentArray.push(result)
         } catch (error) {
             console.log(error)
         }
-        if(studentArray.length == array.length){
+        if (studentArray.length == array.length) {
             studentArray.sort((a, b) => a.compatibilityPosition - b.compatibilityPosition);
             //console.log(studentArray)
             res.json(studentArray)

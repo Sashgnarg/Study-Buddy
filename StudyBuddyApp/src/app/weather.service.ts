@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import axios from 'axios';
 
@@ -6,21 +7,13 @@ import axios from 'axios';
   providedIn: 'root'
 })
 export class WeatherService {
-  private API_KEY = 'b5f4498cdc5a7ac1855ca82a6b5e6f32';
-  private city = "vancouver";
-  constructor() { }
 
-  getCurrentWeather(): Observable<any> {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${this.API_KEY}`;
-    return new Observable(observer => {
-      axios.get(url)
-        .then(response => {
-          observer.next(response.data);
-          observer.complete();
-        })
-        .catch(error => {
-          observer.error(error);
-        });
-    });
+  // Don't forget to change baseURL in weather service!
+  baseUrl = 'http://localhost:8081'
+
+  constructor(private http: HttpClient) { }
+  getWeather(): Observable<any> {
+    const url = `${this.baseUrl}/weather/`;
+    return this.http.get(url);
   }
 }

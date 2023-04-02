@@ -67,8 +67,15 @@ export class UserMainComponent implements OnInit {
     return ''
   }
 
+  // getWeather() {
+  //   this.weatherService.getCurrentWeather().subscribe(data => {
+  //     this.weather = data;
+  //     this.weatherImagePath = "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@4x.png"
+  //     console.log(this.weather);
+  //   });
+  // }
   getWeather() {
-    this.weatherService.getCurrentWeather().subscribe(data => {
+    this.weatherService.getWeather().subscribe(data => {
       this.weather = data;
       this.weatherImagePath = "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@4x.png"
       console.log(this.weather);

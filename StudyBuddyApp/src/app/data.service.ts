@@ -17,6 +17,7 @@ export class DataService {
 
   }
 
+  // Don't forget to change baseURL in weather service!
   baseUrl = 'http://localhost:8081'
 
   getFacultyID(s: string) {
