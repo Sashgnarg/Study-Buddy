@@ -1,10 +1,11 @@
 <p>Edit Profile: {{username}}</p>
 
 <mat-tab-group animationDuration="0ms">
+    <!-- General Tab for modifying name, password, bio, etc -->
     <mat-tab label="General">
         <mat-form-field>
             <mat-label>Username:</mat-label>
-            <input matInput type="text" name="username-input" [(ngModel)]=student.username required>
+            <input matInput type="text" name="username-input" [(ngModel)]=student.username disabled>
         </mat-form-field>
         <mat-form-field>
             <mat-label>First Name:</mat-label>
@@ -16,7 +17,7 @@
         </mat-form-field>
         <mat-form-field>
             <mat-label>New password:</mat-label>
-            <input matInput type="password" name="password-input" [(ngModel)]=student.new_password>
+            <input matInput type="password" name="password-input" [(ngModel)]=student.password>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Faculty</mat-label>
@@ -28,11 +29,12 @@
         </mat-form-field>
         <mat-form-field>
             <mat-label>Bio:</mat-label>
-            <textarea matInput type="text" name="bio-input" [(ngModel)]=student.bio required></textarea>
+            <textarea matInput type="text" name="bio-input" [(ngModel)]=student.bio></textarea>
         </mat-form-field>
         <br><br>
         <button mat-flat-button color="primary" (click)="saveGeneral()">SAVE CHANGES</button>
     </mat-tab>
+    <!-- Courses tab for adding/removing courses -->
     <mat-tab label="Courses">
         <ng-container [formGroup]="form">
             <ng-container formArrayName="courses">
@@ -70,6 +72,7 @@
         <br><br>
         <button mat-flat-button color="primary" (click)="saveCourses()">SAVE COURSES</button>
     </mat-tab>
+    <!-- Schedule tab for changing weekly availability hours -->
     <mat-tab label="Availability Schedule">
         <div class="legend">
             <span class="available"></span>

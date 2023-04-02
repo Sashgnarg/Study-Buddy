@@ -260,7 +260,8 @@ export class DataService {
         new_faculty_id: new_faculty_id,
         new_bio: new_bio,
         new_is_admin: new_is_admin
-      }
+      },
+      { responseType: "text" }
     )
   }
 

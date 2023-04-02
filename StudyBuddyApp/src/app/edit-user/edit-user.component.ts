@@ -37,6 +37,7 @@ export class EditUserComponent {
     })
     this.DS.getStudentByUsernameObservable(this.username).subscribe((res) => {
       this.student = res[0]
+      this.student.password = ''
 
       // Load courses
       this.DS.getStudentsCoursesByIdObservable(this.student.student_id).subscribe((res) => {
@@ -157,6 +158,23 @@ export class EditUserComponent {
 
   saveGeneral(): void {
     console.log(this.student)
+    this.DS.editStudentObservable(
+      this.student.student_id,
+      this.student.username,
+      this.student.first_name,
+      this.student.last_name,
+      this.student.password,
+      this.student.faculty_id,
+      this.student.bio,
+      this.student.is_admin
+    ).subscribe((res) => {
+      if (res == 'OK') {
+        this._snackBar.open("successfully saved!", "OK", { duration: 3 * 1000 })
+      }
+      else {
+        this._snackBar.open("Error: Could not save schedule", "OK", { duration: 3 * 1000 })
+      }
+    })
   }
 
   saveCourses(): void {
@@ -169,10 +187,10 @@ export class EditUserComponent {
     this.DS.modifyScheduleObservable(this.student.student_id, availability).subscribe((res) => {
       console.log(res)
       if (res == 'OK') {
-        this._snackBar.open("Successfuly saved schedule!", "Ok", { duration: 3 * 1000 })
+        this._snackBar.open("successfully saved schedule!", "OK", { duration: 3 * 1000 })
       }
       else {
-        this._snackBar.open("Error: Could not save schedule", "Ok", { duration: 3 * 1000 })
+        this._snackBar.open("Error: Could not save schedule", "OK", { duration: 3 * 1000 })
       }
     })
   }

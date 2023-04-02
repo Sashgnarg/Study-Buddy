@@ -238,6 +238,7 @@ app.patch('/edit-student', async (req, res) => {
     if (req.body.new_password != '') {
         try {
             await pool.query(query, [req.body.new_username, req.body.new_first_name, req.body.new_last_name, md5(req.body.new_password), req.body.new_faculty_id, req.body.new_bio, req.body.new_is_admin, req.body.student_id])
+            res.sendStatus(200)
             res.end()
         }
         catch (e) {
@@ -247,6 +248,7 @@ app.patch('/edit-student', async (req, res) => {
     else {
         try {
             await pool.query(queryNoPassword, [req.body.new_username, req.body.new_first_name, req.body.new_last_name, req.body.new_faculty_id, req.body.new_bio, req.body.new_is_admin, req.body.student_id])
+            res.sendStatus(200)
             res.end()
         }
         catch (e) {
@@ -566,7 +568,7 @@ app.patch('/modify-schedule', async(req, res) => {
 
     // Add semicolon to the end of the query
     query += `;`
-    console.log(query)
+    // console.log(query)
     try {
         await pool.query(query);
         res.sendStatus(200)
