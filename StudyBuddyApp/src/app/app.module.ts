@@ -39,7 +39,6 @@ import { DepartmentNamePipe } from './department-name.pipe';
 import { UserMainComponent } from './user-main/user-main.component';
 import { UserMainBuddiesComponent } from './user-main-buddies/user-main-buddies.component';
 import { LoginUserComponent } from './login-user/login-user.component';
-import { LoginComponent } from './login/login.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { MessagingComponent } from './messaging/messaging.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
@@ -69,7 +68,6 @@ import { ProfileComponent } from './profile/profile.component';
     UserMainComponent,
     UserMainBuddiesComponent,
     LoginUserComponent,
-    LoginComponent,
     MessagingComponent,
     EditUserComponent,
     UserProfileComponent,

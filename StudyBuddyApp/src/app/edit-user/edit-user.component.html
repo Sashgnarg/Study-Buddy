@@ -1,6 +1,11 @@
 <mat-tab-group animationDuration="0ms">
     <!-- General Tab for modifying name, password, bio, etc -->
     <mat-tab label="General">
+        <br>
+        <a routerLink="#" (click)="goBack()" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back
+          </a>
         <div class="container">
             <mat-form-field>
                 <mat-label>Username:</mat-label>
@@ -37,6 +42,11 @@
     </mat-tab>
     <!-- Courses tab for adding/removing courses -->
     <mat-tab label="Courses">
+        <br>
+        <a routerLink="#" (click)="goBack()" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back
+          </a>
        <div class="container">
 
         <mat-card class="course-card" *ngFor="let course of enrolledCourses">
@@ -96,6 +106,11 @@
     <!-- Schedule tab for changing weekly availability hours -->
 
     <mat-tab label="Availability Schedule">
+        <br>
+        <a routerLink="#" (click)="goBack()" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back
+          </a>
     <div class="container">
         
         <div class="legend">

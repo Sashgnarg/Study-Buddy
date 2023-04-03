@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
@@ -16,7 +17,8 @@ export class LoginUserComponent {
   loginForm: FormGroup;
   // dataservice
 
-  constructor(private cookieService :CookieService , private fb: FormBuilder, private router: Router , private DS : DataService , private AS : AuthService ) {
+  constructor(private cookieService :CookieService , private fb: FormBuilder, private router: Router ,
+     private DS : DataService , private AS : AuthService , private _snackBar :MatSnackBar ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -32,6 +34,7 @@ export class LoginUserComponent {
   } 
 
   onSubmit() {
+
     this.AS.login(this.username , this.password).subscribe(data=>{
       let expiry = new Date();
       expiry.setTime(expiry.getTime() + 30 * 60 * 1000);
@@ -40,7 +43,7 @@ export class LoginUserComponent {
           this.AS.isAuthenticated = true
           this.cookieService.set('is_admin' , JSON.stringify(true) , expiry)
           this.cookieService.set('is_authenticated' , JSON.stringify(true) , expiry)
-          this.cookieService.set('username', this.username , expiry)
+          this.cookieService.set('username', data.username , expiry)
 
           // sessionStorage.setItem('is_admin' , JSON.stringify(true))
           // sessionStorage.setItem('is_authenticated' , JSON.stringify(true))
@@ -54,7 +57,7 @@ export class LoginUserComponent {
 
           this.cookieService.set('is_admin' , JSON.stringify(false) , expiry)
           this.cookieService.set('is_authenticated' , JSON.stringify(true) , expiry)
-          this.cookieService.set('username', this.username , expiry)
+          this.cookieService.set('username', data.username , expiry)
 
           // sessionStorage.setItem('is_admin' , JSON.stringify(false))
           // sessionStorage.setItem('is_authenticated' , JSON.stringify(true))
@@ -63,6 +66,7 @@ export class LoginUserComponent {
                   this.router.navigate(['/main'])
         }else{
           console.log({ is_admin : this.AS.isAdmin , is_authenticated:this.AS.isAuthenticated})
+          this._snackBar.open("Invalid Login" , "OK", { duration: 3 * 1000 })
           console.log('invalid login')
           this.router.navigate(['/'])
         }

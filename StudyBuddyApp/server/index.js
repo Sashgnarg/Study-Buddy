@@ -225,6 +225,7 @@ app.delete('/delete-student', async (req, res) => {
     query = `
     DELETE FROM student
     WHERE student_id = $1
+    CASCADE;
     `
     try {
         console.log(req.body.student_id)
@@ -393,14 +394,14 @@ app.post('/add-availability', async (req, res) => {
 app.post('/login', async (req, res) => {
     let { username, password } = req.body
     password = md5(password)
-    result = await pool.query("select * from student where username = $1 and password = $2", [username, password])
+    result = await pool.query("select * from student where lower(username) = lower($1) and password = $2", [username, password])
     if (result.rows.length > 0) {
         if (result.rows[0].is_admin == true) {
-            res.json({ is_admin: true })
+            res.json({ is_admin: true , username: result.rows[0].username})
         }
         else {
             console.log("returning true my brother")
-            res.json({ is_admin: false })
+            res.json({ is_admin: false , username: result.rows[0].username})
         }
     } else {
         console.log(result.rows[0])

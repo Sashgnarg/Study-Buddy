@@ -182,6 +182,10 @@ export class EditUserComponent {
     })
   }
 
+  goBack(){
+    this.router.navigate(['/'])
+  }
+  
   deleteCourse(course_id: number): void {
     console.log(course_id)
     this.DS.deleteEnrollmentObservable(this.student.student_id, course_id).subscribe((res) => {

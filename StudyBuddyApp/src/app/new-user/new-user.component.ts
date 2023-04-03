@@ -273,7 +273,9 @@ export class NewUserComponent implements OnInit {
     this.cookieService.set('username', user.uName , expiry)
 
 
-    this.router.navigate(['/admin'])
+    setTimeout(() => {
+      this.router.navigate(['/admin'])
+    }, 1000);
 
   }
 }
