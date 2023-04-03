@@ -40,9 +40,6 @@ export class MessagingComponent implements OnInit {
 
   constructor(private cookieService: CookieService, private messageService: MessagingService,
     private renderer: Renderer2, private _ngZone: NgZone , private route : ActivatedRoute , private router : Router) {
-    this.currentContact = this.route.snapshot.paramMap.get('username')!;
-    // console.log(this.currentContact)
-    // this.loadMessages()
     this.socket = io(this.url, { transports: ['websocket'], upgrade: false, withCredentials: true, extraHeaders: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET,POST,OPTIONS,DELETE", "Access-Control-Allow-Headers": "X-Requested-With, Access-Control-Allow-Headers, Content-Type, Authorization, Origin, Accept" } });
     this.username = this.cookieService.get('username');
 
@@ -50,7 +47,9 @@ export class MessagingComponent implements OnInit {
       this.messages = messages;
       this.contactsList = [...new Set(this.messages.flatMap(message => [message.receiver_username, message.sender_username]))]
         .filter(contact => contact !== this.username);
-
+        this.currentContact = this.route.snapshot.paramMap.get('username')!;
+        console.log(this.currentContact)
+        this.loadMessages()
     });
 
     this.socket.on('new_message', (message: Message) => {
