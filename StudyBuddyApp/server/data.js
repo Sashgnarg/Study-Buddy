@@ -71,6 +71,14 @@ async function createAllTables() {
             PRIMARY KEY ("course_id", "day_of_week", "start_time", "end_time")
         );
 
+        CREATE TABLE "message" (
+            "message_id" serial PRIMARY KEY,
+            "content" text NOT NULL,
+            "timestamp" timestamp NOT NULL,
+            FOREIGN KEY ("username") REFERENCES "student" ("sender_username"),
+            FOREIGN KEY ("username") REFERENCES "student" ("receiver_username")
+        );
+
         CREATE INDEX ON "student" ("username");
 
         CREATE UNIQUE INDEX ON "course" ("code", "term", "section");
@@ -206,6 +214,8 @@ async function dropTables() {
         console.log("2", e)
     }
 }
+
+
 
 // createAllTables()
 // selectQuery()

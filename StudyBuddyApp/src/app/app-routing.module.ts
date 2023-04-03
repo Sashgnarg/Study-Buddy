@@ -14,7 +14,7 @@ import { ProfileComponent } from './profile/profile.component';
 const routes: Routes = [
   { path: '', component: LoginUserComponent, canActivate: [AuthGuardLoggedIn] },
   { path: 'admin', component: AdminMainComponent, canActivate: [AuthGuardAdmin] },
-  { path: 'messaging', component: MessagingComponent, canActivate: [AuthGuard] },
+  { path: 'messaging/:username', component: MessagingComponent, canActivate: [AuthGuard] },
   { path: 'main', component: UserMainComponent, canActivate: [AuthGuard] },
   { path: 'new', component: NewUserComponent },
   { path: 'edit', component: EditUserComponent, canActivate: [AuthGuard] },

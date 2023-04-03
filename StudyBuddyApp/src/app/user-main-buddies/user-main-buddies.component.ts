@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { DataService } from '../data.service';
+import { MessagingService } from '../messaging/messaging.service';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 
 
@@ -18,7 +19,7 @@ export class UserMainBuddiesComponent implements OnInit{
   
   commonCourses:any[]
   constructor(private DS : DataService , private cookieService : CookieService, public dialog: MatDialog,
-    private router : Router) {
+    private router : Router , private messageService : MessagingService ) {
     //this.commonCourses=[{code:"cmpt372" } , {code:'cmpt276'}]
     this.commonCourses=[]
     //console.log(this.member);
@@ -31,6 +32,20 @@ export class UserMainBuddiesComponent implements OnInit{
         //console.log(this.commonCourses)
         });
       })
+  }
+
+  sendMessage(){
+    const loggedInUsername = this.cookieService.get('username')
+    this.messageService.getMessageHistory(loggedInUsername , this.member.uName).subscribe(data=>{
+      if(data.length > 0){
+        this.router.navigate(['/messaging' , this.member.uName])
+      }
+      else{
+        this.messageService.uploadMessageToDatabase(loggedInUsername , this.member.uName , "Hey I want to connect").subscribe(()=>{
+          this.router.navigate(['/messaging' , this.member.uName])
+        })
+      }
+    })
   }
 
   openUserProfile(member: any) {

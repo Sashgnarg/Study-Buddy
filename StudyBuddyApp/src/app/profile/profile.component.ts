@@ -7,6 +7,7 @@ import { AuthService } from '../auth.service';
 import { AvailabilityBlock } from '../availability-block';
 import { Course } from '../course';
 import { DataService } from '../data.service';
+import { MessagingService } from '../messaging/messaging.service';
 import { Section } from '../section';
 
 @Component({
@@ -37,7 +38,7 @@ export class ProfileComponent implements OnInit {
   LoggedInschedule_unformatted: any[] = [];
 
   commonSchedule: AvailabilityBlock[][] = this.hours.map(start_time => this.days.map(day => ({ start_time, is_available: false })));
-  constructor(private cookieService: CookieService, private fb: FormBuilder, private router: Router, 
+  constructor(private cookieService: CookieService, private fb: FormBuilder, private router: Router, private messageService: MessagingService,
     private DS: DataService, private AS: AuthService, private _snackBar: MatSnackBar , private route :ActivatedRoute) {
     this.commonCourses=[]
     this.loggedUsername = cookieService.get('username')
@@ -85,9 +86,19 @@ export class ProfileComponent implements OnInit {
       })
     })
 
-
   }
-
+  sendMessage(){
+    this.messageService.getMessageHistory(this.loggedUsername , this.username).subscribe(data=>{
+      if(data.length > 0){
+        this.router.navigate(['/messaging' , this.username])
+      }
+      else{
+        this.messageService.uploadMessageToDatabase(this.loggedUsername , this.username , "Hey I want to connect").subscribe(()=>{
+          this.router.navigate(['/messaging' , this.username])
+        })
+      }
+    })
+  }
 
   ngOnInit(): void {
     this.DS.getCommonCourses(this.username , this.loggedUsername ).subscribe(data=>{

@@ -1,12 +1,8 @@
 export interface Message {
-    id: number;
-    senderId: number;
-    receiverId: number;
-    content: string;
-    timestamp: Date;
+    id: number | null;
+    sender_username: string | null;
+    receiver_username: string | null;
+    content: string | null;
+    timestamp: string | null;
   }
   
-  export interface Conversation {
-    contactId: number;
-    messages: Message[];
-  }

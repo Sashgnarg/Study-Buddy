@@ -1,10 +1,12 @@
 const express = require('express')
 const cors = require('cors')
 const { Pool } = require('pg');
-var md5 = require('md5');
-const axios = require("axios");
+const md5 = require('md5');
+const axios = require('axios');
 const path = require('path');
 const app = express().use('*', cors());
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 const pool = new Pool({
     user: "postgres",
@@ -17,7 +19,6 @@ app.use(express.json())
 app.use(cors())
 //app.use(express.static(__dirname + "/study-buddy-app"))
 
-const PORT = 8081
 
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -26,6 +27,25 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Credentials', true)
     next();
 });
+
+
+//app.use(express.static(__dirname + "/study-buddy-app"))
+
+const PORT = 8081
+
+
+
+io.on('connection', (socket) => {
+    console.log('User connected');
+
+    socket.on('new_message', (message) => {
+        console.log(`Received message: ${message}`);
+        io.emit('new_message', message);
+    });
+});
+
+
+
 
 // For logging incoming requests
 app.use('/', function (req, res, next) {
@@ -47,9 +67,9 @@ app.post('/signUp', (req, res) => {
     }
 })
 
-app.listen(PORT, () => {
-    console.log(`app is listening on ${PORT}`);
-})
+server.listen(PORT, () => {
+    console.log(`app and socket are listening on port ${PORT}`);
+});
 
 app.get('/get-faculties', async (req, res) => {
     try {
@@ -225,7 +245,7 @@ app.delete('/delete-student', async (req, res) => {
     query = `
     DELETE FROM student
     WHERE student_id = $1
-    CASCADE;
+
     `
     try {
         console.log(req.body.student_id)
@@ -553,7 +573,59 @@ function pushCoursesToDB(sameCodeCourses) {
     }
 }
 
+app.get('/messages', async (req, res) => {
+    const sender_username = req.query.sender_username;
+  
+    if (!sender_username) {
+        res.status(400).json({ message: 'sender username required' });
+      return;
+    }
+  
+    const query = `
+      SELECT * FROM "message"
+      WHERE"sender_username" = $1 OR "receiver_username" = $1
+      ORDER BY "timestamp" ASC
+    `;
+    const dbRes = await pool.query(query, [sender_username]);
+    const messages = dbRes.rows;
+  
+    res.json(messages);
+  });
 
+  app.post('/messages', async (req, res) => {
+    const sender_username = req.body.sender_username;
+    const receiver_username = req.body.receiver_username;
+    const content = req.body.content;
+    const timestamp = new Date();
+  
+    if (!sender_username || !receiver_username || !content) {
+        res.status(400).json({ message: 'sender username, receiver username and content required' });
+        return;
+    }
+  
+    const query = `
+      INSERT INTO "message" ("sender_username", "receiver_username", "content", "timestamp")
+      VALUES ($1, $2, $3, $4)
+    `;
+    await pool.query(query, [sender_username, receiver_username, content, timestamp]);
+  
+    res.status(201).json({ message: 'Message created' });
+    console.log('Message created');
+  });
+
+app.get('/message-history/:sender_username/:receiver_username' , async(req, res)=>{
+    const sender_username = req.params.sender_username
+    const receiver_username = req.params.receiver_username
+    const query =`select * from message where sender_username in ($1 , $2) and receiver_username in ($1 ,$2)`
+
+    try {
+        let result = await pool.query(query , [sender_username , receiver_username])
+        console.log(result.rows)
+        res.json(result.rows)
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 
 app.get('/most-compatible/:username', async (req, res) => {

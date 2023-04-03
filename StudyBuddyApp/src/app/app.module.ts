@@ -44,7 +44,9 @@ import { MessagingComponent } from './messaging/messaging.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ProfileComponent } from './profile/profile.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
+const config: SocketIoConfig = { url: 'http://localhost:8081', options: {} };
 
 @NgModule({
   declarations: [
@@ -92,6 +94,7 @@ import { ProfileComponent } from './profile/profile.component';
     MatCardModule,
     MatTabsModule,
     MatSnackBarModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
