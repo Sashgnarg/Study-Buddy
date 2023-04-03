@@ -126,6 +126,12 @@ export class EditUserComponent {
         return true;
       }
     }
+    for(let i = 0 ; i < this.enrolledCourses.length ; i++){
+      let code = this.enrolledCourses.at(i).code
+      if(code == course.getCode()){
+        return true
+      }
+    }
     return false;
   }
 
@@ -185,7 +191,7 @@ export class EditUserComponent {
   goBack(){
     this.router.navigate(['/'])
   }
-  
+
   deleteCourse(course_id: number): void {
     console.log(course_id)
     this.DS.deleteEnrollmentObservable(this.student.student_id, course_id).subscribe((res) => {

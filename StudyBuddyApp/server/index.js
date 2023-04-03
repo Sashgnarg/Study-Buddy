@@ -245,7 +245,6 @@ app.delete('/delete-student', async (req, res) => {
     query = `
     DELETE FROM student
     WHERE student_id = $1
-
     `
     try {
         console.log(req.body.student_id)
