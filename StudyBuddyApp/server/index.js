@@ -528,7 +528,7 @@ app.get('/messages', async (req, res) => {
     const sender_username = req.query.sender_username;
   
     if (!sender_username) {
-      res.status(400).send('sender_username is required');
+        res.status(400).json({ message: 'sender username required' });
       return;
     }
   
@@ -550,8 +550,8 @@ app.get('/messages', async (req, res) => {
     const timestamp = new Date();
   
     if (!sender_username || !receiver_username || !content) {
-      res.status(400).send('sender_username, receiver_username, and content are required');
-      return;
+        res.status(400).json({ message: 'sender username, receiver username and content required' });
+        return;
     }
   
     const query = `
@@ -560,7 +560,8 @@ app.get('/messages', async (req, res) => {
     `;
     await pool.query(query, [sender_username, receiver_username, content, timestamp]);
   
-    res.status(201).send('Message created');
+    res.status(201).json({ message: 'Message created' });
+    console.log('Message created');
   });
 
 

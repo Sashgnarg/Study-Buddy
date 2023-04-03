@@ -122,7 +122,7 @@
 
 .send-message-form {
     position: fixed;
-    bottom: 100px;
+    bottom: 1px;
     left: 350px;
     right: 0;
     display: flex;
