@@ -1,0 +1,64 @@
+<header><br><br>
+    <h1 class="title">{{ student.first_name + " "+ student.last_name }}</h1>
+    <div class="d-grid gap-2">
+        <button class="btn btn-primary">CHAT</button>
+    </div>
+    <br><br>
+</header>
+<br><br>
+<a routerLink="#" (click)="goBack()" class="back-button">
+    <i class="fas fa-arrow-left"></i>
+    Back
+  </a>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-4 profile-content">
+            Username:
+            <span class="profile-info">{{student.username}}</span><br><br>
+            Faculty : <br>
+            <span class="profile-info">{{student.faculty_id | facultyName:this.faculties}}</span> <br>
+        </div>
+        <br>
+        <div class="col-md-4 profile-content"> 
+            Enrolled Courses :
+            <span class="profile-info" *ngFor="let course of enrolledCourses" [ngClass]="{'bolded': isCommonCourse(course)}"><br>{{course.code}}</span> <br>
+        </div>
+        <div class="col-md-4 profile-content">
+            Bio : <span class="profile-info">{{student.bio}}</span>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+        
+    <div class="legend">
+        <span class="common"></span>
+        <span>Common</span>
+        <span class="available"></span>
+        <span>Available</span>
+        <span class="unavailable"></span>
+        <span>Unavailable</span>
+
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th *ngFor="let day of days">{{ day }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let hour of hours">
+                <td class="hour-display">{{ formatHour(hour) }}-{{formatHour(hour + 1)}}</td>
+                <td *ngFor="let day of days" [ngClass]="{
+                      'available': isAvailable(hour, day),
+                      'unavailable': !isAvailable(hour, day),
+                      'common':isCommon(hour , day)
+                    }">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br><br>
+</div>

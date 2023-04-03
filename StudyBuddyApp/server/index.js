@@ -158,7 +158,7 @@ app.get('/get-student-by-username/:username', async (req, res) => {
 })
 
 
-app.get(`/get-usernames` , async(req,res)=>{
+app.get(`/get-usernames`, async (req, res) => {
     let query = `select username from student`
 
     try {
@@ -408,9 +408,9 @@ app.post('/login', async (req, res) => {
     }
 })
 
-app.get('/get-common-courses/:username1/:username2' , async(req, res)=>{
+app.get('/get-common-courses/:username1/:username2', async (req, res) => {
 
-const query =`SELECT c.code
+    const query = `SELECT c.code
 FROM course c
 JOIN enrollment e ON c.course_id = e.course_id
 JOIN student s ON e.student_id = s.student_id
@@ -428,9 +428,9 @@ WHERE s.username = $2;
     const username2 = req.params.username2
 
     try {
-       let result = (await pool.query(query , [username1 , username2])).rows
-    //    console.log(result)
-       res.json(result)
+        let result = (await pool.query(query, [username1, username2])).rows
+        //    console.log(result)
+        res.json(result)
     } catch (error) {
         console.log(error)
     }
@@ -479,6 +479,20 @@ app.get('/fill-database-courses', (req, res) => {
         console.log(error)
     })
 })
+
+app.get('/weather/', async (req, res) => {
+    const API_KEY = 'b5f4498cdc5a7ac1855ca82a6b5e6f32';
+    const city = "vancouver";
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`;
+
+    try {
+        const response = await axios.get(url);
+        res.send(response.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error getting weather data');
+    }
+});
 
 function getFacultyID(departmentName) {
     switch (departmentName) {
@@ -530,7 +544,7 @@ function pushCoursesToDB(sameCodeCourses) {
     query += `;`
 
     console.log(query)
- // !!!!!!!!! Havent tested this just yet !!!!!!!!!!!
+    // !!!!!!!!! Havent tested this just yet !!!!!!!!!!!
     try {
         pool.query(query)
     } catch (error) {
@@ -546,9 +560,9 @@ app.get('/most-compatible/:username', async (req, res) => {
     let username = req.params.username
     console.log('attempting to find most compatible')
     try {
-        let student = await ( await pool.query('select * from student where username = ($1)' ,[username])).rows[0]
+        let student = await (await pool.query('select * from student where username = ($1)', [username])).rows[0]
         //console.log('here is the current student :', student)
-        getCompatible(student , res);
+        getCompatible(student, res);
     } catch (error) {
         console.log(error)
     }

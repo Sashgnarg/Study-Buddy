@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, Input, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { DataService } from '../data.service';
+import { UserProfileComponent } from '../user-profile/user-profile.component';
+
 
 @Component({
   selector: 'app-user-main-buddies',
@@ -10,9 +14,11 @@ import { DataService } from '../data.service';
 })
 export class UserMainBuddiesComponent implements OnInit{
   @Input() member: any;
+  @Input() index: any;
   
   commonCourses:any[]
-  constructor(private DS : DataService , private cookieService : CookieService) {
+  constructor(private DS : DataService , private cookieService : CookieService, public dialog: MatDialog,
+    private router : Router) {
     //this.commonCourses=[{code:"cmpt372" } , {code:'cmpt276'}]
     this.commonCourses=[]
     //console.log(this.member);
@@ -25,6 +31,13 @@ export class UserMainBuddiesComponent implements OnInit{
         //console.log(this.commonCourses)
         });
       })
+  }
+
+  openUserProfile(member: any) {
+    const dialogRef = this.dialog.open(UserProfileComponent, {
+      data: member,
+      autoFocus:false
+    });
   }
   
 }

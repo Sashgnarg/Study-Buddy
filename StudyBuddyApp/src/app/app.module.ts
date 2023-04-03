@@ -43,6 +43,8 @@ import { LoginComponent } from './login/login.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { MessagingComponent } from './messaging/messaging.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -70,6 +72,8 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     LoginComponent,
     MessagingComponent,
     EditUserComponent,
+    UserProfileComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

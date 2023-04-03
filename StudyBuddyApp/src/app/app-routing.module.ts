@@ -9,6 +9,7 @@ import { AuthGuard } from './authGuard';
 import { AuthGuardAdmin } from './authGuardAdmin';
 import { AuthGuardLoggedIn } from './authGuardLoggedIn';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   { path: '', component: LoginUserComponent, canActivate: [AuthGuardLoggedIn] },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'main', component: UserMainComponent, canActivate: [AuthGuard] },
   { path: 'new', component: NewUserComponent },
   { path: 'edit', component: EditUserComponent, canActivate: [AuthGuard] },
+  { path : 'profile/:uName' , component:ProfileComponent , canActivate: [AuthGuard]}
 ];
 
 @NgModule({
