@@ -161,7 +161,12 @@ export class MessagingComponent implements OnInit {
 
   }
 
-
-
+  isToday(timestamp: string): boolean {
+    var now = new Date()
+    var timestampYear = Number(timestamp.slice(0, 4))
+    var timestampMonth = Number(timestamp.slice(5, 7))
+    var timestampDay = Number(timestamp.slice(8, 10))
+    return (timestampYear == now.getFullYear() && timestampMonth == (now.getMonth() + 1) && timestampDay == now.getDate())
+  }
 }
 
