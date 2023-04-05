@@ -34,6 +34,7 @@ export class UserMainComponent implements OnInit {
           temp.setId(student.student_id);
           // some of the fields are left blank because their usage here isnt required, i dont think atleast
           temp.setCombatibility(student.compatibilityPosition)
+          temp.setBio(student.bio)
           this.members.push(temp)
           if(this.members.length == data.length){
             console.log(this.members)
