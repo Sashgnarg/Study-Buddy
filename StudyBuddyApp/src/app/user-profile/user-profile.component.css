@@ -55,3 +55,7 @@
 button{
     margin-right: 5px;
 }
+
+.mat-icon {
+    vertical-align: middle;
+}

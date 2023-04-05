@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class UserProfileComponent implements OnInit {
   selectedUser: any;
   currentUser: any;
-  commonCourses: any;
+  commonCourses: any = [];
 
   constructor(public dialogRef: MatDialogRef<UserProfileComponent>, @Inject(MAT_DIALOG_DATA) public userData: any, private DS: DataService, private cookieService : CookieService 
   , private router: Router) {
