@@ -15,15 +15,18 @@ export class UserMainComponent implements OnInit {
   title = 'SFU Study Buddy';
   title_head2 = 'Who is available? Look at our list of suggestions. They are arranged to fit you best';
   members:any[]
+  membersFiltered:any[]
   curUser : any
   username : string
   weather:any;
   weatherImagePath:any;
+  searchValue = '';
 
   constructor(private DS : DataService , private cookieService : CookieService , private AS : AuthService, private weatherService: WeatherService , 
     private router : Router) {
     this.username =''
     this.members =[]
+    this.membersFiltered =[]
    };
    ngOnInit(): void {
       this.username = this.cookieService.get('username')
@@ -84,4 +87,15 @@ export class UserMainComponent implements OnInit {
     });
   }
 
+  filterMembers() {
+    // Filter an array of members based on the username while keeping the order
+    this.membersFiltered = []
+    this.membersFiltered = this.members.filter(member => member.uName.toLowerCase().includes(this.searchValue.toLowerCase()));
+    this.membersFiltered.sort((a, b) => {
+      const indexA = this.members.indexOf(a);
+      const indexB = this.members.indexOf(b);
+      return indexA - indexB;
+    });
+    return this.membersFiltered;
+  }
 }

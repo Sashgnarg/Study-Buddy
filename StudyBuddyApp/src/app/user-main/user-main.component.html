@@ -28,7 +28,11 @@
 
 <div class="body-text">
     <h2 class="fade-in">{{ title_head2 }}</h2>
-    <ng-container *ngFor="let m of members; let i = index">
+    <div class="search-container">
+        <input type="text" placeholder="Search User Name" #searchInput id ="searchInput" [(ngModel)]="searchValue">
+        <i class="material-icons">search</i>
+    </div>
+    <ng-container *ngFor="let m of filterMembers(); let i = index">
         <app-user-main-buddies [member]="m" [index]="i + 1"></app-user-main-buddies>
         <span>&nbsp;</span>
     </ng-container>

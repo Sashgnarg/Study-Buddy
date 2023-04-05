@@ -120,3 +120,27 @@ button:hover {
     margin-left: 150px;
     font-size: 18px;
 }
+
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin: 10px;
+}
+
+#searchInput{
+    border-radius: 20px;
+}
+
+.search-container input[type=text] {
+    border: none;
+    padding: 5px;
+    margin-right: 5px;
+    flex: 1;
+}
+
+.material-icons {
+    font-family: 'Material Icons';
+}
