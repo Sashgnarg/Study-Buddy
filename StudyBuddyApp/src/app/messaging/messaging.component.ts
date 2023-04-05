@@ -48,6 +48,9 @@ export class MessagingComponent implements OnInit {
       this.contactsList = [...new Set(this.messages.flatMap(message => [message.receiver_username, message.sender_username]))]
         .filter(contact => contact !== this.username);
         this.currentContact = this.route.snapshot.paramMap.get('username')!;
+        if(this.currentContact.trim() == ''){
+          this.currentContact = this.contactsList.at(0)!;
+        }
         console.log(this.currentContact)
         this.loadMessages()
     });
@@ -72,10 +75,13 @@ export class MessagingComponent implements OnInit {
   goBack(){
     this.router.navigate(['/'])
   }
+  goProfile(){
+    this.router.navigate([`profile/${this.currentContact}`])
+  }
 
   sendMessageToUser() {
     this.socket.emit('new_message', this.message);
-    this.message.content;
+    this.message.content='';
   }
 
   onSendMessage() {

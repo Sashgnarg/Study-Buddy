@@ -48,6 +48,9 @@ export class UserMainComponent implements OnInit {
   editProfile() {
     this.router.navigate(['edit'])
   }
+  messages() {
+    this.router.navigate(['messaging/ '])
+  }
 
 
   getFacultyName(n: number) {

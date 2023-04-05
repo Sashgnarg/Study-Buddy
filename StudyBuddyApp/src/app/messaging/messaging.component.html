@@ -9,18 +9,25 @@
     <ul class="contacts-list" id="conversationList" #conversationList>
       <li *ngFor="let username of contactsList" (click)="currentContact = username; loadMessages();">
         <div class="contact">
-          <img src="https://source.unsplash.com/random/50x50" alt="Profile Picture">
+          <img src="https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png" alt="Profile Picture">
           <div class="contact-details">
             <h4>{{username}}</h4>
           </div>
         </div>
       </li>
     </ul>
-    <button class="bottom-left" mat-flat-button color="accent" (click)="goBack()">Back</button>
+    <button class="bottom-left wide-button" mat-flat-button color="accent" (click)="goBack()">Back</button>
 
   </div>
   <div class="messages" id="messages" #messages>
-    <div *ngFor="let message of displayedMessages" [class.received]="message.sender_username !== username" [class.sent]="message.sender_username === username">
+    <div *ngIf="currentContact != null "  class="contact-header">
+      <img (click)="goProfile()" src="https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png" alt="Profile Picture">
+      <div (click)="goProfile()" class="contact-details">
+        <h4>{{currentContact}}</h4>
+      </div>
+    </div>
+    <br><br><br><br>
+    <div class="message" *ngFor="let message of displayedMessages" [class.received]="message.sender_username !== username" [class.sent]="message.sender_username === username">
       <p class="sender-name">{{message.sender_username === username ? 'You' : message.sender_username}}</p>
       <p>{{message.content}}</p>
       <p class="timestamp">{{message.timestamp | date:'shortTime'}}</p>
