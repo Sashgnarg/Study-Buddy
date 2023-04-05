@@ -134,6 +134,19 @@ app.patch('/edit-faculty', async (req, res) => {
     }
 })
 
+app.delete('/delete-department', async (req, res) => {
+    query = `
+    DELETE FROM department WHERE faculty_id=$1 AND department_id=$2
+    `
+    try {
+        await pool.query(query, [req.body.faculty_id, req.body.department_id])
+        res.end()
+    }
+    catch (e) {
+        console.log(e)
+    }
+})
+
 app.get('/get-students', async (req, res) => {
     query = `
     SELECT * FROM student ORDER BY student_id
