@@ -33,6 +33,10 @@
     font-size: small;
 }
 
+.mat-icon {
+    vertical-align: middle;
+}
+
 .messaging-app {
     display: flex;
     height: 100vh;

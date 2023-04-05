@@ -30,8 +30,8 @@
     <div class="message" *ngFor="let message of displayedMessages" [class.received]="message.sender_username !== username" [class.sent]="message.sender_username === username">
       <p class="sender-name">{{message.sender_username === username ? 'You' : message.sender_username}}</p>
       <p>{{message.content}}</p>
-      <p class="timestamp">{{message.timestamp | date:'shortTime'}}</p>
-      <span *ngIf="message.sender_username === username" class="status">Sent</span>
+      <p class="timestamp">{{isToday(message.timestamp) ? ('Today at ' +(message.timestamp | date:'shortTime')) : (message.timestamp | date:'MMM d, y, h:mm a')}}</p>
+      <span *ngIf="message.sender_username === username" class="status"><mat-icon>check</mat-icon>Sent</span>
     </div>
   </div>
 

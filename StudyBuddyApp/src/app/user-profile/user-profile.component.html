@@ -4,13 +4,15 @@
         <p class="mat-dialog-content">First Name: {{userData.fName}}</p>
         <p class="mat-dialog-content">Last Name: {{userData.lName}}</p>
         <p class="mat-dialog-content">Faculty: {{userData.faculty}}</p>
-        <p class="mat-dialog-content">Biography : {{userData.bio}}</p>
-        <p class="mat-dialog-content">Common Courses</p>
+        <p class="mat-dialog-content">Biography: {{userData.bio}}</p>
+        <p class="mat-dialog-content">Common Courses:</p>
+        <div *ngIf="!commonCourses.length">
+            <p>No courses in common <mat-icon>mood_bad</mat-icon></p>
+        </div>
         <p *ngFor="let course of commonCourses" class="mat-dialog-content bold">{{course.code}}</p>
-        
     </div>
     <div class="mat-dialog-actions">
         <button class="close" mat-button mat-dialog-close>Close</button>
-        <button mat-flat-button mat-dialog-close color="primary" cdkFocusInitial (click)="viewProfile()">Visit Profile</button>
+        <button mat-flat-button mat-dialog-close color="primary" (click)="viewProfile()">Visit Profile</button>
     </div>
 </div>
