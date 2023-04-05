@@ -28,6 +28,10 @@ header {
     font-weight: bold;
     text-align: center;
     background: gold;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
 }
 
 .header-bottom {
@@ -103,11 +107,12 @@ button:hover {
 .sidebar {
     height: 100%;
     width: 150px;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     padding-top: 40px;
     background-color: gold;
+    z-index: 101;
 }
 
 .sidebar div {
@@ -128,6 +133,9 @@ button:hover {
     border-radius: 20px;
     padding: 5px 10px;
     margin: 10px;
+    position: fixed;
+    right: 0;
+    top: 90px;
 }
 
 #searchInput{

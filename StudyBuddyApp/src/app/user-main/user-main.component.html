@@ -1,7 +1,12 @@
 <header>
     <h1>{{ title }}</h1>
     <br><br>
+    <div class="search-container">
+        <input type="text" placeholder="Search User Name" #searchInput id ="searchInput" [(ngModel)]="searchValue">
+        <i class="material-icons">search</i>
+    </div>
 </header>
+<br><br><br><br><br><br><br>
 <div class="sidebar">
     <div class="header-bottom">
         <nav class="flex-container">
@@ -10,7 +15,7 @@
             <button class="flex-item user-sidebar" (click)="editProfile()">EDIT PROFILE</button>
             <button class="flex-item user-sidebar" (click)="messages()">MESSAGES</button>
             <button class="flex-item user-sidebar" (click)="logout()">LOGOUT</button>
-            <div class="card flex-item">
+            <div class="card flex-item" onclick="window.location.href='https://weather.com/weather/today/l/5a9b6bfab4b40ef28db00e3f6403e7c4c3431ff025a0cabb5cc5a4a5f13611d6'">
                 <h5 class="card-title p-2">Current Weather</h5>
                 <img *ngIf="weatherImagePath" src={{weatherImagePath}} alt="Weather loading" />
                 <div *ngIf="weatherImagePath" class="card-body">
@@ -31,10 +36,6 @@
 
 <div class="body-text">
     <h2 class="fade-in">{{ title_head2 }}</h2>
-    <div class="search-container">
-        <input type="text" placeholder="Search User Name" #searchInput id ="searchInput" [(ngModel)]="searchValue">
-        <i class="material-icons">search</i>
-    </div>
     <ng-container *ngFor="let m of filterMembers(); let i = index">
         <app-user-main-buddies [member]="m" [index]="i + 1"></app-user-main-buddies>
         <span>&nbsp;</span>
