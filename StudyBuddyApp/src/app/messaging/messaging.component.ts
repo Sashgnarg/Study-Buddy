@@ -39,28 +39,26 @@ export class MessagingComponent implements OnInit {
 
 
   constructor(private cookieService: CookieService, private messageService: MessagingService,
-    private renderer: Renderer2, private _ngZone: NgZone , private route : ActivatedRoute , private router : Router) {
+    private renderer: Renderer2, private _ngZone: NgZone, private route: ActivatedRoute, private router: Router) {
     this.socket = io(this.url, { transports: ['websocket'], upgrade: false, withCredentials: true, extraHeaders: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET,POST,OPTIONS,DELETE", "Access-Control-Allow-Headers": "X-Requested-With, Access-Control-Allow-Headers, Content-Type, Authorization, Origin, Accept" } });
     this.username = this.cookieService.get('username');
 
     this.messageService.getPreviousMessages(this.username).subscribe((messages: Message[]) => {
       this.messages = messages;
-      this.contactsList = [...new Set(this.messages.flatMap(message => [message.receiver_username, message.sender_username]))]
-        .filter(contact => contact !== this.username);
-        this.currentContact = this.route.snapshot.paramMap.get('username')!;
-        if(this.currentContact.trim() == ''){
-          this.currentContact = this.contactsList.at(0)!;
-        }
-        console.log(this.currentContact)
-        this.loadMessages()
+      this.createAndSortContactsList()
+      this.currentContact = this.route.snapshot.paramMap.get('username')!;
+      if (this.currentContact.trim() == '') {
+        this.currentContact = this.contactsList.at(0)!;
+      }
+      console.log(this.currentContact)
+      this.loadMessages()
     });
 
     this.socket.on('new_message', (message: Message) => {
       this._ngZone.run(() => {
         this.messages.push(message);
-        this.contactsList = [...new Set(this.messages.flatMap(message => [message.receiver_username, message.sender_username]))]
-          .filter(contact => contact !== this.username);
-          this.loadMessages();
+        this.createAndSortContactsList()
+        this.loadMessages();
       });
     });
 
@@ -68,20 +66,19 @@ export class MessagingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.contactsList = [...new Set(this.messages.map(message => message.receiver_username))]
-      .filter(contact => contact !== this.username);
+    this.createAndSortContactsList()
 
   }
-  goBack(){
+  goBack() {
     this.router.navigate(['/'])
   }
-  goProfile(){
+  goProfile() {
     this.router.navigate([`profile/${this.currentContact}`])
   }
 
   sendMessageToUser() {
     this.socket.emit('new_message', this.message);
-    this.message.content='';
+    this.message.content = '';
   }
 
   onSendMessage() {
@@ -111,13 +108,13 @@ export class MessagingComponent implements OnInit {
   filterContacts(): void {
     const filter = this.searchInput.nativeElement.value.toLowerCase();
     const contacts = this.conversationList.nativeElement.getElementsByTagName("li");
-  
+
     for (let i = 0; i < contacts.length; i++) {
       const username = contacts[i].getElementsByTagName("h4")[0];
       const txtValue = username.textContent || username.innerText;
       const lowercaseTxtValue = txtValue.toLowerCase();
       console.log("Filter:", filter, "Username:", lowercaseTxtValue);
-  
+
       if (lowercaseTxtValue.startsWith(filter)) {
         this.renderer.setStyle(contacts[i], 'display', '');
       } else {
@@ -125,7 +122,46 @@ export class MessagingComponent implements OnInit {
       }
     }
   }
-  
-  
+
+  createAndSortContactsList(): void {
+    // First, get a list of all unique contacts from the messages array
+    const uniqueContacts = [...new Set(this.messages.flatMap(message => [message.receiver_username, message.sender_username]))];
+
+    // Then, sort the contacts based on the latest message timestamp
+    this.contactsList = uniqueContacts
+      .filter(contact => contact !== this.username)
+      .sort((a, b) => {
+        // Find the latest message timestamp for contact a
+        const latestMessageA = this.messages
+          .filter(message => message.receiver_username === a || message.sender_username === a)
+          .reduce((latest, message) => {
+            const messageTime = message.timestamp ? new Date(message.timestamp) : new Date(0);
+            if (messageTime > latest) {
+              return messageTime;
+            }
+            return latest;
+          }, new Date(0));
+
+        // Find the latest message timestamp for contact b
+        const latestMessageB = this.messages
+          .filter(message => message.receiver_username === b || message.sender_username === b)
+          .reduce((latest, message) => {
+            const messageTime = message.timestamp ? new Date(message.timestamp) : new Date(0);
+            if (messageTime > latest) {
+              return messageTime;
+            }
+            return latest;
+          }, new Date(0));
+
+        // Compare the latest message timestamps and sort the contacts in descending order
+        return latestMessageB.getTime() - latestMessageA.getTime();
+      });
+
+
+
+  }
+
+
+
 }
 
