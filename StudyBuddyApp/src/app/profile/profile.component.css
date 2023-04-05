@@ -4,6 +4,11 @@ header {
     font-weight: bold;
     text-align: center;
     background: gold;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    box-shadow: 0px 3px 5px #ddd;
 }
 
 .header-bottom {
@@ -92,6 +97,10 @@ span.bolded{
     font-size: 16px;
     font-weight: bold;
     padding: 10px;
+    z-index: 101;
+    position: fixed;
+    left: 0;
+    top: 220px;
   }
   
   .back-button i {
