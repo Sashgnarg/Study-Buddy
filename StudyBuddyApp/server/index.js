@@ -17,7 +17,7 @@ const pool = new Pool({
 
 app.use(express.json())
 app.use(cors())
-//app.use(express.static(__dirname + "/study-buddy-app"))
+app.use(express.static(__dirname + "/study-buddy-app"))
 
 
 app.use(function (req, res, next) {

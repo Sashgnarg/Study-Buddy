@@ -18,7 +18,7 @@ export class DataService {
   }
 
   // Don't forget to change baseURL in weather service!
-  baseUrl = 'http://localhost:8081'
+  baseUrl = 'http://35.193.21.93:8081'
 
   getFacultyID(s: string) {
     switch (s) {
@@ -495,14 +495,14 @@ export class DataService {
     return this.http.get(this.baseUrl + methodUrl + `/${username}`)
   }
 
-  getAllUsernamesObservable():Observable<any>{
-    let methodUrl=`/get-usernames`
-    return this.http.get(this.baseUrl+methodUrl);
+  getAllUsernamesObservable(): Observable<any> {
+    let methodUrl = `/get-usernames`
+    return this.http.get(this.baseUrl + methodUrl);
   }
 
-  getCommonCourses(uName1 : string , uName2 : string):Observable<any>{
-    let methodUrl='/get-common-courses'
-    return this.http.get(this.baseUrl+methodUrl+`/${uName1}/${uName2}`)
+  getCommonCourses(uName1: string, uName2: string): Observable<any> {
+    let methodUrl = '/get-common-courses'
+    return this.http.get(this.baseUrl + methodUrl + `/${uName1}/${uName2}`)
   }
   massAddCourses(): void {
     let methodUrl = `/fill-database-courses`

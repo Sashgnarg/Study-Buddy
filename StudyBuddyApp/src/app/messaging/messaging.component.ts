@@ -12,7 +12,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
   styleUrls: ['./messaging.component.css']
 })
 export class MessagingComponent implements OnInit {
-  private url: string = 'http://localhost:8081';
+  private url: string = 'http://35.193.21.93:8081';
   private socket: Socket;
   @ViewChild('searchInput')
   searchInput!: ElementRef;

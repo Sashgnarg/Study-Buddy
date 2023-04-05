@@ -3,7 +3,7 @@
         <h2 class="mat-dialog-title">{{userData.uName}}'s Profile</h2>
         <p class="mat-dialog-content">First Name: {{userData.fName}}</p>
         <p class="mat-dialog-content">Last Name: {{userData.lName}}</p>
-        <p class="mat-dialog-content">Faculty: <span [ngClass]="{'bold' : sameFaculty()}">{{userData.faculty}}i</span> </p>
+        <p class="mat-dialog-content">Faculty: <span [ngClass]="{'bold' : sameFaculty()}">{{userData.faculty}}</span> </p>
         <p class="mat-dialog-content">Biography: {{userData.bio}}</p>
         <p class="mat-dialog-content">Common Courses:</p>
         <div *ngIf="!commonCourses.length">
