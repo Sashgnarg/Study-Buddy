@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
   student: any
   isLoaded: boolean = false
   faculties: any[] = []
+  loggedUserFacultyID=-1;
   enrolledCourses: any[] = [];
   commonCourses:any[]
   allCourses: Course[] = [];
@@ -107,6 +108,9 @@ export class ProfileComponent implements OnInit {
       //console.log(this.commonCourses)
       });
     })
+    this.DS.getStudentByUsernameObservable(this.loggedUsername).subscribe(data=>{
+      this.loggedUserFacultyID = data[0].faculty_id;
+    })
       
   
   }
@@ -125,6 +129,9 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/'])
   }
 
+  sameFaculty(){
+    return this.loggedUserFacultyID == this.student.faculty_id
+  }
   isAvailable(hour: number, day: string) {
     const rowIndex = this.hours.indexOf(hour);
     const colIndex = this.days.indexOf(day);

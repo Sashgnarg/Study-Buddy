@@ -17,7 +17,7 @@
             Username:
             <span class="profile-info">{{student.username}}</span><br><br>
             Faculty : <br>
-            <span class="profile-info">{{student.faculty_id | facultyName:this.faculties}}</span> <br>
+            <span [ngClass]="{'bolded':sameFaculty()}" class="profile-info">{{student.faculty_id | facultyName:this.faculties}}</span> <br>
         </div>
         <br>
         <div class="col-md-4 profile-content"> 

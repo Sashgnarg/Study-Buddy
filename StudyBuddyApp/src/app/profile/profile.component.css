@@ -100,7 +100,8 @@ span.bolded{
     z-index: 101;
     position: fixed;
     left: 0;
-    top: 220px;
+    top: 150px;
+    border-radius: 10px;
   }
   
   .back-button i {
@@ -108,7 +109,7 @@ span.bolded{
   }
   
   .back-button:hover {
-    background-color: #f5f5f5;
+    background-color: rgb(255, 224, 50)
   }
   .profile-content{
     font-size: 35px;
