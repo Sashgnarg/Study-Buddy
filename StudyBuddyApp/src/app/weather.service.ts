@@ -9,7 +9,7 @@ import axios from 'axios';
 export class WeatherService {
 
   // Don't forget to change baseURL in weather service!
-  baseUrl = 'http://35.193.21.93:8081'
+  baseUrl = 'http://35.222.201.10:8081'
 
   constructor(private http: HttpClient) { }
   getWeather(): Observable<any> {

@@ -46,7 +46,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
-const config: SocketIoConfig = { url: 'http://35.193.21.93:8081', options: {} };
+const config: SocketIoConfig = { url: 'http://35.222.201.10:8081', options: {} };
 
 @NgModule({
   declarations: [
